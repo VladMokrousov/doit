@@ -1,0 +1,21 @@
+.change-email-form__old-email-field,
+.change-email-form__password-field,
+.change-email-form__new-email-field {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.change-email-form__submit {
+  display: block;
+  margin-top: 50px;
+  margin-left: auto;
+  width: 140px;
+  height: 40px;
+  border-radius: 5px;
+  padding: 0;
+  border: none;
+  background-color: #169bd5;
+  color: #fff;
+}

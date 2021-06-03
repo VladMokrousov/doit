@@ -1,0 +1,72 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/opensans-regular.woff2') format('woff2'),
+    url('../assets/fonts/opensans-regular.woff') format('woff');
+  /* src: url('/doit/build/static/media/opensans-regular.woff2') format('woff2'),
+    url('/doit/build/static/media/opensans-regular.woff') format('woff'); */
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/opensans-bold.woff2') format('woff2'),
+    url('../assets/fonts/opensans-bold.woff') format('woff');
+  /* src: url('/doit/build/static/media/opensans-bold.woff2') format('woff2'),
+    url('/doit/build/static/media/opensans-bold.woff') format('woff'); */
+}
+
+body {
+  margin: 0;
+  font-family: 'Open sans', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #1a1a1a;
+  background-color: #fff;
+}
+a {
+  text-decoration: none;
+  color: #1a1a1a;
+}
+.visually-hidden:not(:focus):not(:active),
+input[type='checkbox'].visually-hidden,
+input[type='radio'].visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  -webkit-clip-path: inset(100%);
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+.container {
+  position: relative;
+  width: 1000px;
+  margin: 0 auto;
+}
+
+button {
+  cursor: pointer;
+}
+
+.flex-wrapper {
+  display: flex;
+}
+.flex-wrapper--jsb {
+  justify-content: space-between;
+}
+
+:root {
+  --color-secondary: #8f1010;
+  /* Ближе к зел D6E01F */
+  --color-green: #d6e01f;
+  /* Ближе к желт 9BCC34 */
+  /* Промежуточный BFD729 */
+}

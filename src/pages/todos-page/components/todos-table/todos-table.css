@@ -1,0 +1,48 @@
+.table {
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+  border: 1px solid #e7e7e7;
+  border-collapse: collapse;
+}
+.table__headers {
+  background-color: #e7e7e7;
+  color: #000;
+}
+.table__header {
+  padding: 10px;
+  font-size: 18px;
+  font-weight: 400;
+  box-sizing: border-box;
+}
+.table__header--description {
+  width: 330px;
+}
+.table__header--status,
+.table__header--priority,
+.table__header--action {
+  width: 100px;
+}
+.table__header--planDate {
+  width: 150px;
+}
+.table__header--actualDate {
+  width: 180px;
+}
+.table__item {
+  font-size: 16px;
+  user-select: none;
+  cursor: pointer;
+}
+.table__item:hover {
+  background-color: #919191;
+  color: #fff;
+  transition-duration: 0.1s;
+}
+.table__item--done {
+  text-decoration: line-through;
+}
+.table__item--important {
+  font-weight: 700;
+  color: #4682b4;
+}

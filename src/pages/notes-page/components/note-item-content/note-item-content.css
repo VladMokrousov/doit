@@ -1,0 +1,16 @@
+.note__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.note__description {
+  margin: 0;
+}
+.note__btn {
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+}
+.note__btn--del {
+  color: var(--color-secondary);
+}

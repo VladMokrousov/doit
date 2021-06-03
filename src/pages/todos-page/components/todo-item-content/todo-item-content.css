@@ -1,0 +1,6 @@
+.table__btn--del {
+  padding: 0;
+  border: 0;
+  color: var(--color-secondary);
+  background-color: transparent;
+}

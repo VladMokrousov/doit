@@ -1,0 +1,56 @@
+.modal--sign-in {
+  top: 30vh;
+  width: 500px;
+  min-height: 300px;
+  padding: 20px;
+}
+
+.sign-in-form__email-field,
+.sign-in-form__password-field {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+.sign-up-form__remember-me-checkbox {
+  margin-bottom: 50px;
+}
+
+.sign-in-form__submit {
+  display: block;
+  margin-left: auto;
+  width: 140px;
+  height: 40px;
+  border-radius: 5px;
+  padding: 0;
+  border: none;
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+
+.modal--sign-in__go-to-sign-up,
+.modal--sign-in__go-to-reset {
+  display: block;
+  margin-top: 30px;
+}
+.modal--sign-in__google-link {
+  display: inline-block;
+  margin-top: 30px;
+}
+.modal--sign-in__sign-up-link,
+.modal--sign-in__reset-link,
+.modal--sign-in__google-link {
+  position: relative;
+  color: var(--color-secondary);
+}
+.modal--sign-in__sign-up-link::before,
+.modal--sign-in__reset-link::before,
+.modal--sign-in__google-link::before {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 1px;
+  bottom: -3px;
+  left: 0;
+  background-color: var(--color-secondary);
+}

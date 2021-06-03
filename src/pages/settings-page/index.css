@@ -1,0 +1,58 @@
+.settings-page__subtitle {
+  font-size: 20px;
+  line-height: 1;
+  margin-bottom: 15px;
+  display: block;
+}
+.settings-page__subtitle:last-of-type {
+  margin-top: 30px;
+}
+
+.settings-item {
+  margin-bottom: 15px;
+}
+.settings-item__avatar-wrapper {
+  display: flex;
+}
+.settings-item__avatar {
+  /* display: block; */
+  border-radius: 50%;
+}
+.settings-item__avatar,
+.settings-item__text {
+  cursor: pointer;
+}
+.settings-item__text--unclickable {
+  cursor: auto;
+}
+.settings-item:last-of-type {
+  margin-bottom: 0;
+}
+.settings-item__field {
+  /* width: 200px; */
+  /* cursor: pointer; */
+  box-sizing: border-box;
+}
+.settings-item__field[disabled] {
+  background-color: transparent;
+  border: 2px solid transparent;
+}
+.settings-item__field--avatar {
+  margin: auto 0;
+  margin-left: 20px;
+}
+
+.settings-item__btn {
+  background-color: transparent;
+  color: #169bd5;
+  border: none;
+}
+.modal--change-email,
+.modal--change-password,
+.modal--delete-account {
+  position: relative;
+  top: 25vh;
+  width: 500px;
+  min-height: 300px;
+  padding: 20px;
+}

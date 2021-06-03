@@ -1,0 +1,47 @@
+.modal--sign-up {
+  top: 30vh;
+  width: 500px;
+  min-height: 300px;
+  padding: 20px;
+}
+
+.sign-up-form__email-field,
+.sign-up-form__password-field,
+.sign-up-form__repeat-password-field {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.sign-up-form__submit {
+  display: block;
+  margin-left: auto;
+  width: 140px;
+  height: 40px;
+  border-radius: 5px;
+  padding: 0;
+  border: none;
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+.modal--sign-up__go-to-sign-in,
+.modal--sign-up__sign-up-with-google {
+  display: block;
+  margin-top: 30px;
+}
+.modal--sign-up__sign-in-link,
+.modal--sign-up__google-link {
+  position: relative;
+  color: var(--color-secondary);
+}
+.modal--sign-up__sign-in-link::before,
+.modal--sign-up__google-link::before {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 1px;
+  bottom: -3px;
+  left: 0;
+  background-color: var(--color-secondary);
+}

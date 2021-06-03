@@ -1,0 +1,43 @@
+.modal--todos {
+  position: relative;
+  top: 30vh;
+  width: 500px;
+  min-height: 300px;
+  padding: 20px;
+}
+
+.todos-form__description-field,
+.todos-form__calendar {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+.todos-form__select-wrapper {
+  margin: 15px 0;
+}
+.todos-form__label-for-select {
+  margin-right: 10px;
+}
+.todos-form__select {
+  min-width: 100px;
+}
+
+.todos-form__submit {
+  display: block;
+  margin-top: 50px;
+  margin-left: auto;
+  width: 140px;
+  height: 40px;
+  border-radius: 5px;
+  padding: 0;
+  border: none;
+  background-color: #169bd5;
+  color: #fff;
+}
+/* .todos-form__error {
+  display: none;
+  position: absolute;
+  bottom: 15px;
+  left: 50px;
+  color: #ce0000;
+} */

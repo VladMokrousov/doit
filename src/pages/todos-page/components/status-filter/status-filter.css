@@ -1,0 +1,12 @@
+.status-filter__btn {
+    margin-right: 5px;
+}
+.status-filter__btn:last-of-type {
+    margin-right: 0;
+}
+
+.status-filter__btn--active {
+    background-color: #6b31e8;
+    color: #fff;
+}
+

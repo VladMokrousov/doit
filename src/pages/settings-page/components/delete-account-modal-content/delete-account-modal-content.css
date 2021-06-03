@@ -1,0 +1,37 @@
+.delete-account-form__email-field,
+.delete-account-form__password-field {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+.delete-account-form__bnt-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  margin: 0 auto;
+  margin-top: 150px;
+}
+
+.delete-account-form__submit,
+.delete-account-form__agree,
+.delete-account-form__disagree {
+  display: block;
+  margin-top: 50px;
+  margin-left: auto;
+  width: 140px;
+  height: 40px;
+  border-radius: 5px;
+  padding: 0;
+  border: none;
+  background-color: #169bd5;
+  color: #fff;
+}
+
+.delete-account-form__agree,
+.delete-account-form__disagree {
+  margin: 0;
+}
+.delete-account-form__disagree {
+  background-color: var(--color-secondary);
+}

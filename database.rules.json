@@ -1,0 +1,23 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid",
+        "todos": {
+          "$todo": {
+            ".validate": "newData.hasChildren(['fieldsContent', 'id'])",
+            "fieldsContent": {
+              ".validate": "newData.hasChildren(['description','priority', 'status', 'endDatePlan', 'endDateActual'])"
+            }
+          }
+        },
+        "notes": {
+          "$note": {
+            ".validate": "newData.hasChildren(['description', 'creationDate', 'id'])"
+          }
+        }
+    	}
+    }
+  }
+}

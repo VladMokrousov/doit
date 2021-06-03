@@ -1,0 +1,8 @@
+src/*.tsx
+src/*.ts
+src/pages/todos-page/index.tsx
+src/pages/todos-page/components/todos-modal-content/todos-modal-content.tsx
+src/pages/notes-page/components/notes-modal-content/notes-modal-content.tsx
+src/pages/settings-page/components/change-email-modal-content/change-email-modal-content.tsx
+src/context/AppContext.tsx
+# src/pages/sign-up-page/components/sign-up-modal-content/sign-up-modal-content.tsx
