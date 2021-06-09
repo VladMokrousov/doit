@@ -1,16 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { useTooltipContext } from '../../context';
 import firebase from 'firebase/app';
 
 import './header.css';
 
 const Header: React.FC = () => {
+  const { showTooltip } = useTooltipContext();
   const signOut = (evt: React.MouseEvent<HTMLButtonElement>): void => {
     firebase
       .auth()
       .signOut()
       .catch((error) => {
-        console.log(error.message);
+        showTooltip(error.message);
       });
   };
 
@@ -18,16 +20,24 @@ const Header: React.FC = () => {
     <header className="page-header">
       <div className="container flex-wrapper flex-wrapper--jsb">
         <nav className="main-nav">
-          <Link to="/">Doit!</Link>
+          <NavLink exact to="/" activeClassName="main-nav__active-link">
+            Doit!
+          </NavLink>
           <ul className="main-nav__list">
             <li className="main-nav__item">
-              <Link to="/todo">Todo</Link>
+              <NavLink to="/todo" activeClassName="main-nav__active-link">
+                Todo
+              </NavLink>
             </li>
             <li className="main-nav__item">
-              <Link to="/notes">Notes</Link>
+              <NavLink to="/notes" activeClassName="main-nav__active-link">
+                Notes
+              </NavLink>
             </li>
             <li className="main-nav__item">
-              <Link to="/settings">Settings</Link>
+              <NavLink to="/settings" activeClassName="main-nav__active-link">
+                Settings
+              </NavLink>
             </li>
           </ul>
         </nav>

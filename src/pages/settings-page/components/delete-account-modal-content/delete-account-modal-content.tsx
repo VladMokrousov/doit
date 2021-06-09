@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useTooltipContext } from '../../../../context';
 import firebase from 'firebase/app';
 import './delete-account-modal-content.css';
 
@@ -15,6 +16,7 @@ const ChangeAccountDeleteModalContent: React.FC<ChangeAccountDeleteModalProps> =
   onToggleModal,
   user,
 }) => {
+  const { showTooltip } = useTooltipContext();
   const [credentials, setCredentials] = useState<IConfirmCredentials>({
     email: user.email,
     password: '',
@@ -45,14 +47,14 @@ const ChangeAccountDeleteModalContent: React.FC<ChangeAccountDeleteModalProps> =
         setIsFirstModal(false);
       })
       .catch((error: any) => {
-        console.log('Не удалось сделать reauth', error);
+        showTooltip(`Reauth didn't pass: ${error.message}`);
       });
   };
 
   const onDeleteAccount = (evt: React.FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
     user.delete().catch((err: any) => {
-      console.log(err);
+      showTooltip(`Your account didn't be deleted: ${err.message}`);
     });
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAppContext } from '../../../../context';
+import { useAppContext, useTooltipContext } from '../../../../context';
 import { Id } from '../../../../types';
 import firebase from 'firebase/app';
 import './notes-modal-content.css';
@@ -18,6 +18,7 @@ const NotesModalContent: React.FC<NotesModalProps> = ({
   onToggleModal,
 }) => {
   const { currentUser } = useAppContext();
+  const { showTooltip } = useTooltipContext();
   const [description, setDescription] = useState('');
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const NotesModalContent: React.FC<NotesModalProps> = ({
           });
         })
         .catch((error) => {
-          console.log("Couldn't take the data from DB: " + error);
+          showTooltip(`Couldn't take the data from DB: ${error.message}`);
         });
     }
   }, []);

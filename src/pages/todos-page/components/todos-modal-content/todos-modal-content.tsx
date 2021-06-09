@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useAppContext } from '../../../../context';
-import { IFieldsContent } from '../../../../interfaces';
+import { useAppContext, useTooltipContext } from '../../../../context';
+import { ITodoFieldsContent } from '../../../../interfaces';
 import { Id } from '../../../../types';
 import firebase from 'firebase/app';
 import './todos-modal-content.css';
 
 interface TodosModalProps {
   selectedItemId: Id | false;
-  onEdited?: (fieldsContent: IFieldsContent) => void;
-  onAdded: (fieldsContent: IFieldsContent) => void;
+  onEdited?: (fieldsContent: ITodoFieldsContent) => void;
+  onAdded: (fieldsContent: ITodoFieldsContent) => void;
   onToggleModal: (evt: any) => void;
 }
 
@@ -19,6 +19,7 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
   onToggleModal,
 }) => {
   const { currentUser } = useAppContext();
+  const { showTooltip } = useTooltipContext();
   const currentDate: Date = new Date();
   const currentMonth: number = currentDate.getMonth() + 1;
   const currentDay: number = currentDate.getDate();
@@ -26,7 +27,7 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
     String(currentMonth).length == 2 ? currentMonth : '0' + currentMonth
   }-${String(currentDay).length == 2 ? currentDay : '0' + currentDay}`;
 
-  const [state, setState] = useState<IFieldsContent>({
+  const [state, setState] = useState<ITodoFieldsContent>({
     description: '',
     priority: 'Low',
     status: 'New',
@@ -51,8 +52,8 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
             }
           });
         })
-        .catch((error) => {
-          console.log("Couldn't take the data from DB: " + error);
+        .catch((err) => {
+          showTooltip(`Couldn't take the data from DB: ${err.message}`);
         });
     }
   }, []);

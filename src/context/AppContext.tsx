@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useTooltipContext } from './index';
 import firebase from 'firebase/app';
 
 interface AppContextProps {
@@ -24,12 +25,14 @@ export const AppProvider: React.FC<AppContextProps> = ({ children }) => {
     // url: 'http://localhost:3000/sign-in',
   };
 
+  const { showTooltip } = useTooltipContext();
+
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         if (!user.emailVerified) {
           user.sendEmailVerification(actionCodeSettings).catch((err) => {
-            console.log('При подтверждении email произошла ошибка', err.message);
+            showTooltip(`При подтверждении email произошла ошибка ${err.message}`);
           });
         }
         if (!localStorage.getItem('rememberMe')) {
@@ -42,7 +45,7 @@ export const AppProvider: React.FC<AppContextProps> = ({ children }) => {
               .auth()
               .signOut()
               .catch((error) => {
-                console.log(error.message);
+                showTooltip(error.message);
               });
           } else {
             onLogIn(user);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTooltipContext } from '../../../../context';
 import firebase from 'firebase/app';
 import './change-email-modal-content.css';
 
@@ -17,6 +18,8 @@ const ChangeEmailModalContent: React.FC<ChangeEmailModalProps> = ({
   user,
   actionCodeSettings,
 }) => {
+  const { showTooltip } = useTooltipContext();
+
   const [credentials, setCredentials] = useState<IConfirmCredentials>({
     oldEmail: user.email,
     password: '',
@@ -52,7 +55,7 @@ const ChangeEmailModalContent: React.FC<ChangeEmailModalProps> = ({
         setIsFirstModal(false);
       })
       .catch((error: any) => {
-        console.log('Не удалось сделать reauth', error);
+        showTooltip(`Reauth didn't pass: ${error.message}`);
       });
   };
   const onSetNewEmail = (evt: React.FormEvent<HTMLFormElement>): void => {
@@ -61,12 +64,11 @@ const ChangeEmailModalContent: React.FC<ChangeEmailModalProps> = ({
     user
       .verifyBeforeUpdateEmail(email, actionCodeSettings)
       .then(() => {
-        // @todo Здесь я должен показывать ползователю тултип, что он должен подтвердить свой емейл, чтобы закончить его изменение
-        console.log('Confirm your new email to finish change the email');
+        showTooltip('Check your new email and confirm it to finish the change the email');
         onToggleModal(evt);
       })
       .catch(function (err: any) {
-        console.log('Не удалось обновить email.', err.message);
+        showTooltip(`Your email didn't update: ${err.message}`);
       });
   };
 

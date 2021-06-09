@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
+import { HashRouter as Router, Redirect, Route } from 'react-router-dom';
 import {
   MainPage,
   TodosPage,
@@ -26,16 +26,19 @@ const App: React.FC = () => {
         <>
           {currentUser.emailVerified ? (
             <>
+              <Route path="/sign-in" render={() => <Redirect to="/" />} />
+              <Route path="/sign-up" render={() => <Redirect to="/" />} />
               <Header />
               <Tooltip />
-              <Route path="/" render={() => <MainPage />} exact />
-              <Route path="/todo" render={() => <TodosPage />} />
-              <Route path="/notes" render={() => <NotesPage />} />
-              <Route path="/settings" render={() => <SettingsPage />} />
-              <Redirect to="/" />
+              <Route path="/" component={MainPage} exact />
+              <Route path="/todo" component={TodosPage} />
+              <Route path="/notes" component={NotesPage} />
+              <Route path="/settings" component={SettingsPage} />
             </>
           ) : (
             <>
+              <Route path="/sign-in" render={() => <Redirect to="/" />} />
+              <Route path="/sign-up" render={() => <Redirect to="/" />} />
               <Header />
               <div className="app__overlay">
                 <span className="app__confirm-message">
@@ -48,9 +51,9 @@ const App: React.FC = () => {
       ) : (
         <>
           <Tooltip />
-          <Route path="/sign-up" render={() => <SignUpPage />} />
-          <Route path="/sign-in" render={() => <SignInPage />} />
-          <Route path="/reset-password" render={() => <ResetPasswordPage />} />
+          <Route path="/sign-up" component={SignUpPage} />
+          <Route path="/sign-in" component={SignInPage} />
+          <Route path="/reset-password" component={ResetPasswordPage} />
           <Redirect to="/sign-up" />
         </>
       )}

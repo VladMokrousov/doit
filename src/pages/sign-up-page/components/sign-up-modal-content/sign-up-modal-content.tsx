@@ -40,7 +40,7 @@ const SignUpModalContent: React.FC = () => {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => localStorage.setItem('rememberMe', 'true'))
-        .catch((err) => console.log(err));
+        .catch((err) => showTooltip(`Your account didn't be created: ${err.message}`));
     } else {
       showTooltip("You password and repeated password don't match");
     }
@@ -69,6 +69,7 @@ const SignUpModalContent: React.FC = () => {
           name="email"
           placeholder="Enter your email"
           onChange={onChange}
+          value={state.email}
           required
         />
 
@@ -80,6 +81,7 @@ const SignUpModalContent: React.FC = () => {
           name="password"
           placeholder="Create a password"
           onChange={onChange}
+          value={state.password}
           required
         />
 
@@ -91,18 +93,20 @@ const SignUpModalContent: React.FC = () => {
           name="repeat-password"
           placeholder="Repeat a password"
           onChange={onChange}
+          value={state.repeatPassword}
           required
         />
 
         <button className="sign-up-form__submit">Sign up</button>
       </form>
-      {/* @todo Поменять ссылку на кнопку */}
-      <span className="modal--sign-up__sign-up-with-google">
-        You can pass an alternative registration with Google.{' '}
-        <Link className="modal--sign-up__google-link" to="#" onClick={googleSignUp}>
+      <div className="modal--sign-up__sign-up-with-google">
+        <span className="sign-up-with-google__text">
+          You can pass an alternative registration with Google.{' '}
+        </span>
+        <button className="sign-up-with-google__btn" onClick={googleSignUp}>
           Let's do it!
-        </Link>
-      </span>
+        </button>
+      </div>
 
       <span className="modal--sign-up__go-to-sign-in">
         Already have an account?{' '}

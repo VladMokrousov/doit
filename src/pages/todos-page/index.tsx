@@ -6,9 +6,9 @@ import StatusFilter from './components/status-filter';
 import Portal from '../../components/portal';
 import TodosModalContent from './components/todos-modal-content';
 import Modal from '../../components/modal';
-import { useAppContext } from '../../context';
+import { useAppContext, useTooltipContext } from '../../context';
 import firebase from 'firebase/app';
-import { IFieldsContent, ITodoItem, IEveryStatusCount } from '../../interfaces';
+import { ITodoFieldsContent, ITodoItem, IEveryStatusCount } from '../../interfaces';
 import { Id } from '../../types';
 
 interface ITodosData {
@@ -26,7 +26,7 @@ interface ITodosPageState {
 
 const TodosPage: React.FC = () => {
   const { currentUser } = useAppContext();
-  // console.log('Компонент монтируется или обновляется');
+  const { showTooltip } = useTooltipContext();
   const [state, setState] = useState<ITodosPageState>({
     term: '',
     filter: 'all',
@@ -34,11 +34,9 @@ const TodosPage: React.FC = () => {
     selectedItemId: false,
     isDataLoaded: false,
   });
-  // console.log(state);
   useEffect(() => {
     //Обернуть в try catch?
     const getTodos = (elem: firebase.database.DataSnapshot) => {
-      // console.log('Данные из бд подтягиваются');
       setState(({ isDataLoaded, ...restParams }) => {
         return {
           isDataLoaded: true,
@@ -58,14 +56,14 @@ const TodosPage: React.FC = () => {
   if (state.isDataLoaded) {
     let newItemId: Id = 100;
 
-    const createTodoItem = (fieldsContent: IFieldsContent): ITodoItem => {
+    const createTodoItem = (fieldsContent: ITodoFieldsContent): ITodoItem => {
       return {
         fieldsContent,
         id: newItemId,
       };
     };
 
-    const addItem = (fieldsContent: IFieldsContent): void => {
+    const addItem = (fieldsContent: ITodoFieldsContent): void => {
       const newItem: ITodoItem = createTodoItem({
         ...fieldsContent,
       });
@@ -73,8 +71,8 @@ const TodosPage: React.FC = () => {
       const db = firebase.database();
       db.ref('users/' + currentUser.uid + '/todos')
         .push(newItem)
-        .catch((e) => {
-          console.log(`Add item failed: ${e.message}`);
+        .catch((err) => {
+          showTooltip(`Add item failed: ${err.message}`);
         });
     };
 
@@ -120,20 +118,19 @@ const TodosPage: React.FC = () => {
                   .database()
                   .ref('users/' + currentUser.uid + `/todos/${childSnapshot.key}`)
                   .remove()
-                  .catch((error) => {
-                    //Нужно уведомить пользователя, что удаление не прошло успешно
-                    console.log('Remove failed: ' + error.message);
+                  .catch((err) => {
+                    showTooltip(`Removing the task was failed: ${err.message}`);
                   });
                 return true;
               }
             });
           })
-          .catch((error) => {
-            console.log("Couldn't take the data from DB: " + error);
+          .catch((err) => {
+            showTooltip(`Couldn't take the data from DB: ${err.message}`);
           });
       };
 
-      const editItem = (fieldsContent: IFieldsContent): void => {
+      const editItem = (fieldsContent: ITodoFieldsContent): void => {
         const todosRef = firebase.database().ref('users/' + currentUser.uid + '/todos');
         todosRef
           .once('value')
@@ -145,16 +142,15 @@ const TodosPage: React.FC = () => {
                   .database()
                   .ref('users/' + currentUser.uid + `/todos/${childSnapshot.key}/fieldsContent`)
                   .set({ ...fieldsContent })
-                  .catch((error) => {
-                    //Нужно уведомить пользователя, что редактирование не прошло успешно
-                    console.log('Edit item failed: ' + error.message);
+                  .catch((err) => {
+                    showTooltip(`Editing the task was failed: ${err.message}`);
                   });
                 return true;
               }
             });
           })
-          .catch((error) => {
-            console.log("Couldn't take the data from DB: " + error);
+          .catch((err) => {
+            showTooltip(`Couldn't take the data from DB: ${err.message}`);
           });
 
         setState(({ selectedItemId, ...restParams }) => {

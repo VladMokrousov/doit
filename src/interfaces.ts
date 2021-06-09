@@ -1,12 +1,12 @@
 import { Id } from './types';
 
 export interface ITodoItem {
-  fieldsContent: IFieldsContent;
+  fieldsContent: ITodoFieldsContent;
   id: Id;
 }
 
 // Поменять название, чтобы было ясно, что это  поля в модалке для todo
-export interface IFieldsContent {
+export interface ITodoFieldsContent {
   description: string;
   priority: string;
   status: string;

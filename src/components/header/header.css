@@ -8,6 +8,9 @@
   padding: 20px 0;
   font-size: 18px;
 }
+.main-nav__active-link {
+  color: var(--color-secondary);
+}
 .main-nav__list {
   display: flex;
   list-style: none;

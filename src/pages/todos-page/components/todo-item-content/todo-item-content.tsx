@@ -1,10 +1,10 @@
 import React from 'react';
-import { IFieldsContent } from '../../../../interfaces';
+import { ITodoFieldsContent } from '../../../../interfaces';
 import { Id } from '../../../../types';
 import './todo-item-content.css';
 
 interface TodoItemContentProps {
-  fieldsContent: IFieldsContent;
+  fieldsContent: ITodoFieldsContent;
   onDeleted: () => any;
   // onDeleted: () => (id: Id) => void
 }

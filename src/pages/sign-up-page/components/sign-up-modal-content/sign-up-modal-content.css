@@ -25,18 +25,24 @@
   background-color: var(--color-secondary);
   color: #fff;
 }
-.modal--sign-up__go-to-sign-in,
-.modal--sign-up__sign-up-with-google {
+.modal--sign-up__go-to-sign-in {
   display: block;
   margin-top: 30px;
 }
-.modal--sign-up__sign-in-link,
-.modal--sign-up__google-link {
+.modal--sign-up__sign-up-with-google {
+  display: flex;
+
+  align-items: center;
+  margin-top: 30px;
+}
+.sign-up-with-google__text {
+  margin-right: 10px;
+}
+.modal--sign-up__sign-in-link {
   position: relative;
   color: var(--color-secondary);
 }
-.modal--sign-up__sign-in-link::before,
-.modal--sign-up__google-link::before {
+.modal--sign-up__sign-in-link::before {
   position: absolute;
   content: '';
   width: 100%;

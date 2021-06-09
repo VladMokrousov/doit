@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PageTitle from '../../components/page-title';
 import Portal from '../../components/portal';
 import Modal from '../../components/modal';
-import { useAppContext } from '../../context';
+import { useAppContext, useTooltipContext } from '../../context';
 import firebase from 'firebase/app';
 import ChangeEmailModalContent from './components/change-email-modal-content';
 import ChangePasswordModalContent from './components/change-password-modal-content';
@@ -12,6 +12,7 @@ import './index.css';
 // @todo Рефакторинг компонента + привести к единому виду названия функций, переменных из useState
 const SettingsPage: React.FC = () => {
   const { currentUser, actionCodeSettings } = useAppContext();
+  const { showTooltip } = useTooltipContext();
 
   const [name, setName] = useState(currentUser.displayName);
   const [photoUrl, setPhotoUrl] = useState(currentUser.photoURL);
@@ -36,7 +37,7 @@ const SettingsPage: React.FC = () => {
       })
       .then(() => setIsNameClicked(false))
       .catch((err: any) => {
-        console.log('Не удалось обновить имя пользователя', err.message);
+        showTooltip(`User name didn't update: ${err.message}`);
       });
   };
   const onNameCancel = (): void => {
@@ -55,7 +56,7 @@ const SettingsPage: React.FC = () => {
       })
       .then(() => setIsAvatarClicked(false))
       .catch((err: any) => {
-        console.log('Не удалось обновить аватар пользователя', err.message);
+        showTooltip(`User avatar didn't update: ${err.message}`);
       });
   };
   const onPhotoUrlCancel = (): void => {
@@ -69,10 +70,10 @@ const SettingsPage: React.FC = () => {
       .auth()
       .sendPasswordResetEmail(email, actionCodeSettings)
       .then(() => {
-        // @todo Всплывает тултип с просьбой проверить почту
+        showTooltip('Please check your email');
       })
       .catch((err) => {
-        console.log('Не удалось отправить email:(', err.message);
+        showTooltip(`Email for reset password didn't send ${err.message}`);
       });
   };
 
@@ -196,7 +197,7 @@ const SettingsPage: React.FC = () => {
               </div>
               <div className="settings-item">
                 <button className="settings-item__btn" onClick={onEmailForResetPasswordSend}>
-                  Send me email to reset the password
+                  Send me the email to reset the password
                 </button>
               </div>
             </>

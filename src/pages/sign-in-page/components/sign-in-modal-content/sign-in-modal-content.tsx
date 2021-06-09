@@ -49,6 +49,15 @@ const SignInModalContent: React.FC = () => {
       .signInWithEmailAndPassword(email, password)
       .catch((err) => showTooltip(err.message));
   };
+  const googleSignIn = (): void => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .catch((error) => {
+        showTooltip(error.message);
+      });
+  };
 
   return (
     <>
@@ -61,6 +70,7 @@ const SignInModalContent: React.FC = () => {
           name="email"
           placeholder="Enter you email"
           onChange={onChange}
+          value={state.email}
           required
         />
 
@@ -72,6 +82,7 @@ const SignInModalContent: React.FC = () => {
           name="password"
           placeholder="Enter you password"
           onChange={onChange}
+          value={state.password}
           required
         />
         <label htmlFor="rememberMe">Remember me </label>
@@ -86,10 +97,10 @@ const SignInModalContent: React.FC = () => {
 
         <button className="sign-in-form__submit">Sign in</button>
       </form>
-      {/* @todo проставить ссылку */}
-      <Link className="modal--sign-in__google-link" to="#">
+
+      <button className="modal--sign-in__google-btn" onClick={googleSignIn}>
         Sign in with Google
-      </Link>
+      </button>
 
       <span className="modal--sign-in__go-to-reset">
         Forgot password?{' '}

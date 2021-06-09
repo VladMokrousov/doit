@@ -4,7 +4,7 @@ import NotesList from './components/notes-list';
 import Portal from '../../components/portal';
 import NotesModalContent from './components/notes-modal-content';
 import Modal from '../../components/modal';
-import { useAppContext } from '../../context';
+import { useAppContext, useTooltipContext } from '../../context';
 import firebase from 'firebase/app';
 import { INoteItem } from '../../interfaces';
 import { Id } from '../../types';
@@ -22,17 +22,16 @@ interface INotesPageState {
 
 const NotesPage: React.FC = () => {
   const { currentUser } = useAppContext();
-  // console.log('Компонент монтируется или обновляется');
+  const { showTooltip } = useTooltipContext();
   const [state, setState] = useState<INotesPageState>({
     showModal: false,
     selectedItemId: false,
     isDataLoaded: false,
   });
-  // console.log(state);
+
   useEffect(() => {
-    //Обернуть в try catch?
+    // @todo Обернуть в try catch?
     const getNotes = (elem: firebase.database.DataSnapshot) => {
-      // console.log('Данные из бд подтягиваются');
       setState(({ isDataLoaded, ...restParams }) => {
         return {
           isDataLoaded: true,
@@ -68,7 +67,7 @@ const NotesPage: React.FC = () => {
         .ref('users/' + currentUser.uid + '/notes')
         .push(newItem)
         .catch((e) => {
-          console.log(`Add item failed: ${e.message}`);
+          showTooltip(`Add item failed: ${e.message}`);
         });
     };
 
@@ -82,8 +81,8 @@ const NotesPage: React.FC = () => {
       }.${currentDate.getFullYear()}`;
     };
 
-    // evt: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
-    // Сделать отдельную функцию на закрытие окна?
+    // @todo evt: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
+    // @todo Сделать отдельную функцию на закрытие окна?
     const toggleModal = (evt: any): void => {
       if (evt.target.textContent == 'X') {
         setState((prevState) => {
@@ -125,15 +124,14 @@ const NotesPage: React.FC = () => {
                   .ref('users/' + currentUser.uid + `/notes/${childSnapshot.key}`)
                   .remove()
                   .catch((error) => {
-                    //Нужно уведомить пользователя, что удаление не прошло успешно
-                    console.log('Remove failed: ' + error.message);
+                    showTooltip(`Remove failed: ${error.message}`);
                   });
                 return true;
               }
             });
           })
           .catch((error) => {
-            console.log("Couldn't take the data from DB: " + error);
+            showTooltip(`Couldn't take the data from DB: ${error.message}`);
           });
       };
 
@@ -150,15 +148,14 @@ const NotesPage: React.FC = () => {
                   .ref('users/' + currentUser.uid + `/notes/${childSnapshot.key}/description`)
                   .set(description)
                   .catch((error) => {
-                    //Нужно уведомить пользователя, что редактирование не прошло успешно
-                    console.log('Edit item failed: ' + error.message);
+                    showTooltip(`Edit item failed: ${error.message}`);
                   });
                 return true;
               }
             });
           })
           .catch((error) => {
-            console.log("Couldn't take the data from DB: " + error);
+            showTooltip(`Couldn't take the data from DB: ${error.message}`);
           });
 
         setState(({ selectedItemId, ...restParams }) => {
@@ -176,7 +173,7 @@ const NotesPage: React.FC = () => {
             selectedItemId: id,
           };
         });
-        //В дальнейшем нужно избавиться от передачи события
+        // @todo В дальнейшем нужно избавиться от передачи события
         toggleModal(evt);
       };
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTooltipContext } from '../../../../context';
 import firebase from 'firebase/app';
 import './change-password-modal-content.css';
 
@@ -15,6 +16,8 @@ const ChangePasswordModalContent: React.FC<ChangePasswordModalProps> = ({
   onToggleModal,
   user,
 }) => {
+  const { showTooltip } = useTooltipContext();
+
   const [credentials, setCredentials] = useState<IConfirmCredentials>({
     email: user.email,
     oldPassword: '',
@@ -50,7 +53,7 @@ const ChangePasswordModalContent: React.FC<ChangePasswordModalProps> = ({
         setIsFirstModal(false);
       })
       .catch((error: any) => {
-        console.log('Не удалось сделать reauth', error);
+        showTooltip(`Reauth didn't pass: ${error.message}`);
       });
   };
 
@@ -60,11 +63,11 @@ const ChangePasswordModalContent: React.FC<ChangePasswordModalProps> = ({
     user
       .updatePassword(password)
       .then(() => {
-        console.log('Ты успешно обновил пароль!');
+        showTooltip('Your password was successfully updated!');
         onToggleModal(evt);
       })
       .catch((err: any) => {
-        console.log('Не получилось обновить пароль...', err);
+        showTooltip(`Your password didn't be update: ${err.message}`);
       });
   };
 

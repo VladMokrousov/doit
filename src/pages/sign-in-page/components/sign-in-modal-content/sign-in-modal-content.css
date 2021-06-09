@@ -33,19 +33,16 @@
   display: block;
   margin-top: 30px;
 }
-.modal--sign-in__google-link {
-  display: inline-block;
+.modal--sign-in__google-btn {
   margin-top: 30px;
 }
 .modal--sign-in__sign-up-link,
-.modal--sign-in__reset-link,
-.modal--sign-in__google-link {
+.modal--sign-in__reset-link {
   position: relative;
   color: var(--color-secondary);
 }
 .modal--sign-in__sign-up-link::before,
-.modal--sign-in__reset-link::before,
-.modal--sign-in__google-link::before {
+.modal--sign-in__reset-link::before {
   position: absolute;
   content: '';
   width: 100%;
