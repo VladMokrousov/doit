@@ -61,50 +61,60 @@ const SignUpModalContent: React.FC = () => {
   return (
     <>
       <form className="sign-up-form" onSubmit={onSubmit}>
-        <label htmlFor="email">Email (*): </label>
-        <input
-          className="sign-up-form__email-field"
-          id="email"
-          type="email"
-          name="email"
-          placeholder="Enter your email"
-          onChange={onChange}
-          value={state.email}
-          required
-        />
+        <div className="sign-up-form__field-wrapper">
+          <label className="sign-up-form__label" htmlFor="email">
+            Email<sup className="sign-up-form__label-required">*</sup>:
+          </label>
+          <input
+            className="sign-up-form__field"
+            id="email"
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            onChange={onChange}
+            value={state.email}
+            required
+          />
+        </div>
 
-        <label htmlFor="password">Password (*): </label>
-        <input
-          className="sign-up-form__password-field"
-          id="password"
-          type="password"
-          name="password"
-          placeholder="Create a password"
-          onChange={onChange}
-          value={state.password}
-          required
-        />
+        <div className="sign-up-form__field-wrapper">
+          <label className="sign-up-form__label" htmlFor="password">
+            Password<sup className="sign-up-form__label-required">*</sup>:
+          </label>
+          <input
+            className="sign-up-form__field"
+            id="password"
+            type="password"
+            name="password"
+            placeholder="Create a password"
+            onChange={onChange}
+            value={state.password}
+            required
+          />
+        </div>
 
-        <label htmlFor="repeatPassword">Repeat password (*): </label>
-        <input
-          className="sign-up-form__repeat-password-field"
-          id="repeatPassword"
-          type="password"
-          name="repeat-password"
-          placeholder="Repeat a password"
-          onChange={onChange}
-          value={state.repeatPassword}
-          required
-        />
+        <div className="sign-up-form__field-wrapper">
+          <label className="sign-up-form__label" htmlFor="repeatPassword">
+            Repeat password<sup className="sign-up-form__label-required">*</sup>:
+          </label>
+          <input
+            className="sign-up-form__field"
+            id="repeatPassword"
+            type="password"
+            name="repeat-password"
+            placeholder="Repeat a password"
+            onChange={onChange}
+            value={state.repeatPassword}
+            required
+          />
+        </div>
 
         <button className="sign-up-form__submit">Sign up</button>
       </form>
       <div className="modal--sign-up__sign-up-with-google">
-        <span className="sign-up-with-google__text">
-          You can pass an alternative registration with Google.{' '}
-        </span>
+        <span className="sign-up-with-google__text">Also you can</span>
         <button className="sign-up-with-google__btn" onClick={googleSignUp}>
-          Let's do it!
+          Sign up with
         </button>
       </div>
 

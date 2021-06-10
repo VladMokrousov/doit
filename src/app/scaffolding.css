@@ -64,9 +64,8 @@ button {
 }
 
 :root {
+  --color-important: #ff2a2a;
   --color-secondary: #8f1010;
-  /* Ближе к зел D6E01F */
-  --color-green: #d6e01f;
-  /* Ближе к желт 9BCC34 */
-  /* Промежуточный BFD729 */
+  --color-decorative-light: #d6e01f;
+  --color-decorative-dark: #9bcc34;
 }

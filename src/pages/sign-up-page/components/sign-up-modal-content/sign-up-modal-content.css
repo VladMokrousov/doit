@@ -4,43 +4,106 @@
   min-height: 300px;
   padding: 20px;
 }
-
-.sign-up-form__email-field,
-.sign-up-form__password-field,
-.sign-up-form__repeat-password-field {
-  display: block;
-  width: 100%;
+.sign-up-form {
+  margin-bottom: 30px;
+}
+.sign-up-form__field-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
-  box-sizing: border-box;
+}
+
+.sign-up-form__label {
+  margin-right: 10px;
+}
+.sign-up-form__label-required {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-important);
+}
+.sign-up-form__field {
+  flex-grow: 1;
 }
 
 .sign-up-form__submit {
+  position: relative;
   display: block;
   margin-left: auto;
-  width: 140px;
+  padding: 0 35px 0 15px;
   height: 40px;
-  border-radius: 5px;
-  padding: 0;
   border: none;
-  background-color: var(--color-secondary);
-  color: #fff;
+  border-radius: 20px;
+
+  background: linear-gradient(
+    to bottom,
+    var(--color-decorative-light),
+    var(--color-decorative-dark)
+  );
+  color: #000;
+  transition-duration: 0.3s;
 }
-.modal--sign-up__go-to-sign-in {
-  display: block;
-  margin-top: 30px;
+.sign-up-form__submit::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  width: 15px;
+  height: 15px;
+  background-image: url('../../../../assets/img/sign-in-icon.svg');
+  background-position: 0 0;
+  background-repeat: no-repeat;
 }
+.sign-up-form__submit:hover,
+.sign-up-form__submit:focus {
+  opacity: 0.8;
+}
+.sign-up-form__submit:active {
+  opacity: 0.4;
+}
+
 .modal--sign-up__sign-up-with-google {
   display: flex;
-
   align-items: center;
-  margin-top: 30px;
+  margin-bottom: 30px;
 }
 .sign-up-with-google__text {
   margin-right: 10px;
 }
+.sign-up-with-google__btn {
+  position: relative;
+  padding: 0 40px 0 15px;
+  height: 40px;
+  background-color: #fff;
+  /* border: none; */
+  border: 1px solid #a0a0a0;
+  border-radius: 20px;
+  transition-duration: 0.3s;
+}
+.sign-up-with-google__btn::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 15px;
+  width: 20px;
+  height: 20px;
+  background-image: url('../../../../assets/img/google-icon.svg');
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+.sign-up-with-google__btn:hover,
+.sign-up-with-google__btn:focus {
+  opacity: 0.8;
+}
+.sign-up-with-google__btn:active {
+  opacity: 0.4;
+}
+
+.modal--sign-up__go-to-sign-in {
+  display: block;
+}
 .modal--sign-up__sign-in-link {
   position: relative;
-  color: var(--color-secondary);
 }
 .modal--sign-up__sign-in-link::before {
   position: absolute;
@@ -49,5 +112,5 @@
   height: 1px;
   bottom: -3px;
   left: 0;
-  background-color: var(--color-secondary);
+  background-color: var(--color-decorative-dark);
 }
