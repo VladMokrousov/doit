@@ -50,9 +50,5 @@
 .modal--change-email,
 .modal--change-password,
 .modal--delete-account {
-  position: relative;
   top: 25vh;
-  width: 500px;
-  min-height: 300px;
-  padding: 20px;
 }

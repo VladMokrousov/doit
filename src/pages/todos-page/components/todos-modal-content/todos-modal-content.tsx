@@ -175,7 +175,7 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
         value={endDatePlan}
       />
 
-      <button className="todos-form__submit">Save</button>
+      <button className="todos-form__submit-btn">Save</button>
     </form>
   );
 };

@@ -109,7 +109,7 @@ const SignUpModalContent: React.FC = () => {
           />
         </div>
 
-        <button className="sign-up-form__submit">Sign up</button>
+        <button className="sign-up-form__submit-btn">Sign up</button>
       </form>
       <div className="modal--sign-up__sign-up-with-google">
         <span className="sign-up-with-google__text">Also you can</span>

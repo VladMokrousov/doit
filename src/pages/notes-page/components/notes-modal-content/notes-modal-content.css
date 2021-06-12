@@ -1,9 +1,5 @@
 .modal--notes {
-  position: relative;
   top: 25vh;
-  width: 500px;
-  min-height: 300px;
-  padding: 20px;
 }
 
 .notes-form__description-field {
@@ -14,7 +10,7 @@
   box-sizing: border-box;
 }
 
-.notes-form__submit {
+.notes-form__submit-btn {
   display: block;
   margin-top: 50px;
   margin-left: auto;

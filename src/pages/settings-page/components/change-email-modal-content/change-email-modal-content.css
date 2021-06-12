@@ -7,7 +7,7 @@
   box-sizing: border-box;
 }
 
-.change-email-form__submit {
+.change-email-form__submit-btn {
   display: block;
   margin-top: 50px;
   margin-left: auto;

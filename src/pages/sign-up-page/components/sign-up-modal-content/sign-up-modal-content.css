@@ -1,8 +1,5 @@
 .modal--sign-up {
   top: 30vh;
-  width: 500px;
-  min-height: 300px;
-  padding: 20px;
 }
 .sign-up-form {
   margin-bottom: 30px;
@@ -26,7 +23,7 @@
   flex-grow: 1;
 }
 
-.sign-up-form__submit {
+.sign-up-form__submit-btn {
   position: relative;
   display: block;
   margin-left: auto;
@@ -43,7 +40,7 @@
   color: #000;
   transition-duration: 0.3s;
 }
-.sign-up-form__submit::before {
+.sign-up-form__submit-btn::before {
   content: '';
   position: absolute;
   top: 12px;
@@ -54,11 +51,11 @@
   background-position: 0 0;
   background-repeat: no-repeat;
 }
-.sign-up-form__submit:hover,
-.sign-up-form__submit:focus {
+.sign-up-form__submit-btn:hover,
+.sign-up-form__submit-btn:focus {
   opacity: 0.8;
 }
-.sign-up-form__submit:active {
+.sign-up-form__submit-btn:active {
   opacity: 0.4;
 }
 
@@ -75,7 +72,6 @@
   padding: 0 40px 0 15px;
   height: 40px;
   background-color: #fff;
-  /* border: none; */
   border: 1px solid #a0a0a0;
   border-radius: 20px;
   transition-duration: 0.3s;
@@ -94,16 +90,16 @@
 .sign-up-with-google__btn:hover,
 .sign-up-with-google__btn:focus {
   opacity: 0.8;
+  border: 1px solid var(--color-decorative-dark);
 }
 .sign-up-with-google__btn:active {
   opacity: 0.4;
+  border: 1px solid var(--color-decorative-dark);
 }
 
-.modal--sign-up__go-to-sign-in {
-  display: block;
-}
 .modal--sign-up__sign-in-link {
   position: relative;
+  transition-duration: 0.3s;
 }
 .modal--sign-up__sign-in-link::before {
   position: absolute;
@@ -113,4 +109,12 @@
   bottom: -3px;
   left: 0;
   background-color: var(--color-decorative-dark);
+}
+
+.modal--sign-up__sign-in-link:hover,
+.modal--sign-up__sign-in-link:focus {
+  opacity: 0.8;
+}
+.modal--sign-up__sign-in-link:active {
+  opacity: 0.4;
 }

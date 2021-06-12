@@ -119,7 +119,9 @@ const ChangePasswordModalContent: React.FC<ChangePasswordModalProps> = ({
         </>
       )}
 
-      <button className="change-password-form__submit">{isFirstModal ? 'Continue' : 'Save'}</button>
+      <button className="change-password-form__submit-btn">
+        {isFirstModal ? 'Continue' : 'Save'}
+      </button>
     </form>
   );
 };

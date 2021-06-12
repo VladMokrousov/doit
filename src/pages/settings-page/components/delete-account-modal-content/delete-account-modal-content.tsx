@@ -90,17 +90,17 @@ const ChangeAccountDeleteModalContent: React.FC<ChangeAccountDeleteModalProps> =
             value={credentials.password}
             required
           />
-          <button className="delete-account-form__submit">Continue</button>
+          <button className="delete-account-form__submit-btn">Continue</button>
         </>
       ) : (
         <>
           <span>Do you sure want to delete your account? This action is irreversibly...</span>
-          <div className="delete-account-form__bnt-wrapper">
-            <button className="delete-account-form__agree" type="submit">
+          <div className="delete-account-form__btn-wrapper">
+            <button className="delete-account-form__agree-btn" type="submit">
               Yes
             </button>
             <button
-              className="delete-account-form__disagree"
+              className="delete-account-form__disagree-btn"
               type="button"
               onClick={onCancelDeleteAccount}
             >

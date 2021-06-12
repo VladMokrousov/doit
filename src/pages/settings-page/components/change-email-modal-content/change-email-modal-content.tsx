@@ -116,7 +116,9 @@ const ChangeEmailModalContent: React.FC<ChangeEmailModalProps> = ({
         </>
       )}
 
-      <button className="change-email-form__submit">{isFirstModal ? 'Continue' : 'Save'}</button>
+      <button className="change-email-form__submit-btn">
+        {isFirstModal ? 'Continue' : 'Save'}
+      </button>
     </form>
   );
 };

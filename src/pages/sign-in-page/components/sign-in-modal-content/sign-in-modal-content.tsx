@@ -62,55 +62,68 @@ const SignInModalContent: React.FC = () => {
   return (
     <>
       <form className="sign-in-form" onSubmit={onSubmit}>
-        <label htmlFor="email">Email (*): </label>
-        <input
-          className="sign-in-form__email-field"
-          id="email"
-          type="email"
-          name="email"
-          placeholder="Enter you email"
-          onChange={onChange}
-          value={state.email}
-          required
-        />
+        <div className="sign-in-form__field-wrapper">
+          <label className="sign-in-form__label" htmlFor="email">
+            Email<sup className="sign-in-form__label-required">*</sup>:
+          </label>
+          <input
+            className="sign-in-form__field"
+            id="email"
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            onChange={onChange}
+            value={state.email}
+            required
+          />
+        </div>
 
-        <label htmlFor="password">Password (*): </label>
-        <input
-          className="sign-in-form__password-field"
-          id="password"
-          type="password"
-          name="password"
-          placeholder="Enter you password"
-          onChange={onChange}
-          value={state.password}
-          required
-        />
-        <label htmlFor="rememberMe">Remember me </label>
-        <input
-          className="sign-up-form__remember-me-checkbox"
-          id="rememberMe"
-          type="checkbox"
-          name="remember-me"
-          onChange={onRememberMeToggle}
-          checked={isRememberMeChecked ? true : false}
-        />
+        <div className="sign-in-form__field-wrapper">
+          <label className="sign-in-form__label" htmlFor="password">
+            Password<sup className="sign-in-form__label-required">*</sup>:
+          </label>
+          <input
+            className="sign-in-form__field"
+            id="password"
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+            onChange={onChange}
+            value={state.password}
+            required
+          />
+        </div>
 
-        <button className="sign-in-form__submit">Sign in</button>
+        <div className="sign-in-form__field-wrapper sign-in-form__field-wrapper--checkbox">
+          <label className="sign-in-form__label" htmlFor="rememberMe">
+            Remember me:
+          </label>
+          <input
+            className="sign-in-form__field sign-in-form__field--checkbox"
+            id="rememberMe"
+            type="checkbox"
+            name="remember-me"
+            onChange={onRememberMeToggle}
+            checked={isRememberMeChecked ? true : false}
+          />
+        </div>
+
+        <button className="sign-in-form__submit-btn">Sign in</button>
       </form>
 
       <button className="modal--sign-in__google-btn" onClick={googleSignIn}>
-        Sign in with Google
+        Sign in with
       </button>
 
       <span className="modal--sign-in__go-to-reset">
         Forgot password?{' '}
-        <Link className="modal--sign-in__reset-link" to="/reset-password">
+        <Link className="modal--sign-in__link" to="/reset-password">
           Reset
         </Link>
       </span>
       <span className="modal--sign-in__go-to-sign-up">
-        Return to{' '}
-        <Link className="modal--sign-in__sign-up-link" to="/sign-up">
+        Back to{' '}
+        <Link className="modal--sign-in__link" to="/sign-up">
           Sign up
         </Link>
       </span>

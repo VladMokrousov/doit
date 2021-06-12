@@ -1,9 +1,5 @@
 .modal--todos {
-  position: relative;
   top: 30vh;
-  width: 500px;
-  min-height: 300px;
-  padding: 20px;
 }
 
 .todos-form__description-field,
@@ -22,7 +18,7 @@
   min-width: 100px;
 }
 
-.todos-form__submit {
+.todos-form__submit-btn {
   display: block;
   margin-top: 50px;
   margin-left: auto;

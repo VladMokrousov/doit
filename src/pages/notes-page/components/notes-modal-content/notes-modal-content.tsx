@@ -71,7 +71,7 @@ const NotesModalContent: React.FC<NotesModalProps> = ({
         required
       />
 
-      <button className="notes-form__submit">Save</button>
+      <button className="notes-form__submit-btn">Save</button>
     </form>
   );
 };

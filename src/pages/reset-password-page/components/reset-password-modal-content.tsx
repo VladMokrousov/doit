@@ -43,7 +43,7 @@ const ResetPasswordModalContent: React.FC = () => {
           required
         />
 
-        <button className="reset-password-form__submit">Reset password</button>
+        <button className="reset-password-form__submit-btn">Reset password</button>
       </form>
 
       <Link className="modal--reset-password__sign-in-link" to="/sign-in">

@@ -5,7 +5,7 @@
   margin-bottom: 20px;
   box-sizing: border-box;
 }
-.delete-account-form__bnt-wrapper {
+.delete-account-form__btn-wrapper {
   display: flex;
   justify-content: space-between;
   width: 400px;
@@ -13,9 +13,9 @@
   margin-top: 150px;
 }
 
-.delete-account-form__submit,
-.delete-account-form__agree,
-.delete-account-form__disagree {
+.delete-account-form__submit-btn,
+.delete-account-form__agree-btn,
+.delete-account-form__disagree-btn {
   display: block;
   margin-top: 50px;
   margin-left: auto;
@@ -28,10 +28,10 @@
   color: #fff;
 }
 
-.delete-account-form__agree,
-.delete-account-form__disagree {
+.delete-account-form__agree-btn,
+.delete-account-form__disagree-btn {
   margin: 0;
 }
-.delete-account-form__disagree {
+.delete-account-form__disagree-btn {
   background-color: var(--color-secondary);
 }
