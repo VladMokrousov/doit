@@ -31,18 +31,21 @@ const ResetPasswordModalContent: React.FC = () => {
   return (
     <>
       <form className="reset-password-form" onSubmit={onSubmit}>
-        <label htmlFor="email">Email (*): </label>
-        <input
-          className="reset-password-form__email-field"
-          id="email"
-          type="email"
-          name="email"
-          placeholder="Enter you email"
-          onChange={onChange}
-          value={email}
-          required
-        />
-
+        <div className="reset-password-form__field-wrapper">
+          <label className="reset-password-form__label" htmlFor="email">
+            Email<sup className="reset-password-form__label-required">*</sup>:
+          </label>
+          <input
+            className="reset-password-form__field"
+            id="email"
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            onChange={onChange}
+            value={email}
+            required
+          />
+        </div>
         <button className="reset-password-form__submit-btn">Reset password</button>
       </form>
 

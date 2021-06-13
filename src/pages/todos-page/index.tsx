@@ -11,6 +11,8 @@ import firebase from 'firebase/app';
 import { ITodoFieldsContent, ITodoItem, IEveryStatusCount } from '../../interfaces';
 import { Id } from '../../types';
 
+import './index.css';
+
 interface ITodosData {
   [key: string]: ITodoItem;
 }
@@ -233,8 +235,8 @@ const TodosPage: React.FC = () => {
         <main className="todos-page">
           <div className="container">
             <PageTitle text="Todo List" />
-            <div className="flex-wrapper">
-              <button className="modal-toggle-button" onClick={toggleModal}>
+            <div className="todos-page__control-panel">
+              <button className="todos-page__add-task-btn" onClick={toggleModal}>
                 Add task
               </button>
               <SearchPanel onSearchChange={onSearchChange} />
@@ -272,8 +274,8 @@ const TodosPage: React.FC = () => {
       <main className="todos-page">
         <div className="container">
           <PageTitle text="Todo List" />
-          <div className="flex-wrapper">
-            <button className="modal-toggle-button" onClick={toggleModal}>
+          <div className="flex-wrapper todos-page__control-panel">
+            <button className="todos-page__add-task-btn" onClick={toggleModal}>
               Add task
             </button>
           </div>

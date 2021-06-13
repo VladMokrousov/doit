@@ -18,7 +18,7 @@ const SearchPanel: React.FC<SearchPanelProps> = ({ onSearchChange }) => {
   return (
     <input
       type="text"
-      placeholder="Type this somthing"
+      placeholder="Search by description"
       className="search-input"
       value={term}
       onChange={onSearchReplace}

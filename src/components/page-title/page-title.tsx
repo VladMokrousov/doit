@@ -1,7 +1,8 @@
-import React from "react";
+import React from 'react';
+import './page-title.css';
 
 interface PageTitleProps {
-  text: string
+  text: string;
 }
 
 const PageTitle: React.FC<PageTitleProps> = ({ text }) => {

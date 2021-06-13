@@ -1,0 +1,40 @@
+.todos-page__control-panel {
+  display: flex;
+  align-items: center;
+}
+
+.todos-page__add-task-btn {
+  position: relative;
+  display: block;
+  margin-left: auto;
+  padding: 0 35px 0 15px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+
+  background: linear-gradient(
+    to bottom,
+    var(--color-decorative-light),
+    var(--color-decorative-dark)
+  );
+  color: #000;
+  transition-duration: 0.3s;
+}
+.todos-page__add-task-btn::before {
+  content: '';
+  position: absolute;
+  top: 13px;
+  right: 15px;
+  width: 15px;
+  height: 15px;
+  background-image: url('../../assets/img/add-task.svg');
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+.todos-page__add-task-btn:hover,
+.todos-page__add-task-btn:focus {
+  opacity: 0.8;
+}
+.todos-page__add-task-btn:active {
+  opacity: 0.4;
+}

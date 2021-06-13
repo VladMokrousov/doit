@@ -183,7 +183,7 @@ const NotesPage: React.FC = () => {
         <main className="notes-page">
           <div className="container">
             <PageTitle text="Notes" />
-            <button className="modal-toggle-button" onClick={toggleModal}>
+            <button className="notes-page__add-note-btn" onClick={toggleModal}>
               Add note
             </button>
             <NotesList
@@ -216,7 +216,7 @@ const NotesPage: React.FC = () => {
       <main className="notes-page">
         <div className="container">
           <PageTitle text="Notes" />
-          <button className="modal-toggle-button" onClick={toggleModal}>
+          <button className="notes-page__add-note-btn" onClick={toggleModal}>
             Add note
           </button>
           <NotesList overlayText="You can sleep soundly" />
