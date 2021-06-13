@@ -18,31 +18,43 @@ const Header: React.FC = () => {
 
   return (
     <header className="page-header">
-      <div className="container flex-wrapper flex-wrapper--jsb">
+      <div className="container flex-wrapper">
         <nav className="main-nav">
-          <NavLink exact to="/" activeClassName="main-nav__active-link">
+          <NavLink exact to="/" className="main-nav__link" activeClassName="main-nav__active-link">
             Doit!
           </NavLink>
           <ul className="main-nav__list">
             <li className="main-nav__item">
-              <NavLink to="/todo" activeClassName="main-nav__active-link">
+              <NavLink
+                to="/todo"
+                className="main-nav__link"
+                activeClassName="main-nav__active-link"
+              >
                 Todo
               </NavLink>
             </li>
             <li className="main-nav__item">
-              <NavLink to="/notes" activeClassName="main-nav__active-link">
+              <NavLink
+                to="/notes"
+                className="main-nav__link"
+                activeClassName="main-nav__active-link"
+              >
                 Notes
               </NavLink>
             </li>
             <li className="main-nav__item">
-              <NavLink to="/settings" activeClassName="main-nav__active-link">
+              <NavLink
+                to="/settings"
+                className="main-nav__link"
+                activeClassName="main-nav__active-link"
+              >
                 Settings
               </NavLink>
             </li>
           </ul>
         </nav>
 
-        <button className="page-header__sign-out" onClick={signOut}>
+        <button className="page-header__sign-out-btn" onClick={signOut}>
           Sign out
         </button>
       </div>

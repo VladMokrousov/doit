@@ -1,16 +1,27 @@
 .page-header {
-  box-shadow: 0 -10px 30px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -10px 25px 0 rgba(0, 0, 0, 0.2);
+  /* @todo Отпределиться между вариантами. Нижний - более собранный */
+  /* box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2); */
 }
 .main-nav {
-  width: 100%;
   display: flex;
   justify-content: space-between;
+  flex-grow: 1;
   padding: 20px 0;
   font-size: 18px;
 }
-.main-nav__active-link {
-  color: var(--color-secondary);
+.main-nav__link {
+  color: rgb(97, 97, 97);
 }
+.main-nav__link:hover,
+.main-nav__link:focus {
+  color: var(--color-decorative-dark);
+}
+.main-nav__active-link {
+  cursor: default;
+  color: var(--color-decorative-dark);
+}
+
 .main-nav__list {
   display: flex;
   list-style: none;
@@ -24,15 +35,35 @@
   margin-left: 0;
 }
 
-.page-header__sign-out {
-  /* display: block; */
-  width: 140px;
+.page-header__sign-out-btn {
+  position: relative;
   height: 40px;
   margin: auto 0;
   margin-left: 60px;
-  border-radius: 5px;
-  padding: 0;
-  border: none;
-  background-color: var(--color-secondary);
-  color: #fff;
+  padding: 0 35px 0 15px;
+  border: 1px solid #a0a0a0;
+  border-radius: 20px;
+  background-color: transparent;
+  transition-duration: 0.3s;
+}
+
+.page-header__sign-out-btn::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  width: 15px;
+  height: 15px;
+  background-image: url('../../assets/img/sign-out.svg');
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+.page-header__sign-out-btn:hover,
+.page-header__sign-out-btn:focus {
+  opacity: 0.8;
+  border: 1px solid var(--color-important);
+}
+.page-header__sign-out-btn:active {
+  opacity: 0.4;
+  border: 1px solid var(--color-important);
 }
