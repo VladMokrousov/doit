@@ -1,6 +1,7 @@
 .todos-page__control-panel {
   display: flex;
   align-items: center;
+  margin-bottom: 15px;
 }
 
 .todos-page__add-task-btn {

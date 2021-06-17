@@ -1,9 +1,9 @@
 .status-filter__btn {
   margin-right: 5px;
-  padding: 0 15px;
-  height: 40px;
+  padding: 0 10px;
+  height: 30px;
   border: none;
-  border-radius: 20px;
+  border-radius: 15px;
   color: #000;
   transition-duration: 0.3s;
 }

@@ -1,6 +1,19 @@
+.table__item-cell {
+  padding: 5px 0;
+}
+.table__item-cell:nth-of-type(6n) {
+  padding: 0;
+}
 .table__btn--del {
   padding: 0;
   border: 0;
-  color: var(--color-secondary);
   background-color: transparent;
+}
+.table__btn--del svg {
+  padding-top: 2px;
+  transition-duration: 0.3s;
+}
+.table__btn--del:hover svg,
+.table__btn--del:focus svg {
+  opacity: 0.7;
 }
