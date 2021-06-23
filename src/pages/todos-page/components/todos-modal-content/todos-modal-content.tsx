@@ -125,22 +125,30 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
 
   return (
     <form className="todos-form" onSubmit={onSubmit}>
-      <label htmlFor="description">Description (*): </label>
-      <input
-        className="todos-form__description-field"
-        id="description"
-        type="text"
-        name="description"
-        onChange={onDescriptionChange}
-        placeholder="What must be to do?"
-        value={description}
-        required
-      />
-      <div className="todos-form__select-wrapper flex-wrapper flex-wrapper--jsb">
-        <div className="todos-form__priority-wrapper">
-          <span className="todos-form__label-for-select">Priority:</span>
+      <div className="todos-form__field-wrapper">
+        <label className="todos-form__label" htmlFor="description">
+          Description<sup className="todos-form__label-required">*</sup>:
+        </label>
+        <input
+          className="todos-form__field"
+          id="description"
+          type="text"
+          name="description"
+          onChange={onDescriptionChange}
+          placeholder="What must be to do?"
+          value={description}
+          required
+        />
+      </div>
+
+      <div className="todos-form__fields-group-wrapper">
+        <div className="todos-form__field-wrapper">
+          <label className="todos-form__label" htmlFor="priority">
+            Priority:
+          </label>
           <select
-            className="todos-form__select"
+            className="todos-form__field"
+            id="priority"
             name="priority"
             onChange={onPriorityChange}
             value={priority}
@@ -150,10 +158,13 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
             <option value="High">High</option>
           </select>
         </div>
-        <div className="todos-form__status-wrapper">
-          <span className="todos-form__label-for-select">Status: </span>
+        <div className="todos-form__field-wrapper">
+          <label className="todos-form__label" htmlFor="status">
+            Status:
+          </label>
           <select
-            className="todos-form__select"
+            className="todos-form__field"
+            id="status"
             disabled={!selectedItemId}
             name="status"
             onChange={onStatusChange}
@@ -165,15 +176,19 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
           </select>
         </div>
       </div>
-      <label htmlFor="calendar">End Date: </label>
-      <input
-        className="todos-form__calendar"
-        id="calendar"
-        type="date"
-        name="calendar"
-        onChange={onEndDatePlanChange}
-        value={endDatePlan}
-      />
+      <div className="todos-form__field-wrapper">
+        <label className="todos-form__label" htmlFor="calendar">
+          End Date:{' '}
+        </label>
+        <input
+          className="todos-form__field"
+          id="calendar"
+          type="date"
+          name="calendar"
+          onChange={onEndDatePlanChange}
+          value={endDatePlan}
+        />
+      </div>
 
       <button className="todos-form__submit-btn">Save</button>
     </form>

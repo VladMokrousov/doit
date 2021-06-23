@@ -1,39 +1,48 @@
 .modal--todos {
   top: 30vh;
 }
+.todos-form__field-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.todos-form__fields-group-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
 
-.todos-form__description-field,
-.todos-form__calendar {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-}
-.todos-form__select-wrapper {
-  margin: 15px 0;
-}
-.todos-form__label-for-select {
+.todos-form__label {
   margin-right: 10px;
 }
-.todos-form__select {
-  min-width: 100px;
+.todos-form__label-required {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-important);
 }
-
+.todos-form__field {
+  flex-grow: 1;
+}
 .todos-form__submit-btn {
   display: block;
-  margin-top: 50px;
   margin-left: auto;
-  width: 140px;
+  padding: 0 15px;
   height: 40px;
-  border-radius: 5px;
-  padding: 0;
   border: none;
-  background-color: #169bd5;
-  color: #fff;
+  border-radius: 20px;
+
+  background: linear-gradient(
+    to bottom,
+    var(--color-decorative-light),
+    var(--color-decorative-dark)
+  );
+  color: #000;
+  transition-duration: 0.3s;
 }
-/* .todos-form__error {
-  display: none;
-  position: absolute;
-  bottom: 15px;
-  left: 50px;
-  color: #ce0000;
-} */
+
+.todos-form__submit-btn:hover,
+.todos-form__submit-btn:focus {
+  opacity: 0.8;
+}
+.todos-form__submit-btn:active {
+  opacity: 0.4;
+}

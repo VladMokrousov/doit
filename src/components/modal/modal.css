@@ -19,5 +19,33 @@
   position: absolute;
   right: 20px;
   top: 20px;
-  font-size: 20px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  transition-duration: 0.3s;
+}
+.modal__close:after,
+.modal__close:before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 25px;
+  height: 2px;
+  background-color: #000;
+}
+.modal__close:before {
+  transform: rotate(-45deg);
+}
+.modal__close:after {
+  transform: rotate(45deg);
+}
+.modal__close:hover,
+.modal__close:focus {
+  opacity: 0.8;
+}
+.modal__close:active {
+  opacity: 0.4;
 }

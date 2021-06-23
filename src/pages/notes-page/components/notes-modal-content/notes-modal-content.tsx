@@ -60,9 +60,11 @@ const NotesModalContent: React.FC<NotesModalProps> = ({
 
   return (
     <form className="notes-form" onSubmit={onSubmit}>
-      <label htmlFor="description">Description (*): </label>
+      <label className="notes-form__label" htmlFor="description">
+        Description<sup className="notes-form__label-required">*</sup>:
+      </label>
       <textarea
-        className="notes-form__description-field"
+        className="notes-form__field notes-form__field--description"
         id="description"
         name="description"
         onChange={onDescriptionChange}

@@ -135,13 +135,16 @@ const SettingsPage: React.FC = () => {
                   type="text"
                   name="avatar"
                   onChange={onPhotoUrlChange}
-                  placeholder="Type link on you avatar"
+                  placeholder="Type the link on your avatar"
                   value={photoUrl ? photoUrl : ''}
                 />
                 <button className="settings-item__btn" onClick={onPhotoUrlSave}>
                   Save
                 </button>
-                <button className="settings-item__btn" onClick={onPhotoUrlCancel}>
+                <button
+                  className="settings-item__btn settings-item__btn--cancel"
+                  onClick={onPhotoUrlCancel}
+                >
                   Cancel
                 </button>
               </>
@@ -161,7 +164,10 @@ const SettingsPage: React.FC = () => {
               <button className="settings-item__btn" onClick={onNameSave}>
                 Save
               </button>
-              <button className="settings-item__btn" onClick={onNameCancel}>
+              <button
+                className="settings-item__btn settings-item__btn--cancel"
+                onClick={onNameCancel}
+              >
                 Cancel
               </button>
             </div>

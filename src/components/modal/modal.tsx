@@ -13,7 +13,7 @@ const Modal: React.FC<IModal> = ({ classes, title, onCloseBtnClick, children }) 
     <h2 className="modal__title">{title}</h2>
     {onCloseBtnClick && (
       <button className="modal__close" onClick={onCloseBtnClick}>
-        X
+        <span className="visually-hidden">Закрыть</span>
       </button>
     )}
     {children}
