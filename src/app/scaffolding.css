@@ -69,6 +69,7 @@ button {
 :root {
   --color-gray-extralight: #f7f7f7;
   --color-neutral: #efefef;
+  --color-gray-dark: rgb(88, 88, 88);
   --color-important: #ff2a2a;
   --color-secondary: #8f1010;
   --color-decorative-light: #d6e01f;

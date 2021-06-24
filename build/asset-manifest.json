@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/doit/build/static/css/main.5cff14ed.chunk.css",
-    "main.js": "/doit/build/static/js/main.5e8106f8.chunk.js",
-    "main.js.map": "/doit/build/static/js/main.5e8106f8.chunk.js.map",
+    "main.css": "/doit/build/static/css/main.a5f1ceba.chunk.css",
+    "main.js": "/doit/build/static/js/main.b885c51e.chunk.js",
+    "main.js.map": "/doit/build/static/js/main.b885c51e.chunk.js.map",
     "runtime-main.js": "/doit/build/static/js/runtime-main.25745810.js",
     "runtime-main.js.map": "/doit/build/static/js/runtime-main.25745810.js.map",
     "static/js/2.698f073c.chunk.js": "/doit/build/static/js/2.698f073c.chunk.js",
     "static/js/2.698f073c.chunk.js.map": "/doit/build/static/js/2.698f073c.chunk.js.map",
     "index.html": "/doit/build/index.html",
-    "static/css/main.5cff14ed.chunk.css.map": "/doit/build/static/css/main.5cff14ed.chunk.css.map",
+    "static/css/main.a5f1ceba.chunk.css.map": "/doit/build/static/css/main.a5f1ceba.chunk.css.map",
     "static/js/2.698f073c.chunk.js.LICENSE.txt": "/doit/build/static/js/2.698f073c.chunk.js.LICENSE.txt",
     "static/media/index.css": "/doit/build/static/media/add-task.c569c3c7.svg",
     "static/media/sign-in-modal-content.css": "/doit/build/static/media/sign-in.d4059b8e.svg",
@@ -18,7 +18,7 @@
   "entrypoints": [
     "static/js/runtime-main.25745810.js",
     "static/js/2.698f073c.chunk.js",
-    "static/css/main.5cff14ed.chunk.css",
-    "static/js/main.5e8106f8.chunk.js"
+    "static/css/main.a5f1ceba.chunk.css",
+    "static/js/main.b885c51e.chunk.js"
   ]
 }

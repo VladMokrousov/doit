@@ -111,7 +111,7 @@ const SettingsPage: React.FC = () => {
     <main className="settings-page">
       <div className="container">
         <PageTitle text="Settings" />
-        <span className="settings-page__subtitle">Account</span>
+        <h2 className="settings-page__subtitle">Account</h2>
 
         <div className="settings-wrapper">
           <div className="settings-item settings-item__avatar-wrapper">
@@ -122,11 +122,11 @@ const SettingsPage: React.FC = () => {
                   ? photoUrl
                   : 'https://yt3.ggpht.com/ytc/AAUvwng-3d-BcGfaNN09TTsLOoFfVhCT96sjcPQeJzQ2iQ=s900-c-k-c0x00ffffff-no-rj'
               }
-              onClick={onAvatarClick}
               width="100"
               height="100"
               alt="User's avatar"
             />
+
             {isAvatarClicked ? (
               <>
                 {/* @todo Стоит сделать ref на инпут, чтобы бахать фокус сразу после его появления? */}
@@ -148,74 +148,125 @@ const SettingsPage: React.FC = () => {
                   Cancel
                 </button>
               </>
-            ) : null}
+            ) : (
+              <button
+                className="settings-item__edit-btn settings-item__edit-btn--avatar"
+                onClick={onAvatarClick}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  width="24px"
+                  fill="#000000"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+              </button>
+            )}
           </div>
 
-          {isNameClicked ? (
-            <div className="settings-item">
-              <input
-                className="settings-item__field settings-item__field--name"
-                type="text"
-                name="name"
-                onChange={onNameChange}
-                placeholder="What is your name?"
-                value={name ? name : ''}
-              />
-              <button className="settings-item__btn" onClick={onNameSave}>
-                Save
-              </button>
-              <button
-                className="settings-item__btn settings-item__btn--cancel"
-                onClick={onNameCancel}
-              >
-                Cancel
-              </button>
-            </div>
-          ) : (
-            <div className="settings-item">
-              <span className="settings-item__text" onClick={onNameClick}>
-                {name ? name : 'Anonymous'}
-              </span>
-            </div>
-          )}
+          <div className="settings-item">
+            {isNameClicked ? (
+              <>
+                <input
+                  className="settings-item__field settings-item__field--name"
+                  type="text"
+                  name="name"
+                  onChange={onNameChange}
+                  placeholder="What is your name?"
+                  value={name ? name : ''}
+                />
+                <button className="settings-item__btn" onClick={onNameSave}>
+                  Save
+                </button>
+                <button
+                  className="settings-item__btn settings-item__btn--cancel"
+                  onClick={onNameCancel}
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <span className="settings-item__text">
+                  <b>Your name: </b>
+                  {name ? name : 'Anonymous'}
+                </span>
+                <button
+                  className="settings-item__edit-btn settings-item__edit-btn--name"
+                  onClick={onNameClick}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="18px"
+                    viewBox="0 0 24 24"
+                    width="18px"
+                    fill="#000000"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                  </svg>
+                </button>
+              </>
+            )}
+          </div>
 
           <div className="settings-item settings-item--email">
-            <span onClick={isGoogleUser ? undefined : toggleEmailChangeModal}>Your email: </span>
-
-            <span
-              className={
-                isGoogleUser
-                  ? 'settings-item__text settings-item__text--unclickable'
-                  : 'settings-item__text'
-              }
-              onClick={isGoogleUser ? undefined : toggleEmailChangeModal}
-            >
+            <span className="settings-item__text">
+              <b>Your email: </b>
               {email}
             </span>
+
+            {isGoogleUser ? undefined : (
+              <button
+                className="settings-item__edit-btn settings-item__edit-btn--email"
+                onClick={toggleEmailChangeModal}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="18px"
+                  viewBox="0 0 24 24"
+                  width="18px"
+                  fill="#000000"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+              </button>
+            )}
           </div>
 
           {!isGoogleUser && (
             <>
               <div className="settings-item">
+                <span>If you remember your password, you can</span>
                 <button className="settings-item__btn" onClick={togglePasswordChangeModal}>
-                  Change password
+                  Change it
                 </button>
               </div>
               <div className="settings-item">
+                <span>
+                  But if you forgot it, we can send the email to you to reset the password
+                </span>
                 <button className="settings-item__btn" onClick={onEmailForResetPasswordSend}>
-                  Send me the email to reset the password
+                  Send the email
                 </button>
               </div>
             </>
           )}
 
           <div className="settings-item">
-            <button className="settings-item__btn" onClick={toggleAccountDeleteModal}>
+            <button
+              className="settings-item__btn settings-item__btn--cancel settings-item__btn--delete-account"
+              onClick={toggleAccountDeleteModal}
+            >
               Delete account
             </button>
           </div>
         </div>
-        <span className="settings-page__subtitle">App</span>
+        <h2 className="settings-page__subtitle">App</h2>
         {/* @todo Здесь будет тогглер цветовой схемы сайта */}
 
         {showModalEmailChange && (

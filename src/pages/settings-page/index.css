@@ -1,11 +1,12 @@
 .settings-page__subtitle {
+  margin-bottom: 25px;
+  margin-top: 0;
+  font-weight: 700;
   font-size: 20px;
   line-height: 1;
-  margin-bottom: 15px;
-  display: block;
 }
-.settings-page__subtitle:last-of-type {
-  margin-top: 30px;
+.settings-wrapper {
+  margin-bottom: 30px;
 }
 
 .settings-item {
@@ -19,13 +20,34 @@
   /* display: block; */
   border-radius: 50%;
 }
-.settings-item__avatar,
-.settings-item__text {
-  cursor: pointer;
+.settings-item__text b {
+  font-weight: 700;
+  color: var(--color-gray-dark);
 }
-.settings-item__text--unclickable {
-  cursor: auto;
+.settings-item__edit-btn {
+  width: 24px;
+  height: 24px;
+  margin-bottom: auto;
+  padding: 0;
+  border: none;
+  background-color: transparent;
 }
+.settings-item__edit-btn--name,
+.settings-item__edit-btn--email {
+  margin-bottom: 0;
+  margin-left: 5px;
+  width: 18px;
+  height: 18px;
+}
+.settings-item__edit-btn svg {
+  fill: var(--color-gray-dark);
+  transition-duration: 0.3s;
+}
+.settings-item__edit-btn:hover svg,
+.settings-item__edit-btn:focus svg {
+  fill: var(--color-decorative-dark);
+}
+
 .settings-item:last-of-type {
   margin-bottom: 0;
 }
@@ -66,14 +88,16 @@
 .settings-item__btn:active {
   opacity: 0.4;
 }
+.settings-item__btn--cancel {
+  background: linear-gradient(180deg, var(--color-important), #750000);
+  color: #fff;
+}
+.settings-item__btn--delete-account {
+  margin-left: 0;
+}
 
 .modal--change-email,
 .modal--change-password,
 .modal--delete-account {
   top: 25vh;
-}
-
-.settings-item__btn--cancel {
-  background: linear-gradient(180deg, var(--color-important), #750000);
-  color: #fff;
 }
