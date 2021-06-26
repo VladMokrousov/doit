@@ -8,6 +8,7 @@ import ChangeEmailModalContent from './components/change-email-modal-content';
 import ChangePasswordModalContent from './components/change-password-modal-content';
 import DeleteAccountModalContent from './components/delete-account-modal-content';
 import './index.css';
+import anonymousImg from '../../assets/img/anonymous.jpg';
 
 // @todo Рефакторинг компонента + привести к единому виду названия функций, переменных из useState
 const SettingsPage: React.FC = () => {
@@ -70,7 +71,7 @@ const SettingsPage: React.FC = () => {
       .auth()
       .sendPasswordResetEmail(email, actionCodeSettings)
       .then(() => {
-        showTooltip('Please check your email');
+        showTooltip('The email was send');
       })
       .catch((err) => {
         showTooltip(`Email for reset password didn't send ${err.message}`);
@@ -117,11 +118,7 @@ const SettingsPage: React.FC = () => {
           <div className="settings-item settings-item__avatar-wrapper">
             <img
               className="settings-item__avatar"
-              src={
-                photoUrl
-                  ? photoUrl
-                  : 'https://yt3.ggpht.com/ytc/AAUvwng-3d-BcGfaNN09TTsLOoFfVhCT96sjcPQeJzQ2iQ=s900-c-k-c0x00ffffff-no-rj'
-              }
+              src={photoUrl ? photoUrl : anonymousImg}
               width="100"
               height="100"
               alt="User's avatar"

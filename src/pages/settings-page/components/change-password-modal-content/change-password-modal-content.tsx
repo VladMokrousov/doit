@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useTooltipContext } from '../../../../context';
 import firebase from 'firebase/app';
+
+import { useTooltipContext } from '../../../../context';
+import RequiredMark from '../../../../components/required-mark';
 import './change-password-modal-content.css';
 
 interface ChangePasswordModalProps {
@@ -78,40 +80,56 @@ const ChangePasswordModalContent: React.FC<ChangePasswordModalProps> = ({
     >
       {isFirstModal ? (
         <>
-          <label htmlFor="email">Email (*): </label>
-          <input
-            className="change-password-form__email-field"
-            id="email"
-            type="email"
-            placeholder="Enter you email"
-            onChange={onCredentialsChange}
-            value={credentials.email}
-            required
-          />
+          <div className="change-password-form__field-wrapper">
+            <label className="change-password-form__label" htmlFor="email">
+              Email
+              <RequiredMark />:
+            </label>
+            <input
+              className="change-password-form__field change-password-form__email-field"
+              id="email"
+              type="email"
+              placeholder="Enter you email"
+              onChange={onCredentialsChange}
+              value={credentials.email}
+              required
+            />
+          </div>
 
-          <label htmlFor="oldPassword">Old password (*): </label>
-          <input
-            className="change-password-form__old-password-field"
-            id="oldPassword"
-            type="password"
-            placeholder="Enter you old password"
-            onChange={onCredentialsChange}
-            value={credentials.oldPassword}
-            required
-          />
+          <div className="change-password-form__field-wrapper">
+            <label className="change-password-form__label" htmlFor="oldPassword">
+              Old password
+              <RequiredMark />:
+            </label>
+            <input
+              className="change-password-form__field change-password-form__old-password-field"
+              id="oldPassword"
+              type="password"
+              placeholder="Enter you old password"
+              onChange={onCredentialsChange}
+              value={credentials.oldPassword}
+              required
+            />
+          </div>
         </>
       ) : (
         <>
-          <label htmlFor="newPassword">New password (*): </label>
-          <input
-            className="change-password-form__new-password-field"
-            id="newPassword"
-            type="password"
-            placeholder="Enter new password"
-            onChange={onPasswordChange}
-            value={password}
-            required
-          />
+          <div className="change-password-form__field-wrapper">
+            <label className="change-password-form__label" htmlFor="newPassword">
+              New password
+              <RequiredMark />:
+            </label>
+            <input
+              className="change-password-form__field change-password-form__new-password-field"
+              id="newPassword"
+              type="password"
+              placeholder="Enter a new password"
+              onChange={onPasswordChange}
+              value={password}
+              required
+            />
+          </div>
+
           {/* @todo можно реализовать генерацию рандомного пароля
           <button className="change-password-form__generate-password" onClick={onGeneratePassword}>
             Generate password

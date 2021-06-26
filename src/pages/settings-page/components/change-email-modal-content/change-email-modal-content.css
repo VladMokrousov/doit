@@ -1,21 +1,38 @@
-.change-email-form__old-email-field,
-.change-email-form__password-field,
-.change-email-form__new-email-field {
-  display: block;
-  width: 100%;
+.change-email-form__field-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
-  box-sizing: border-box;
+}
+
+.change-email-form__label {
+  margin-right: 10px;
+}
+.change-email-form__field {
+  flex-grow: 1;
 }
 
 .change-email-form__submit-btn {
   display: block;
-  margin-top: 50px;
   margin-left: auto;
-  width: 140px;
+  padding: 0 15px;
   height: 40px;
-  border-radius: 5px;
-  padding: 0;
   border: none;
-  background-color: #169bd5;
-  color: #fff;
+  border-radius: 20px;
+
+  background: linear-gradient(
+    to bottom,
+    var(--color-decorative-light),
+    var(--color-decorative-dark)
+  );
+  color: #000;
+  transition-duration: 0.3s;
+}
+
+.change-email-form__submit-btn:hover,
+.change-email-form__submit-btn:focus {
+  opacity: 0.8;
+}
+.change-email-form__submit-btn:active {
+  opacity: 0.4;
 }

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { useTooltipContext } from '../../../../context';
 import firebase from 'firebase/app';
+
+import { useTooltipContext } from '../../../../context';
+import RequiredMark from '../../../../components/required-mark';
 import './delete-account-modal-content.css';
 
 interface ChangeAccountDeleteModalProps {
@@ -69,38 +71,54 @@ const ChangeAccountDeleteModalContent: React.FC<ChangeAccountDeleteModalProps> =
     >
       {isFirstModal ? (
         <>
-          <label htmlFor="email">Email (*): </label>
-          <input
-            className="delete-account-form__email-field"
-            id="email"
-            type="email"
-            placeholder="Enter you email"
-            onChange={onCredentialsChange}
-            value={credentials.email}
-            required
-          />
-
-          <label htmlFor="password">Password (*): </label>
-          <input
-            className="delete-account-form__password-field"
-            id="password"
-            type="password"
-            placeholder="Enter you password"
-            onChange={onCredentialsChange}
-            value={credentials.password}
-            required
-          />
-          <button className="delete-account-form__submit-btn">Continue</button>
+          <div className="delete-account-form__field-wrapper">
+            <label className="delete-account-form__label" htmlFor="email">
+              Email
+              <RequiredMark />:
+            </label>
+            <input
+              className="delete-account-form__field delete-account-form__email-field"
+              id="email"
+              type="email"
+              placeholder="Enter you email"
+              onChange={onCredentialsChange}
+              value={credentials.email}
+              required
+            />
+          </div>
+          <div className="delete-account-form__field-wrapper">
+            <label className="delete-account-form__label" htmlFor="password">
+              Password
+              <RequiredMark />:
+            </label>
+            <input
+              className="delete-account-form__field delete-account-form__password-field"
+              id="password"
+              type="password"
+              placeholder="Enter you password"
+              onChange={onCredentialsChange}
+              value={credentials.password}
+              required
+            />
+          </div>
+          <button className="delete-account-form__btn delete-account-form__submit-btn">
+            Continue
+          </button>
         </>
       ) : (
         <>
-          <span>Do you sure want to delete your account? This action is irreversibly...</span>
+          <span className="delete-account-form__warning-text">
+            Do you want <b>to delete</b> your account <b>forever</b>? This action is irreversibly...
+          </span>
           <div className="delete-account-form__btn-wrapper">
-            <button className="delete-account-form__agree-btn" type="submit">
+            <button
+              className="delete-account-form__btn delete-account-form__agree-btn"
+              type="submit"
+            >
               Yes
             </button>
             <button
-              className="delete-account-form__disagree-btn"
+              className="delete-account-form__btn delete-account-form__disagree-btn"
               type="button"
               onClick={onCancelDeleteAccount}
             >

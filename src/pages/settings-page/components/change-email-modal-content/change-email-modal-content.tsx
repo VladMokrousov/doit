@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useTooltipContext } from '../../../../context';
 import firebase from 'firebase/app';
+
+import { useTooltipContext } from '../../../../context';
+import RequiredMark from '../../../../components/required-mark';
 import './change-email-modal-content.css';
 
 interface ChangeEmailModalProps {
@@ -24,7 +26,7 @@ const ChangeEmailModalContent: React.FC<ChangeEmailModalProps> = ({
     oldEmail: user.email,
     password: '',
   });
-  const [email, setEmail] = useState(user.email);
+  const [email, setEmail] = useState('');
   const [isFirstModal, setIsFirstModal] = useState(true);
 
   const onCredentialsChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,41 +81,53 @@ const ChangeEmailModalContent: React.FC<ChangeEmailModalProps> = ({
     >
       {isFirstModal ? (
         <>
-          <label htmlFor="oldEmail">Old email (*): </label>
-          <input
-            className="change-email-form__old-email-field"
-            id="oldEmail"
-            type="email"
-            placeholder="Enter you old email"
-            onChange={onCredentialsChange}
-            value={credentials.oldEmail}
-            required
-          />
-
-          <label htmlFor="password">Password (*): </label>
-          <input
-            className="change-email-form__password-field"
-            id="password"
-            type="password"
-            placeholder="Enter you password"
-            onChange={onCredentialsChange}
-            value={credentials.password}
-            required
-          />
+          <div className="change-email-form__field-wrapper">
+            <label className="change-email-form__label" htmlFor="oldEmail">
+              Old email
+              <RequiredMark />:
+            </label>
+            <input
+              className="change-email-form__field"
+              id="oldEmail"
+              type="email"
+              placeholder="Enter you old email"
+              onChange={onCredentialsChange}
+              value={credentials.oldEmail}
+              required
+            />
+          </div>
+          <div className="change-email-form__field-wrapper">
+            <label className="change-email-form__label" htmlFor="password">
+              Password
+              <RequiredMark />:
+            </label>
+            <input
+              className="change-email-form__field"
+              id="password"
+              type="password"
+              placeholder="Enter you password"
+              onChange={onCredentialsChange}
+              value={credentials.password}
+              required
+            />
+          </div>
         </>
       ) : (
-        <>
-          <label htmlFor="newEmail">New email (*): </label>
+        <div className="change-email-form__field-wrapper">
+          <label className="change-email-form__label" htmlFor="newEmail">
+            New email
+            <RequiredMark />:
+          </label>
           <input
-            className="change-email-form__new-email-field"
+            className="change-email-form__field"
             id="newEmail"
             type="email"
-            placeholder="Enter new email"
+            placeholder="Enter the new email"
             onChange={onEmailChange}
             value={email}
             required
           />
-        </>
+        </div>
       )}
 
       <button className="change-email-form__submit-btn">
