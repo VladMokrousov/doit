@@ -10,16 +10,17 @@
   flex-direction: column;
   margin-bottom: 20px;
   padding: 10px;
+  padding-bottom: 15px;
   white-space: pre-wrap;
-  border: 1px solid rgb(92, 92, 92);
+  border: 1px solid var(--color-neutral);
   border-radius: 10px;
   cursor: pointer;
   /* Не удобно, потому что нельзя скопировать текст заметки, не войдя в режим редактирования */
   user-select: none;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 .list__item:hover {
-  background-color: #919191;
-  color: #fff;
+  background-color: var(--color-gray-extralight);
   transition-duration: 0.3s;
 }

@@ -1,16 +1,23 @@
 .note__header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
 }
 .note__description {
   margin: 0;
 }
-.note__btn {
+
+.note__btn--del {
   padding: 0;
   border: 0;
   background-color: transparent;
 }
-.note__btn--del {
-  color: var(--color-secondary);
+
+.note__btn--del svg {
+  transition-duration: 0.3s;
+}
+.note__btn--del:hover svg,
+.note__btn--del:focus svg {
+  opacity: 0.7;
 }

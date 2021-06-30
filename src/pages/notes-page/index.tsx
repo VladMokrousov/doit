@@ -9,6 +9,8 @@ import firebase from 'firebase/app';
 import { INoteItem } from '../../interfaces';
 import { Id } from '../../types';
 
+import './index.css';
+
 interface INotesData {
   [key: string]: INoteItem;
 }

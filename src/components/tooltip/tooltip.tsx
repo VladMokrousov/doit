@@ -8,9 +8,7 @@ const Tooltip: React.FC = () => {
   return isOpen ? (
     <div className="tooltip">
       <span className="tooltip__message">{message}</span>
-      <button className="tooltip__close" onClick={() => hideTooltip()}>
-        X
-      </button>
+      <button className="tooltip__close" onClick={() => hideTooltip()}></button>
     </div>
   ) : null;
 };

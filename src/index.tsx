@@ -30,10 +30,10 @@ const firebaseConfig: IFirebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
-  <AppProvider>
-    <TooltipProvider>
+  <TooltipProvider>
+    <AppProvider>
       <App />
-    </TooltipProvider>
-  </AppProvider>,
+    </AppProvider>
+  </TooltipProvider>,
   document.querySelector('#root')
 );

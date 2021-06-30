@@ -26,8 +26,8 @@
   background-color: transparent;
   transition-duration: 0.3s;
 }
-.modal__close:after,
-.modal__close:before {
+.modal__close::after,
+.modal__close::before {
   content: '';
   position: absolute;
   top: 10px;
@@ -36,10 +36,10 @@
   height: 2px;
   background-color: #000;
 }
-.modal__close:before {
+.modal__close::before {
   transform: rotate(-45deg);
 }
-.modal__close:after {
+.modal__close::after {
   transform: rotate(45deg);
 }
 .modal__close:hover,

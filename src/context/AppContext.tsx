@@ -20,7 +20,7 @@ export const AppProvider: React.FC<AppContextProps> = ({ children }) => {
   const [isUserGet, setUserGet] = useState(false);
 
   const actionCodeSettings = {
-    url: 'https://vladmokrousov.github.io/doit/build/index.html',
+    url: 'https://vladmokrousov.github.io/doit/build/#/sign-in',
     // url: 'http://localhost:3000/sign-in',
   };
 
@@ -31,6 +31,7 @@ export const AppProvider: React.FC<AppContextProps> = ({ children }) => {
       if (user) {
         if (!user.emailVerified) {
           user.sendEmailVerification(actionCodeSettings).catch((err) => {
+            // @todo тултип не отображается
             showTooltip(`При подтверждении email произошла ошибка ${err.message}`);
           });
         }
