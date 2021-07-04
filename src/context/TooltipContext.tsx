@@ -22,7 +22,6 @@ export const TooltipProvider: React.FC<TooltipContextProps> = ({ children }) => 
   };
   const hideTooltip = (): void => {
     setIsOpen(false);
-    setMessage('');
   };
 
   return (

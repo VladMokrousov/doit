@@ -46,6 +46,7 @@ const TodosTable: React.FC<TodosTableProps> = ({ todos, onDeleted, onSelected, o
       </th>
     );
   });
+
   if (todos && onDeleted && onSelected) {
     const tableRows: JSX.Element[] = todos.map((item: ITodoItem): JSX.Element => {
       const { id, ...itemProps } = item;

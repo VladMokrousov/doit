@@ -1,8 +1,9 @@
 .tooltip {
+  opacity: 0;
   position: absolute;
   z-index: 10;
   top: 20px;
-  left: 50%;
+  left: -500px;
   transform: translateX(-50%);
   width: 1000px;
   padding: 20px;
@@ -47,4 +48,32 @@
 }
 .tooltip__close:active {
   opacity: 0.4;
+}
+
+.tooltip.entered {
+  opacity: 1;
+  animation: bounce 0.5s forwards;
+}
+
+.tooltip.exiting {
+  animation: hideTooltip 0.5s;
+}
+
+@keyframes bounce {
+  60% {
+    left: 60%;
+  }
+  90% {
+    left: 45%;
+  }
+  100% {
+    left: 50%;
+  }
+}
+
+@keyframes hideTooltip {
+  0% {
+    opacity: 1;
+    left: 50%;
+  }
 }
