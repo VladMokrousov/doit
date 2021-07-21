@@ -24,7 +24,7 @@ const Portal: React.FC<PortalProps> = ({ children }) => {
       el.remove();
       document.body.style.overflow = 'visible';
     };
-  }, []);
+  }, [children]);
 
   return createPortal(children, el);
 };

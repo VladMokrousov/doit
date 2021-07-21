@@ -40,6 +40,7 @@ const App: React.FC = () => {
               <Route path="/sign-in" render={() => <Redirect to="/" />} />
               <Route path="/sign-up" render={() => <Redirect to="/" />} />
               <Header />
+              <Tooltip />
               <div className="app__overlay">
                 <span className="app__confirm-message">
                   Please confirm your email to use the app

@@ -56,7 +56,8 @@ const NotesPage: React.FC = () => {
     const createNoteItem = (description: string): INoteItem => {
       return {
         description,
-        creationDate: getCurrentFormattedDate(),
+        // creationDate: getCurrentFormattedDate(),
+        creationDate: new Date().toISOString(),
         id: newItemId,
       };
     };
@@ -73,20 +74,20 @@ const NotesPage: React.FC = () => {
         });
     };
 
-    const getCurrentFormattedDate = (): string => {
-      const currentDate: Date = new Date();
-      const currentMonth: number = currentDate.getMonth() + 1;
-      const currentDay: number = currentDate.getDate();
+    // const getCurrentFormattedDate = (): string => {
+    //   const currentDate: Date = new Date();
+    //   const currentMonth: number = currentDate.getMonth() + 1;
+    //   const currentDay: number = currentDate.getDate();
 
-      return `${String(currentDay).length == 2 ? currentDay : '0' + currentDay}.${
-        String(currentMonth).length == 2 ? currentMonth : '0' + currentMonth
-      }.${currentDate.getFullYear()}`;
-    };
+    //   return `${String(currentDay).length == 2 ? currentDay : '0' + currentDay}.${
+    //     String(currentMonth).length == 2 ? currentMonth : '0' + currentMonth
+    //   }.${currentDate.getFullYear()}`;
+    // };
 
     // @todo evt: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
     // @todo Сделать отдельную функцию на закрытие окна?
     const toggleModal = (evt: any): void => {
-      if (evt.target.textContent == 'X') {
+      if (evt.target.className == 'modal__close') {
         setState((prevState) => {
           return {
             ...prevState,
@@ -189,7 +190,7 @@ const NotesPage: React.FC = () => {
               Add note
             </button>
             <NotesList
-              notes={Object.values(notesData)}
+              notes={Object.values(notesData).reverse()}
               onDeleted={deleteItem}
               onSelected={selectItem}
             />

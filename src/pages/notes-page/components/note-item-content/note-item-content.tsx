@@ -1,4 +1,5 @@
 import React from 'react';
+import { getFormattedDate } from '../../../../helpers';
 import { Id } from '../../../../types';
 import './note-item-content.css';
 
@@ -16,7 +17,7 @@ const NoteItemContent: React.FC<NoteItemContentProps> = ({
 }) => (
   <>
     <div className="note__header">
-      <span>{creationDate}</span>
+      <span>{getFormattedDate(new Date(creationDate), 'note')}</span>
       <button type="button" className="btn note__btn note__btn--del" onClick={onDeleted}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

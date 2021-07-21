@@ -24,3 +24,22 @@
   background-color: var(--color-gray-extralight);
   transition-duration: 0.3s;
 }
+
+.list__item-enter {
+  opacity: 0;
+  transform: translateX(-300px);
+}
+.list__item-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition-duration: 500ms;
+}
+.list__item-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.list__item-exit-active {
+  opacity: 0;
+  transform: translateX(300px);
+  transition-duration: 500ms;
+}

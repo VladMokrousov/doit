@@ -81,7 +81,7 @@ const TodosPage: React.FC = () => {
     // evt: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLTableRowElement>
     // Сделать отдельную функцию на закрытие окна?
     const toggleModal = (evt: any): void => {
-      if (evt.target.textContent == 'X') {
+      if (evt.target.className == 'modal__close') {
         setState((prevState) => {
           return {
             ...prevState,
@@ -220,7 +220,10 @@ const TodosPage: React.FC = () => {
 
       const { todosData, term, filter, showModal, selectedItemId } = state;
 
-      const visibleItems: ITodoItem[] = filterItem(search(Object.values(todosData), term), filter);
+      const visibleItems: ITodoItem[] = filterItem(
+        search(Object.values(todosData), term),
+        filter
+      ).reverse();
 
       const everyStatusCount: IEveryStatusCount = {
         all: Object.values(todosData).length,

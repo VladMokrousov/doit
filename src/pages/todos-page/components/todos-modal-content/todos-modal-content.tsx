@@ -3,6 +3,7 @@ import { useAppContext, useTooltipContext } from '../../../../context';
 import { ITodoFieldsContent } from '../../../../interfaces';
 import { Id } from '../../../../types';
 import firebase from 'firebase/app';
+import { getFormattedDate } from '../../../../helpers';
 import './todos-modal-content.css';
 
 interface TodosModalProps {
@@ -20,18 +21,12 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
 }) => {
   const { currentUser } = useAppContext();
   const { showTooltip } = useTooltipContext();
-  const currentDate: Date = new Date();
-  const currentMonth: number = currentDate.getMonth() + 1;
-  const currentDay: number = currentDate.getDate();
-  const formattedDate: string = `${currentDate.getFullYear()}-${
-    String(currentMonth).length == 2 ? currentMonth : '0' + currentMonth
-  }-${String(currentDay).length == 2 ? currentDay : '0' + currentDay}`;
 
   const [state, setState] = useState<ITodoFieldsContent>({
     description: '',
     priority: 'Low',
     status: 'New',
-    endDatePlan: formattedDate,
+    endDatePlan: '',
     endDateActual: '-',
   });
 
@@ -81,7 +76,7 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
       setState((prevState) => {
         return {
           ...prevState,
-          endDateActual: formattedDate,
+          endDateActual: new Date().toISOString(),
         };
       });
     } else {
@@ -101,12 +96,28 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
   };
 
   const onEndDatePlanChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    setState((prevState) => {
-      return {
-        ...prevState,
-        endDatePlan: evt.target.value,
-      };
-    });
+    if (evt.target.value.length == 10) {
+      let formattedTimeOffset = String(new Date().getTimezoneOffset() / 60);
+
+      if (formattedTimeOffset.includes('-')) {
+        formattedTimeOffset.length == 2
+          ? (formattedTimeOffset = formattedTimeOffset.replace('-', '+0'))
+          : (formattedTimeOffset = formattedTimeOffset.replace('-', '+'));
+      } else {
+        formattedTimeOffset.length == 1
+          ? (formattedTimeOffset = `-0${formattedTimeOffset}`)
+          : (formattedTimeOffset = `-${formattedTimeOffset}`);
+      }
+
+      setState((prevState) => {
+        return {
+          ...prevState,
+          endDatePlan: new Date(
+            `${evt.target.value}T23:59:59.000${formattedTimeOffset}:00`
+          ).toISOString(),
+        };
+      });
+    }
   };
 
   const onSubmit = (evt: React.FormEvent<HTMLFormElement>): void => {
@@ -130,6 +141,7 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
           Description<sup className="todos-form__label-required">*</sup>:
         </label>
         <input
+          maxLength={40}
           className="todos-form__field"
           id="description"
           type="text"
@@ -165,7 +177,6 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
           <select
             className="todos-form__field"
             id="status"
-            disabled={!selectedItemId}
             name="status"
             onChange={onStatusChange}
             value={status}
@@ -181,12 +192,14 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
           End Date:{' '}
         </label>
         <input
+          required
           className="todos-form__field"
           id="calendar"
           type="date"
           name="calendar"
           onChange={onEndDatePlanChange}
-          value={endDatePlan}
+          value={endDatePlan ? getFormattedDate(new Date(endDatePlan), 'calendar') : endDatePlan}
+          min={getFormattedDate(new Date(), 'calendar')}
         />
       </div>
 

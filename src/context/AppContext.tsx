@@ -15,7 +15,7 @@ export const useAppContext = () => {
 
 // @todo Не уверен, что корректно давать контексту тип React.FC
 export const AppProvider: React.FC<AppContextProps> = ({ children }) => {
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(false);
   const [isUserGet, setUserGet] = useState(false);
 
@@ -31,8 +31,7 @@ export const AppProvider: React.FC<AppContextProps> = ({ children }) => {
       if (user) {
         if (!user.emailVerified) {
           user.sendEmailVerification(actionCodeSettings).catch((err) => {
-            // @todo тултип не отображается
-            showTooltip(`При подтверждении email произошла ошибка ${err.message}`);
+            showTooltip(`The email didn't send. ${err.message}`);
           });
         }
         if (!localStorage.getItem('rememberMe')) {
@@ -61,11 +60,11 @@ export const AppProvider: React.FC<AppContextProps> = ({ children }) => {
   }, []);
 
   const onLogIn = (user: any): void => {
-    setLoggedIn(true);
+    setIsLoggedIn(true);
     setCurrentUser(user);
   };
   const onLogOut = (): void => {
-    setLoggedIn(false);
+    setIsLoggedIn(false);
     setCurrentUser(false);
   };
 

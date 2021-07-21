@@ -67,3 +67,6 @@
   font-weight: 700;
   color: var(--color-decorative-dark);
 }
+.table__item--expired {
+  color: var(--color-important);
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ITodoFieldsContent } from '../../../../interfaces';
 import { Id } from '../../../../types';
+import { getFormattedDate } from '../../../../helpers';
 import './todo-item-content.css';
 
 interface TodoItemContentProps {
@@ -26,10 +27,14 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({ fieldsContent, onDele
         <span className="table__item-cell--priority">{priority}</span>
       </td>
       <td className={classNames}>
-        <span className="table__item-cell--datePlan">{endDatePlan}</span>
+        <span className="table__item-cell--datePlan">
+          {getFormattedDate(new Date(endDatePlan), 'task')}
+        </span>
       </td>
       <td className={classNames}>
-        <span className="table__item-cell--actualDate">{endDateActual}</span>
+        <span className="table__item-cell--actualDate">
+          {endDateActual == '-' ? endDateActual : getFormattedDate(new Date(endDateActual), 'task')}
+        </span>
       </td>
       <td className={classNames}>
         <button type="button" className="btn table__btn table__btn--del" onClick={onDeleted}>

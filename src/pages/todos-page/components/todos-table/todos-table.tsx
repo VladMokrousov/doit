@@ -47,7 +47,7 @@ const TodosTable: React.FC<TodosTableProps> = ({ todos, onDeleted, onSelected, o
     );
   });
 
-  if (todos && onDeleted && onSelected) {
+  if (todos) {
     const tableRows: JSX.Element[] = todos.map((item: ITodoItem): JSX.Element => {
       const { id, ...itemProps } = item;
 
@@ -55,14 +55,24 @@ const TodosTable: React.FC<TodosTableProps> = ({ todos, onDeleted, onSelected, o
         itemProps.fieldsContent.priority == 'High' ? 'table__item--important' : '';
       const doneClass: string | null =
         itemProps.fieldsContent.status == 'Done' ? 'table__item--done' : '';
+      const expiredClass: string | null =
+        itemProps.fieldsContent.endDateActual != '-'
+          ? itemProps.fieldsContent.endDateActual < itemProps.fieldsContent.endDatePlan
+            ? ''
+            : 'table__item--expired'
+          : new Date().toISOString() > itemProps.fieldsContent.endDatePlan
+          ? 'table__item--expired'
+          : '';
+      console.log('текущая дата', new Date().toISOString());
+      console.log('когда истекает', itemProps.fieldsContent.endDatePlan);
 
       return (
         <tr
-          className={`table__item ${doneClass} ${importantClass}`}
+          className={`table__item ${doneClass} ${importantClass} ${expiredClass}`}
           key={id}
-          onDoubleClick={(evt) => onSelected(evt, id)}
+          onDoubleClick={(evt) => onSelected!(evt, id)}
         >
-          <TodoItemContent {...itemProps} onDeleted={() => onDeleted(id)} />
+          <TodoItemContent {...itemProps} onDeleted={() => onDeleted!(id)} />
         </tr>
       );
     });
