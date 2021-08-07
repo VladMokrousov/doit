@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import firebase from 'firebase/app';
 import { useTooltipContext } from '../../../../context';
+import { TooltipTypes } from '../../../../types';
 import './sign-in-modal-content.css';
 
 interface ISignInModalContentState {
@@ -47,7 +48,7 @@ const SignInModalContent: React.FC = () => {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .catch((err) => showTooltip(err.message));
+      .catch((err) => showTooltip(TooltipTypes.Error, err.message));
   };
   const googleSignIn = (): void => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -55,7 +56,7 @@ const SignInModalContent: React.FC = () => {
       .auth()
       .signInWithPopup(provider)
       .catch((error) => {
-        showTooltip(error.message);
+        showTooltip(TooltipTypes.Error, error.message);
       });
   };
 

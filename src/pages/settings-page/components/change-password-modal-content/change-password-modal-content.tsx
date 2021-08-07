@@ -3,6 +3,7 @@ import firebase from 'firebase/app';
 
 import { useTooltipContext } from '../../../../context';
 import RequiredMark from '../../../../components/required-mark';
+import { TooltipTypes } from '../../../../types';
 import './change-password-modal-content.css';
 
 interface ChangePasswordModalProps {
@@ -55,7 +56,7 @@ const ChangePasswordModalContent: React.FC<ChangePasswordModalProps> = ({
         setIsFirstModal(false);
       })
       .catch((error: any) => {
-        showTooltip(`Reauth didn't pass: ${error.message}`);
+        showTooltip(TooltipTypes.Error, `Reauth didn't pass: ${error.message}`);
       });
   };
 
@@ -65,11 +66,11 @@ const ChangePasswordModalContent: React.FC<ChangePasswordModalProps> = ({
     user
       .updatePassword(password)
       .then(() => {
-        showTooltip('Your password was successfully updated!');
+        showTooltip(TooltipTypes.Success, 'Your password was successfully updated!');
         onToggleModal(evt);
       })
       .catch((err: any) => {
-        showTooltip(`Your password didn't be update: ${err.message}`);
+        showTooltip(TooltipTypes.Error, `Your password didn't be update: ${err.message}`);
       });
   };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAppContext, useTooltipContext } from '../../../../context';
-import { Id } from '../../../../types';
+import { Id, TooltipTypes } from '../../../../types';
 import firebase from 'firebase/app';
 import './notes-modal-content.css';
 
@@ -37,7 +37,7 @@ const NotesModalContent: React.FC<NotesModalProps> = ({
           });
         })
         .catch((error) => {
-          showTooltip(`Couldn't take the data from DB: ${error.message}`);
+          showTooltip(TooltipTypes.Error, `Couldn't take the data from DB: ${error.message}`);
         });
     }
   }, []);

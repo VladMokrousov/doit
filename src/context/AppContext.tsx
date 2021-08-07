@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTooltipContext } from './index';
 import firebase from 'firebase/app';
+import { TooltipTypes } from '../types';
 
 interface AppContextProps {
   children: React.ReactNode;
@@ -31,7 +32,7 @@ export const AppProvider: React.FC<AppContextProps> = ({ children }) => {
       if (user) {
         if (!user.emailVerified) {
           user.sendEmailVerification(actionCodeSettings).catch((err) => {
-            showTooltip(`The email didn't send. ${err.message}`);
+            showTooltip(TooltipTypes.Error, `The email didn't send. ${err.message}`);
           });
         }
         if (!localStorage.getItem('rememberMe')) {
@@ -44,7 +45,7 @@ export const AppProvider: React.FC<AppContextProps> = ({ children }) => {
               .auth()
               .signOut()
               .catch((error) => {
-                showTooltip(error.message);
+                showTooltip(TooltipTypes.Error, error.message);
               });
           } else {
             onLogIn(user);

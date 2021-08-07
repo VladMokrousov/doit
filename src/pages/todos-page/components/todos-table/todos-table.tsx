@@ -63,8 +63,6 @@ const TodosTable: React.FC<TodosTableProps> = ({ todos, onDeleted, onSelected, o
           : new Date().toISOString() > itemProps.fieldsContent.endDatePlan
           ? 'table__item--expired'
           : '';
-      console.log('текущая дата', new Date().toISOString());
-      console.log('когда истекает', itemProps.fieldsContent.endDatePlan);
 
       return (
         <tr

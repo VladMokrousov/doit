@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import firebase from 'firebase/app';
 
 import { useTooltipContext } from '../../../../context';
 import RequiredMark from '../../../../components/required-mark';
+import { TooltipTypes } from '../../../../types';
 import './change-email-modal-content.css';
 
 interface ChangeEmailModalProps {
@@ -57,7 +58,7 @@ const ChangeEmailModalContent: React.FC<ChangeEmailModalProps> = ({
         setIsFirstModal(false);
       })
       .catch((error: any) => {
-        showTooltip(`Reauth didn't pass: ${error.message}`);
+        showTooltip(TooltipTypes.Error, `Reauth didn't pass: ${error.message}`);
       });
   };
   const onSetNewEmail = (evt: React.FormEvent<HTMLFormElement>): void => {
@@ -66,11 +67,14 @@ const ChangeEmailModalContent: React.FC<ChangeEmailModalProps> = ({
     user
       .verifyBeforeUpdateEmail(email, actionCodeSettings)
       .then(() => {
-        showTooltip('Check your new email and confirm it to finish the change the email');
+        showTooltip(
+          TooltipTypes.Info,
+          'Check your new email and confirm it to finish the change the email'
+        );
         onToggleModal(evt);
       })
       .catch(function (err: any) {
-        showTooltip(`Your email didn't update: ${err.message}`);
+        showTooltip(TooltipTypes.Error, `Your email didn't update: ${err.message}`);
       });
   };
 

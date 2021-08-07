@@ -1,20 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTooltipContext } from '../../context';
-import firebase from 'firebase/app';
+import { signOut } from '../../helpers';
 
 import './header.css';
 
 const Header: React.FC = () => {
   const { showTooltip } = useTooltipContext();
-  const signOut = (evt: React.MouseEvent<HTMLButtonElement>): void => {
-    firebase
-      .auth()
-      .signOut()
-      .catch((error) => {
-        showTooltip(error.message);
-      });
-  };
 
   return (
     <header className="page-header">
@@ -54,7 +46,7 @@ const Header: React.FC = () => {
           </ul>
         </nav>
 
-        <button className="page-header__sign-out-btn" onClick={signOut}>
+        <button className="page-header__sign-out-btn" onClick={() => signOut(showTooltip)}>
           Sign out
         </button>
       </div>

@@ -4,6 +4,7 @@ import { ITodoFieldsContent } from '../../../../interfaces';
 import { Id } from '../../../../types';
 import firebase from 'firebase/app';
 import { getFormattedDate } from '../../../../helpers';
+import { TooltipTypes } from '../../../../types';
 import './todos-modal-content.css';
 
 interface TodosModalProps {
@@ -48,7 +49,7 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
           });
         })
         .catch((err) => {
-          showTooltip(`Couldn't take the data from DB: ${err.message}`);
+          showTooltip(TooltipTypes.Error, `Couldn't take the data from DB: ${err.message}`);
         });
     }
   }, []);
@@ -182,7 +183,7 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
             value={status}
           >
             <option value="New">New</option>
-            <option value="In process">In process</option>
+            <option value="In progress">In progress</option>
             <option value="Done">Done</option>
           </select>
         </div>

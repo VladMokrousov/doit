@@ -7,6 +7,7 @@ import firebase from 'firebase/app';
 import ChangeEmailModalContent from './components/change-email-modal-content';
 import ChangePasswordModalContent from './components/change-password-modal-content';
 import DeleteAccountModalContent from './components/delete-account-modal-content';
+import { TooltipTypes } from '../../types';
 import './index.css';
 import anonymousImg from '../../assets/img/anonymous.jpg';
 
@@ -38,7 +39,7 @@ const SettingsPage: React.FC = () => {
       })
       .then(() => setIsNameClicked(false))
       .catch((err: any) => {
-        showTooltip(`User name didn't update: ${err.message}`);
+        showTooltip(TooltipTypes.Error, `User name didn't update: ${err.message}`);
       });
   };
   const onNameCancel = (): void => {
@@ -57,7 +58,7 @@ const SettingsPage: React.FC = () => {
       })
       .then(() => setIsAvatarClicked(false))
       .catch((err: any) => {
-        showTooltip(`User avatar didn't update: ${err.message}`);
+        showTooltip(TooltipTypes.Error, `User avatar didn't update: ${err.message}`);
       });
   };
   const onPhotoUrlCancel = (): void => {
@@ -71,10 +72,10 @@ const SettingsPage: React.FC = () => {
       .auth()
       .sendPasswordResetEmail(email, actionCodeSettings)
       .then(() => {
-        showTooltip('The email was send');
+        showTooltip(TooltipTypes.Info, 'The email to reset your password was send');
       })
       .catch((err) => {
-        showTooltip(`Email for reset password didn't send ${err.message}`);
+        showTooltip(TooltipTypes.Error, `Email for reset password didn't send ${err.message}`);
       });
   };
 

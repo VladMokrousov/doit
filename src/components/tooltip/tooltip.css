@@ -7,11 +7,22 @@
   transform: translateX(-50%);
   width: 1000px;
   padding: 20px;
-  color: var(--color-important);
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 0 10px 0 rgba(143, 16, 16, 0.2);
+
   box-sizing: border-box;
+}
+.tooltip--error {
+  color: var(--color-important);
+  box-shadow: 0 0 10px 0 rgba(143, 16, 16, 0.2);
+}
+.tooltip--info {
+  color: #1a1a1a;
+  box-shadow: 0 0 10px 0 rgba(131, 131, 131, 0.2);
+}
+.tooltip--success {
+  color: var(--color-decorative-dark);
+  box-shadow: 0 0 10px 0 rgba(61, 129, 15, 0.2);
 }
 
 .tooltip__close {

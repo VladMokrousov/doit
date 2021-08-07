@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { TooltipTypes } from '../types';
 
 interface TooltipContextProps {
   children: React.ReactNode;
@@ -14,9 +15,11 @@ export const useTooltipContext = () => {
 //Не уверен, что корректно давать контексту тип React.FC
 export const TooltipProvider: React.FC<TooltipContextProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [type, setType] = useState('');
   const [message, setMessage] = useState('');
 
-  const showTooltip = (message: string): void => {
+  const showTooltip = (type: TooltipTypes, message: string): void => {
+    setType(type);
     setMessage(message);
     setIsOpen(true);
   };
@@ -25,7 +28,7 @@ export const TooltipProvider: React.FC<TooltipContextProps> = ({ children }) => 
   };
 
   return (
-    <TooltipContext.Provider value={{ isOpen, message, showTooltip, hideTooltip }}>
+    <TooltipContext.Provider value={{ isOpen, type, message, showTooltip, hideTooltip }}>
       {children}
     </TooltipContext.Provider>
   );

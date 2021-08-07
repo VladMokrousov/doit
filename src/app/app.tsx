@@ -11,10 +11,10 @@ import {
 } from '../pages';
 import { useAppContext } from '../context';
 import Header from '../components/header';
+import EmailUnverifiedOverlay from '../components/emailUnverifiedOverlay';
 import Tooltip from '../components/tooltip';
 
 import '../assets/css/normalize.css';
-import './app.css';
 import './scaffolding.css';
 
 const App: React.FC = () => {
@@ -41,11 +41,7 @@ const App: React.FC = () => {
               <Route path="/sign-up" render={() => <Redirect to="/" />} />
               <Header />
               <Tooltip />
-              <div className="app__overlay">
-                <span className="app__confirm-message">
-                  Please confirm your email to use the app
-                </span>
-              </div>
+              <EmailUnverifiedOverlay />
             </>
           )}
         </>

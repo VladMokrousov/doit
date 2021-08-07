@@ -7,7 +7,7 @@ import Modal from '../../components/modal';
 import { useAppContext, useTooltipContext } from '../../context';
 import firebase from 'firebase/app';
 import { INoteItem } from '../../interfaces';
-import { Id } from '../../types';
+import { Id, TooltipTypes } from '../../types';
 
 import './index.css';
 
@@ -70,7 +70,7 @@ const NotesPage: React.FC = () => {
         .ref('users/' + currentUser.uid + '/notes')
         .push(newItem)
         .catch((e) => {
-          showTooltip(`Add item failed: ${e.message}`);
+          showTooltip(TooltipTypes.Error, `Add item failed: ${e.message}`);
         });
     };
 
@@ -127,14 +127,14 @@ const NotesPage: React.FC = () => {
                   .ref('users/' + currentUser.uid + `/notes/${childSnapshot.key}`)
                   .remove()
                   .catch((error) => {
-                    showTooltip(`Remove failed: ${error.message}`);
+                    showTooltip(TooltipTypes.Error, `Remove failed: ${error.message}`);
                   });
                 return true;
               }
             });
           })
           .catch((error) => {
-            showTooltip(`Couldn't take the data from DB: ${error.message}`);
+            showTooltip(TooltipTypes.Error, `Couldn't take the data from DB: ${error.message}`);
           });
       };
 
@@ -151,14 +151,14 @@ const NotesPage: React.FC = () => {
                   .ref('users/' + currentUser.uid + `/notes/${childSnapshot.key}/description`)
                   .set(description)
                   .catch((error) => {
-                    showTooltip(`Edit item failed: ${error.message}`);
+                    showTooltip(TooltipTypes.Error, `Edit item failed: ${error.message}`);
                   });
                 return true;
               }
             });
           })
           .catch((error) => {
-            showTooltip(`Couldn't take the data from DB: ${error.message}`);
+            showTooltip(TooltipTypes.Error, `Couldn't take the data from DB: ${error.message}`);
           });
 
         setState(({ selectedItemId, ...restParams }) => {

@@ -1,0 +1,35 @@
+.app-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.app-overlay__content {
+  position: absolute;
+  top: 40vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 50px;
+  font-weight: 700;
+  color: var(--color-decorative-light);
+}
+
+.app-overlay__sign-out-btn {
+  font-weight: 700;
+  color: var(--color-important);
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  transition-duration: 0.3s;
+}
+
+.app-overlay__sign-out-btn:hover,
+.app-overlay__sign-out-btn:focus {
+  opacity: 0.8;
+}
+.app-overlay__sign-out-btn:active {
+  opacity: 0.4;
+}

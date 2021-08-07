@@ -3,6 +3,7 @@ import firebase from 'firebase/app';
 
 import { useTooltipContext } from '../../../../context';
 import RequiredMark from '../../../../components/required-mark';
+import { TooltipTypes } from '../../../../types';
 import './delete-account-modal-content.css';
 
 interface ChangeAccountDeleteModalProps {
@@ -49,14 +50,14 @@ const ChangeAccountDeleteModalContent: React.FC<ChangeAccountDeleteModalProps> =
         setIsFirstModal(false);
       })
       .catch((error: any) => {
-        showTooltip(`Reauth didn't pass: ${error.message}`);
+        showTooltip(TooltipTypes.Error, `Reauth didn't pass: ${error.message}`);
       });
   };
 
   const onDeleteAccount = (evt: React.FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
     user.delete().catch((err: any) => {
-      showTooltip(`Your account didn't be deleted: ${err.message}`);
+      showTooltip(TooltipTypes.Error, `Your account didn't be deleted: ${err.message}`);
     });
   };
 

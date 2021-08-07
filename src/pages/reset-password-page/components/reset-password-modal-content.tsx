@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import firebase from 'firebase/app';
 import { useAppContext, useTooltipContext } from '../../../context/';
+import { TooltipTypes } from '../../../types';
 import './reset-password-modal-content.css';
 
 const ResetPasswordModalContent: React.FC = () => {
@@ -21,10 +22,10 @@ const ResetPasswordModalContent: React.FC = () => {
       .auth()
       .sendPasswordResetEmail(email, actionCodeSettings)
       .then(() => {
-        // @todo Всплывает тултип с просьбой проверить почту
+        showTooltip(TooltipTypes.Info, 'The email to reset your password was send');
       })
       .catch((err) => {
-        showTooltip(err.message);
+        showTooltip(TooltipTypes.Error, err.message);
       });
   };
 

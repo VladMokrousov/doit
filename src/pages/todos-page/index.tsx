@@ -9,7 +9,7 @@ import Modal from '../../components/modal';
 import { useAppContext, useTooltipContext } from '../../context';
 import firebase from 'firebase/app';
 import { ITodoFieldsContent, ITodoItem, IEveryStatusCount } from '../../interfaces';
-import { Id } from '../../types';
+import { Id, TooltipTypes } from '../../types';
 
 import './index.css';
 
@@ -31,7 +31,7 @@ const TodosPage: React.FC = () => {
   const { showTooltip } = useTooltipContext();
   const [state, setState] = useState<ITodosPageState>({
     term: '',
-    filter: 'all',
+    filter: 'inProgress',
     showModal: false,
     selectedItemId: false,
     isDataLoaded: false,
@@ -74,7 +74,7 @@ const TodosPage: React.FC = () => {
       db.ref('users/' + currentUser.uid + '/todos')
         .push(newItem)
         .catch((err) => {
-          showTooltip(`Add item failed: ${err.message}`);
+          showTooltip(TooltipTypes.Error, `Add item failed: ${err.message}`);
         });
     };
 
@@ -121,14 +121,14 @@ const TodosPage: React.FC = () => {
                   .ref('users/' + currentUser.uid + `/todos/${childSnapshot.key}`)
                   .remove()
                   .catch((err) => {
-                    showTooltip(`Removing the task was failed: ${err.message}`);
+                    showTooltip(TooltipTypes.Error, `Removing the task was failed: ${err.message}`);
                   });
                 return true;
               }
             });
           })
           .catch((err) => {
-            showTooltip(`Couldn't take the data from DB: ${err.message}`);
+            showTooltip(TooltipTypes.Error, `Couldn't take the data from DB: ${err.message}`);
           });
       };
 
@@ -145,14 +145,14 @@ const TodosPage: React.FC = () => {
                   .ref('users/' + currentUser.uid + `/todos/${childSnapshot.key}/fieldsContent`)
                   .set({ ...fieldsContent })
                   .catch((err) => {
-                    showTooltip(`Editing the task was failed: ${err.message}`);
+                    showTooltip(TooltipTypes.Error, `Editing the task was failed: ${err.message}`);
                   });
                 return true;
               }
             });
           })
           .catch((err) => {
-            showTooltip(`Couldn't take the data from DB: ${err.message}`);
+            showTooltip(TooltipTypes.Error, `Couldn't take the data from DB: ${err.message}`);
           });
 
         setState(({ selectedItemId, ...restParams }) => {
@@ -189,7 +189,7 @@ const TodosPage: React.FC = () => {
           case 'new':
             return items.filter((item) => item.fieldsContent.status == 'New');
           case 'inProgress':
-            return items.filter((item) => item.fieldsContent.status == 'In process');
+            return items.filter((item) => item.fieldsContent.status == 'In progress');
           case 'done':
             return items.filter((item) => item.fieldsContent.status == 'Done');
 
@@ -229,7 +229,7 @@ const TodosPage: React.FC = () => {
         all: Object.values(todosData).length,
         new: Object.values(todosData).filter((item) => item.fieldsContent.status == 'New').length,
         inProgress: Object.values(todosData).filter(
-          (item) => item.fieldsContent.status == 'In process'
+          (item) => item.fieldsContent.status == 'In progress'
         ).length,
         done: Object.values(todosData).filter((item) => item.fieldsContent.status == 'Done').length,
       };

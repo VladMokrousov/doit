@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTooltipContext } from '../../../../context';
 import firebase from 'firebase/app';
+import { TooltipTypes } from '../../../../types';
 
 import './sign-up-modal-content.css';
 
@@ -40,9 +41,11 @@ const SignUpModalContent: React.FC = () => {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => localStorage.setItem('rememberMe', 'true'))
-        .catch((err) => showTooltip(`Your account didn't be created: ${err.message}`));
+        .catch((err) =>
+          showTooltip(TooltipTypes.Error, `Your account didn't be created: ${err.message}`)
+        );
     } else {
-      showTooltip("You password and repeated password don't match");
+      showTooltip(TooltipTypes.Error, "You password and repeated password don't match");
     }
   };
 
@@ -54,7 +57,7 @@ const SignUpModalContent: React.FC = () => {
       .signInWithPopup(provider)
       .then(() => localStorage.setItem('rememberMe', 'true'))
       .catch((error) => {
-        showTooltip(error.message);
+        showTooltip(TooltipTypes.Error, error.message);
       });
   };
 
