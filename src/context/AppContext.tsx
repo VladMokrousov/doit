@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useTooltipContext } from './index';
 import firebase from 'firebase/app';
+
+import { useTooltipContext } from './index';
 import { TooltipTypes } from '../types';
+import { firebaseSignOut } from '../services/firebase-service';
 
 interface AppContextProps {
   children: React.ReactNode;
@@ -41,12 +43,7 @@ export const AppProvider: React.FC<AppContextProps> = ({ children }) => {
           const yesterdayTimeStamp = Math.round(new Date().getTime() / 1000) - 24 * 3600;
 
           if (lastSignInTimeTimeStamp < yesterdayTimeStamp) {
-            firebase
-              .auth()
-              .signOut()
-              .catch((error) => {
-                showTooltip(TooltipTypes.Error, error.message);
-              });
+            firebaseSignOut(showTooltip);
           } else {
             onLogIn(user);
           }

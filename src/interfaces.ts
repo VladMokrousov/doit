@@ -5,7 +5,7 @@ export interface ITodoItem {
   id: Id;
 }
 
-// Поменять название, чтобы было ясно, что это  поля в модалке для todo
+// @todo Поменять название, чтобы было ясно, что это  поля в модалке для todo
 export interface ITodoFieldsContent {
   description: string;
   priority: string;
@@ -20,10 +20,23 @@ export interface INoteItem {
   id: Id;
 }
 
+// @todo
 export interface IEveryStatusCount {
   [key: string]: number;
   // all: number;
   // new: number;
   // inProgress: number;
   // done: number;
+}
+
+export interface ICustomInput {
+  label: string;
+  labelClass?: string;
+  isRequired: boolean;
+  fieldClass?: string;
+  type: string;
+  fieldName: string;
+  placeholder: string;
+  isError: boolean;
+  isTouched: boolean;
 }

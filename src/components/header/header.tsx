@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTooltipContext } from '../../context';
-import { signOut } from '../../helpers';
+import { firebaseSignOut } from '../../services/firebase-service';
 
 import './header.css';
 
@@ -46,7 +46,7 @@ const Header: React.FC = () => {
           </ul>
         </nav>
 
-        <button className="page-header__sign-out-btn" onClick={() => signOut(showTooltip)}>
+        <button className="page-header__sign-out-btn" onClick={() => firebaseSignOut(showTooltip)}>
           Sign out
         </button>
       </div>

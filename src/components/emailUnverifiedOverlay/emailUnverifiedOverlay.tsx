@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTooltipContext } from '../../context';
-import { signOut } from '../../helpers';
+import { firebaseSignOut } from '../../services/firebase-service';
 
 import './emailUnverifiedOverlay.css';
 
@@ -11,7 +11,7 @@ const EmailUnverifiedOverlay = () => {
     <div className="app-overlay">
       <div className="app-overlay__content">
         Please confirm your email to use the app or{' '}
-        <button className="app-overlay__sign-out-btn" onClick={() => signOut(showTooltip)}>
+        <button className="app-overlay__sign-out-btn" onClick={() => firebaseSignOut(showTooltip)}>
           Sign out
         </button>
       </div>

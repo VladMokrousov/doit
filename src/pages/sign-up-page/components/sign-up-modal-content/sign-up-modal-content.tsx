@@ -1,122 +1,65 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { Formik, Form } from 'formik';
+
 import { useTooltipContext } from '../../../../context';
-import firebase from 'firebase/app';
-import { TooltipTypes } from '../../../../types';
+import { signUpValidationSchema } from '../../../../validationSchemas';
+import {
+  firebaseCreateUser,
+  firebaseCreateUserWithGoogle,
+} from '../../../../services/firebase-service';
+import CustomInput from '../../../../components/customInput';
+import inputsConfig from './inputs-config';
 
 import './sign-up-modal-content.css';
-
-interface ISignUpModalContentState {
-  email: string;
-  password: string;
-  repeatPassword: string;
-}
 
 const SignUpModalContent: React.FC = () => {
   const { showTooltip } = useTooltipContext();
 
-  const [state, setState] = useState<ISignUpModalContentState>({
-    email: '',
-    password: '',
-    repeatPassword: '',
-  });
-
-  const onChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const id: string = evt.target.id;
-    const value: string = evt.target.value;
-    setState((prevState) => {
-      return {
-        ...prevState,
-        [id]: value,
-      };
-    });
-  };
-
-  const onSubmit = (evt: React.FormEvent<HTMLFormElement>): void => {
-    evt.preventDefault();
-
-    const { email, password, repeatPassword } = state;
-    if (password == repeatPassword) {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(() => localStorage.setItem('rememberMe', 'true'))
-        .catch((err) =>
-          showTooltip(TooltipTypes.Error, `Your account didn't be created: ${err.message}`)
-        );
-    } else {
-      showTooltip(TooltipTypes.Error, "You password and repeated password don't match");
-    }
-  };
-
-  const googleSignUp = (): void => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(() => localStorage.setItem('rememberMe', 'true'))
-      .catch((error) => {
-        showTooltip(TooltipTypes.Error, error.message);
-      });
-  };
-
   return (
     <>
-      <form className="sign-up-form" onSubmit={onSubmit}>
-        <div className="sign-up-form__field-wrapper">
-          <label className="sign-up-form__label" htmlFor="email">
-            Email<sup className="sign-up-form__label-required">*</sup>:
-          </label>
-          <input
-            className="sign-up-form__field"
-            id="email"
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            onChange={onChange}
-            value={state.email}
-            required
-          />
-        </div>
+      <Formik
+        initialValues={{ email: '', password: '', repeatPassword: '' }}
+        validationSchema={signUpValidationSchema}
+        onSubmit={(values, { setSubmitting }) =>
+          firebaseCreateUser(values, showTooltip, setSubmitting)
+        }
+      >
+        {({ isSubmitting, errors, touched }) => (
+          <Form className="sign-up-form">
+            {useMemo(
+              () =>
+                inputsConfig.map((item) => (
+                  <div className="sign-up-form__field-wrapper" key={item.fieldName}>
+                    <CustomInput
+                      label={item.label}
+                      labelClass="sign-up-form__label"
+                      isRequired={item.isRequired}
+                      fieldClass="sign-up-form__field"
+                      type={item.type}
+                      fieldName={item.fieldName}
+                      placeholder={item.placeholder}
+                      isError={item.fieldName in errors}
+                      isTouched={item.fieldName in touched}
+                    />
+                  </div>
+                )),
+              [errors, touched]
+            )}
 
-        <div className="sign-up-form__field-wrapper">
-          <label className="sign-up-form__label" htmlFor="password">
-            Password<sup className="sign-up-form__label-required">*</sup>:
-          </label>
-          <input
-            className="sign-up-form__field"
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Create a password"
-            onChange={onChange}
-            value={state.password}
-            required
-          />
-        </div>
+            <button className="sign-up-form__submit-btn" type="submit" disabled={isSubmitting}>
+              Sign up
+            </button>
+          </Form>
+        )}
+      </Formik>
 
-        <div className="sign-up-form__field-wrapper">
-          <label className="sign-up-form__label" htmlFor="repeatPassword">
-            Repeat password<sup className="sign-up-form__label-required">*</sup>:
-          </label>
-          <input
-            className="sign-up-form__field"
-            id="repeatPassword"
-            type="password"
-            name="repeat-password"
-            placeholder="Repeat a password"
-            onChange={onChange}
-            value={state.repeatPassword}
-            required
-          />
-        </div>
-
-        <button className="sign-up-form__submit-btn">Sign up</button>
-      </form>
       <div className="modal--sign-up__sign-up-with-google">
         <span className="sign-up-with-google__text">Also you can</span>
-        <button className="sign-up-with-google__btn" onClick={googleSignUp}>
+        <button
+          className="sign-up-with-google__btn"
+          onClick={() => firebaseCreateUserWithGoogle(showTooltip)}
+        >
           Sign up with
         </button>
       </div>

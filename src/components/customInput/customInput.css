@@ -1,0 +1,35 @@
+.label-required {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-important);
+}
+.field-with-error-wrapper {
+  position: relative;
+}
+.field {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 1px solid #000;
+  transition: 0.3s;
+  outline: none;
+}
+
+.field:hover,
+.field:focus {
+  border-color: var(--color-decorative-dark);
+}
+
+.field--error,
+.field--error:hover,
+.field--error:focus {
+  border-color: var(--color-important);
+}
+
+.error-message {
+  position: absolute;
+  bottom: -15px;
+  left: 0px;
+  font-size: 13px;
+  color: var(--color-important);
+}
