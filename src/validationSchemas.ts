@@ -7,3 +7,9 @@ export const signUpValidationSchema = Yup.object({
     .oneOf([Yup.ref('password')], `Passwords don't match`)
     .required('Required'),
 });
+
+export const signInValidationSchema = signUpValidationSchema.omit(['repeatPassword']).shape({
+  rememberMe: Yup.boolean(),
+});
+
+export const resetPasswordValidationSchema = signUpValidationSchema.pick(['email']);

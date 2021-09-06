@@ -1,118 +1,69 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import firebase from 'firebase/app';
-import { useTooltipContext } from '../../../../context';
-import { TooltipTypes } from '../../../../types';
-import './sign-in-modal-content.css';
+import { Formik, Form } from 'formik';
 
-interface ISignInModalContentState {
-  email: string;
-  password: string;
-}
+import { useTooltipContext } from '../../../../context';
+import { signInValidationSchema } from '../../../../validationSchemas';
+import { firebaseSignIn, firebaseGoogleSignIn } from '../../../../services/firebase-service';
+import inputsConfig from './inputs-config';
+import CustomInput from '../../../../components/customInput';
+
+import './sign-in-modal-content.css';
 
 const SignInModalContent: React.FC = () => {
   const { showTooltip } = useTooltipContext();
 
-  const [state, setState] = useState<ISignInModalContentState>({
-    email: '',
-    password: '',
-  });
-  const [isRememberMeChecked, setIsRememberMeChecked] = useState(
-    localStorage.getItem('rememberMe')
-  );
-
-  const onChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    const id: string = evt.target.id;
-    const value: string = evt.target.value;
-    setState((prevState) => {
-      return {
-        ...prevState,
-        [id]: value,
-      };
-    });
-  };
-
-  const onRememberMeToggle = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    if (isRememberMeChecked) {
-      localStorage.removeItem('rememberMe');
-      setIsRememberMeChecked(null);
-    } else {
-      localStorage.setItem('rememberMe', 'true');
-      setIsRememberMeChecked('true');
-    }
-  };
-
-  const onSubmit = (evt: React.FormEvent<HTMLFormElement>): void => {
-    evt.preventDefault();
-    const { email, password } = state;
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .catch((err) => showTooltip(TooltipTypes.Error, err.message));
-  };
-  const googleSignIn = (): void => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .catch((error) => {
-        showTooltip(TooltipTypes.Error, error.message);
-      });
-  };
-
   return (
     <>
-      <form className="sign-in-form" onSubmit={onSubmit}>
-        <div className="sign-in-form__field-wrapper">
-          <label className="sign-in-form__label" htmlFor="email">
-            Email<sup className="sign-in-form__label-required">*</sup>:
-          </label>
-          <input
-            className="sign-in-form__field"
-            id="email"
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            onChange={onChange}
-            value={state.email}
-            required
-          />
-        </div>
+      <Formik
+        initialValues={{
+          email: '',
+          password: '',
+          rememberMe: Boolean(localStorage.getItem('rememberMe')),
+        }}
+        validationSchema={signInValidationSchema}
+        onSubmit={(values, { setSubmitting }) => firebaseSignIn(values, showTooltip, setSubmitting)}
+      >
+        {({ isSubmitting, errors, touched }) => (
+          <Form className="sign-in-form">
+            {useMemo(
+              () =>
+                inputsConfig.map((item) => (
+                  <div
+                    className={`sign-in-form__field-wrapper ${
+                      item.fieldName === `rememberMe` ? `sign-in-form__field-wrapper--checkbox` : ''
+                    }`}
+                    key={item.fieldName}
+                  >
+                    <CustomInput
+                      label={item.label}
+                      labelClass="sign-in-form__label"
+                      isRequired={item.isRequired}
+                      fieldClass={`sign-up-form__field ${
+                        item.fieldName === `rememberMe` ? `sign-in-form__field--checkbox` : ``
+                      }`}
+                      type={item.type}
+                      fieldName={item.fieldName}
+                      placeholder={item.placeholder}
+                      isError={item.fieldName in errors}
+                      isTouched={item.fieldName in touched}
+                    />
+                  </div>
+                )),
+              [errors, touched]
+            )}
 
-        <div className="sign-in-form__field-wrapper">
-          <label className="sign-in-form__label" htmlFor="password">
-            Password<sup className="sign-in-form__label-required">*</sup>:
-          </label>
-          <input
-            className="sign-in-form__field"
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            onChange={onChange}
-            value={state.password}
-            required
-          />
-        </div>
+            <button className="sign-in-form__submit-btn" type="submit" disabled={isSubmitting}>
+              Sign in
+            </button>
+          </Form>
+        )}
+      </Formik>
 
-        <div className="sign-in-form__field-wrapper sign-in-form__field-wrapper--checkbox">
-          <label className="sign-in-form__label" htmlFor="rememberMe">
-            Remember me:
-          </label>
-          <input
-            className="sign-in-form__field sign-in-form__field--checkbox"
-            id="rememberMe"
-            type="checkbox"
-            name="remember-me"
-            onChange={onRememberMeToggle}
-            checked={isRememberMeChecked ? true : false}
-          />
-        </div>
-
-        <button className="sign-in-form__submit-btn">Sign in</button>
-      </form>
-
-      <button className="modal--sign-in__google-btn" onClick={googleSignIn}>
+      <button
+        className="modal--sign-in__google-btn"
+        onClick={() => firebaseGoogleSignIn(showTooltip)}
+      >
         Sign in with
       </button>
 

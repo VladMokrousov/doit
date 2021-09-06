@@ -36,7 +36,7 @@ export interface ICustomInput {
   fieldClass?: string;
   type: string;
   fieldName: string;
-  placeholder: string;
+  placeholder?: string;
   isError: boolean;
   isTouched: boolean;
 }

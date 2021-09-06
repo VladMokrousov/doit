@@ -7,28 +7,27 @@
 .sign-in-form__field-wrapper {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  align-items: baseline;
+  margin-bottom: 30px;
+}
+
+.sign-in-form__field-wrapper .field-with-error-wrapper {
+  flex-grow: 1;
 }
 .sign-in-form__field-wrapper--checkbox {
   justify-content: flex-start;
+}
+.sign-in-form__field-wrapper--checkbox .field-with-error-wrapper {
+  flex-grow: 0;
 }
 
 .sign-in-form__label {
   margin-right: 10px;
 }
-.sign-in-form__label-required {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--color-important);
-}
-.sign-in-form__field {
-  flex-grow: 1;
-}
 
 .sign-in-form__field--checkbox {
   cursor: pointer;
-  flex-grow: 0;
+  width: auto;
 }
 
 .sign-in-form__submit-btn {
@@ -59,12 +58,17 @@
   background-position: 0 0;
   background-repeat: no-repeat;
 }
+
 .sign-in-form__submit-btn:hover,
 .sign-in-form__submit-btn:focus {
   opacity: 0.8;
 }
 .sign-in-form__submit-btn:active {
   opacity: 0.4;
+}
+.sign-in-form__submit-btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .modal--sign-in__google-btn {
