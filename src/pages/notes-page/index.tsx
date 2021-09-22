@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import firebase from 'firebase/app';
+
 import PageTitle from '../../components/page-title';
 import NotesList from './components/notes-list';
 import Portal from '../../components/portal';
 import NotesModalContent from './components/notes-modal-content';
 import Modal from '../../components/modal';
 import { useAppContext, useTooltipContext } from '../../context';
-import firebase from 'firebase/app';
 import { INoteItem } from '../../interfaces';
-import { Id, TooltipTypes } from '../../types';
+import { Id, ToggleModalTypes, TooltipTypes } from '../../types';
 
 import './index.css';
 
@@ -74,32 +75,12 @@ const NotesPage: React.FC = () => {
         });
     };
 
-    // const getCurrentFormattedDate = (): string => {
-    //   const currentDate: Date = new Date();
-    //   const currentMonth: number = currentDate.getMonth() + 1;
-    //   const currentDay: number = currentDate.getDate();
-
-    //   return `${String(currentDay).length == 2 ? currentDay : '0' + currentDay}.${
-    //     String(currentMonth).length == 2 ? currentMonth : '0' + currentMonth
-    //   }.${currentDate.getFullYear()}`;
-    // };
-
-    // @todo evt: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
-    // @todo Сделать отдельную функцию на закрытие окна?
-    const toggleModal = (evt: any): void => {
-      if (evt.target.className == 'modal__close') {
-        setState((prevState) => {
-          return {
-            ...prevState,
-            selectedItemId: false,
-          };
-        });
-      }
-
-      setState(({ showModal, ...restParams }) => {
+    const toggleModal = (type: ToggleModalTypes = ToggleModalTypes.Default): void => {
+      setState(({ showModal, selectedItemId, ...restParams }) => {
         return {
           ...restParams,
           showModal: !showModal,
+          selectedItemId: type === `withSelectedItemClearing` ? false : selectedItemId,
         };
       });
     };
@@ -176,8 +157,8 @@ const NotesPage: React.FC = () => {
             selectedItemId: id,
           };
         });
-        // @todo В дальнейшем нужно избавиться от передачи события
-        toggleModal(evt);
+
+        toggleModal();
       };
 
       const { notesData, showModal, selectedItemId } = state;
@@ -186,7 +167,7 @@ const NotesPage: React.FC = () => {
         <main className="notes-page">
           <div className="container">
             <PageTitle text="Notes" />
-            <button className="notes-page__add-note-btn" onClick={toggleModal}>
+            <button className="notes-page__add-note-btn" onClick={() => toggleModal()}>
               Add note
             </button>
             <NotesList
@@ -199,12 +180,12 @@ const NotesPage: React.FC = () => {
                 <Modal
                   classes="modal--notes"
                   title={selectedItemId ? 'Edit note' : 'Add note'}
-                  onCloseBtnClick={toggleModal}
+                  onCloseBtnClick={() => toggleModal(ToggleModalTypes.WithSelectedItemClearing)}
                 >
                   <NotesModalContent
                     onAdded={addItem}
                     onEdited={editItem}
-                    onToggleModal={toggleModal}
+                    onToggleModal={() => toggleModal()}
                     selectedItemId={selectedItemId}
                   />
                 </Modal>
@@ -219,16 +200,20 @@ const NotesPage: React.FC = () => {
       <main className="notes-page">
         <div className="container">
           <PageTitle text="Notes" />
-          <button className="notes-page__add-note-btn" onClick={toggleModal}>
+          <button className="notes-page__add-note-btn" onClick={() => toggleModal()}>
             Add note
           </button>
           <NotesList overlayText="You can sleep soundly" />
           {state.showModal && (
             <Portal>
-              <Modal classes="modal--notes" title="Add note" onCloseBtnClick={toggleModal}>
+              <Modal
+                classes="modal--notes"
+                title="Add note"
+                onCloseBtnClick={() => toggleModal(ToggleModalTypes.WithSelectedItemClearing)}
+              >
                 <NotesModalContent
                   onAdded={addItem}
-                  onToggleModal={toggleModal}
+                  onToggleModal={() => toggleModal()}
                   selectedItemId={false}
                 />
               </Modal>

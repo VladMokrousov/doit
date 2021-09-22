@@ -20,23 +20,29 @@ export interface INoteItem {
   id: Id;
 }
 
-// @todo
-export interface IEveryStatusCount {
-  [key: string]: number;
-  // all: number;
-  // new: number;
-  // inProgress: number;
-  // done: number;
-}
-
 export interface ICustomInput {
   label: string;
   labelClass?: string;
   isRequired: boolean;
   fieldClass?: string;
-  type: string;
+  type?: string;
   fieldName: string;
   placeholder?: string;
   isError: boolean;
   isTouched: boolean;
+  as?: string;
+}
+
+export interface ITodosList {
+  [key: string]: ITodoItem;
+}
+
+export interface ITodosPageState {
+  todosList: ITodosList | null;
+  lastTodoId: Id | null;
+  term: string;
+  filter: string;
+  showModal: boolean;
+  selectedItemId: Id | null;
+  isDataLoaded: boolean;
 }

@@ -1,43 +1,53 @@
 import React from 'react';
+
 import { ITodoFieldsContent } from '../../../../interfaces';
 import { Id } from '../../../../types';
 import { getFormattedDate } from '../../../../helpers';
+import { useAppContext, useTooltipContext } from '../../../../context';
+import { firebaseDeleteTodo } from '../../../../services/firebase-service';
+
 import './todo-item-content.css';
 
 interface TodoItemContentProps {
   fieldsContent: ITodoFieldsContent;
-  onDeleted: () => any;
-  // onDeleted: () => (id: Id) => void
+  id: Id;
 }
 
-const TodoItemContent: React.FC<TodoItemContentProps> = ({ fieldsContent, onDeleted }) => {
+const TodoItemContent: React.FC<TodoItemContentProps> = ({ fieldsContent, id }) => {
   const { description, status, priority, endDatePlan, endDateActual } = fieldsContent;
 
-  const classNames: string = 'table__item-cell';
+  const { currentUser } = useAppContext();
+  const { showTooltip } = useTooltipContext();
+
+  const classNames = 'table__item-cell';
 
   return (
     <>
       <td className={classNames}>
-        <span className="table__item-cell--description">{description}</span>
+        <span className={`${classNames}--description`}>{description}</span>
       </td>
       <td className={classNames}>
-        <span className="table__item-cell--status">{status}</span>
+        <span className={`${classNames}--status`}>{status}</span>
       </td>
       <td className={classNames}>
-        <span className="table__item-cell--priority">{priority}</span>
+        <span className={`${classNames}--priority`}>{priority}</span>
       </td>
       <td className={classNames}>
-        <span className="table__item-cell--datePlan">
+        <span className={`${classNames}--datePlan`}>
           {getFormattedDate(new Date(endDatePlan), 'task')}
         </span>
       </td>
       <td className={classNames}>
-        <span className="table__item-cell--actualDate">
+        <span className={`${classNames}--actualDate`}>
           {endDateActual == '-' ? endDateActual : getFormattedDate(new Date(endDateActual), 'task')}
         </span>
       </td>
       <td className={classNames}>
-        <button type="button" className="btn table__btn table__btn--del" onClick={onDeleted}>
+        <button
+          type="button"
+          className="btn table__btn table__btn--del"
+          onClick={() => firebaseDeleteTodo(id, currentUser, showTooltip)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24px"

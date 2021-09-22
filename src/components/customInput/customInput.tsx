@@ -14,6 +14,8 @@ const CustomInput: React.FC<ICustomInput> = ({
   placeholder,
   isError,
   isTouched,
+  as,
+  children,
 }) => (
   <>
     <label className={`label ${labelClass ? labelClass : ''}`} htmlFor={fieldName}>
@@ -29,7 +31,10 @@ const CustomInput: React.FC<ICustomInput> = ({
         type={type}
         name={fieldName}
         placeholder={placeholder}
-      />
+        as={as}
+      >
+        {children}
+      </Field>
 
       <ErrorMessage name={fieldName} component="span" className="error-message" />
     </div>

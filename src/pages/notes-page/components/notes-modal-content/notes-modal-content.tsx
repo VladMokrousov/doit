@@ -8,7 +8,7 @@ interface NotesModalProps {
   selectedItemId: Id | false;
   onEdited?: (description: string) => void;
   onAdded: (description: string) => void;
-  onToggleModal: (evt: any) => void;
+  onToggleModal: (evt?: any) => void;
 }
 
 const NotesModalContent: React.FC<NotesModalProps> = ({
@@ -55,7 +55,7 @@ const NotesModalContent: React.FC<NotesModalProps> = ({
       onAdded(description);
     }
 
-    onToggleModal(evt);
+    onToggleModal();
   };
 
   return (

@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
+
+import { ITodosPageState } from '../../../../interfaces';
+
 import './search-panel.css';
 
 interface SearchPanelProps {
-  onSearchChange: (changedTerm: string) => void;
+  setState: React.Dispatch<React.SetStateAction<ITodosPageState>>;
 }
 
-const SearchPanel: React.FC<SearchPanelProps> = ({ onSearchChange }) => {
-  const [term, setTerm] = useState<string>('');
+const SearchPanel: React.FC<SearchPanelProps> = ({ setState }) => {
+  const [term, setTerm] = useState('');
 
   const onSearchReplace = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const changedTerm = evt.target.value;
     setTerm(changedTerm);
 
-    onSearchChange(changedTerm);
+    setState((prevState) => ({ ...prevState, term: changedTerm }));
   };
 
   return (

@@ -1,66 +1,86 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import TodoItemContent from '../todo-item-content';
-import { ITodoItem } from '../../../../interfaces';
-import { Id } from '../../../../types';
+import tableHeadersConfig from './tableHeaderConfig';
+import { ITodoItem, ITodosPageState } from '../../../../interfaces';
+import { Id, ToggleModalTypes } from '../../../../types';
+
 import './todos-table.css';
 
 interface TodosTableProps {
-  todos?: ITodoItem[];
-  onDeleted?: (id: Id) => void;
-  onSelected?: (evt: React.MouseEvent<HTMLTableRowElement>, id: Id) => void;
-  overlayText?: string;
+  todosPageState: ITodosPageState;
+  toggleModal: (type?: ToggleModalTypes) => void;
+  todosPageSetState: React.Dispatch<React.SetStateAction<ITodosPageState>>;
 }
 
-const TodosTable: React.FC<TodosTableProps> = ({ todos, onDeleted, onSelected, overlayText }) => {
-  const tableHeadersText: string[] = [
-    'Description',
-    'Status',
-    'Priority',
-    'End date plan',
-    'End date actual',
-    'Action',
-  ];
+const TodosTable: React.FC<TodosTableProps> = ({
+  todosPageState,
+  toggleModal,
+  todosPageSetState,
+}) => {
+  const tableHeaders: JSX.Element[] = tableHeadersConfig.map((item) => (
+    <th key={item.text} className={`table__header ${item.class}`} scope="col">
+      {item.text}
+    </th>
+  ));
 
-  const tableHeaders: JSX.Element[] = tableHeadersText.map((item: string): JSX.Element => {
-    const additionalClass: string =
-      item == 'Description'
-        ? 'table__header--description'
-        : item == 'Status'
-        ? 'table__header--status'
-        : item == 'Priority'
-        ? 'table__header--priority'
-        : item == 'End date plan'
-        ? 'table__header--planDate'
-        : item == 'End date actual'
-        ? 'table__header--actualDate'
-        : item == 'Action'
-        ? 'table__header--action'
-        : '';
+  let visibleTodos: ITodoItem[] | undefined;
+  let tableRows: JSX.Element[] | undefined;
 
-    const clazz: string = additionalClass ? `table__header ${additionalClass}` : 'table__header';
+  const { todosList, term, filter } = todosPageState;
 
-    return (
-      <th key={item} className={clazz} scope="col">
-        {item}
-      </th>
+  if (todosList) {
+    const searchTodos = (items: ITodoItem[], term: string): ITodoItem[] =>
+      term.length === 0
+        ? items
+        : items.filter(
+            (item) => item.fieldsContent.description.toLowerCase().indexOf(term.toLowerCase()) > -1
+          );
+
+    const filterTodos = (items: ITodoItem[], filter: string): ITodoItem[] => {
+      switch (filter) {
+        case 'all':
+          return items;
+        case 'new':
+          return items.filter((item) => item.fieldsContent.status == 'New');
+        case 'inProgress':
+          return items.filter((item) => item.fieldsContent.status == 'In progress');
+        case 'done':
+          return items.filter((item) => item.fieldsContent.status == 'Done');
+
+        default:
+          return items;
+      }
+    };
+
+    // @todo Опять не учтена работа с большим количеством элементов. Reverse - не выход
+    visibleTodos = useMemo(
+      () => filterTodos(searchTodos(Object.values(todosList), term), filter).reverse(),
+      [todosList, term, filter]
     );
-  });
 
-  if (todos) {
-    const tableRows: JSX.Element[] = todos.map((item: ITodoItem): JSX.Element => {
-      const { id, ...itemProps } = item;
+    const selectItem = (id: Id): void => {
+      todosPageSetState((prevState) => {
+        return {
+          ...prevState,
+          selectedItemId: id,
+        };
+      });
 
-      const importantClass: string | null =
-        itemProps.fieldsContent.priority == 'High' ? 'table__item--important' : '';
-      const doneClass: string | null =
-        itemProps.fieldsContent.status == 'Done' ? 'table__item--done' : '';
-      const expiredClass: string | null =
-        itemProps.fieldsContent.endDateActual != '-'
-          ? itemProps.fieldsContent.endDateActual < itemProps.fieldsContent.endDatePlan
+      toggleModal();
+    };
+
+    tableRows = visibleTodos.map((item: ITodoItem): JSX.Element => {
+      const { id, fieldsContent } = item;
+
+      const importantClass = fieldsContent.priority == 'High' ? 'table__item--important' : '';
+      const doneClass = fieldsContent.status == 'Done' ? 'table__item--done' : '';
+      const expiredClass =
+        fieldsContent.endDateActual != '-'
+          ? fieldsContent.endDateActual < fieldsContent.endDatePlan
             ? ''
             : 'table__item--expired'
-          : new Date().toISOString() > itemProps.fieldsContent.endDatePlan
+          : new Date().toISOString() > fieldsContent.endDatePlan
           ? 'table__item--expired'
           : '';
 
@@ -68,21 +88,12 @@ const TodosTable: React.FC<TodosTableProps> = ({ todos, onDeleted, onSelected, o
         <tr
           className={`table__item ${doneClass} ${importantClass} ${expiredClass}`}
           key={id}
-          onDoubleClick={(evt) => onSelected!(evt, id)}
+          onDoubleClick={() => selectItem(id)}
         >
-          <TodoItemContent {...itemProps} onDeleted={() => onDeleted!(id)} />
+          <TodoItemContent fieldsContent={fieldsContent} id={id} />
         </tr>
       );
     });
-
-    return (
-      <table className="table table--todo">
-        <thead>
-          <tr className="table__headers table--todo__headers">{tableHeaders}</tr>
-        </thead>
-        <tbody>{tableRows}</tbody>
-      </table>
-    );
   }
   return (
     <>
@@ -90,9 +101,9 @@ const TodosTable: React.FC<TodosTableProps> = ({ todos, onDeleted, onSelected, o
         <thead>
           <tr className="table__headers table--todo__headers">{tableHeaders}</tr>
         </thead>
-        <tbody></tbody>
+        <tbody>{visibleTodos && tableRows}</tbody>
       </table>
-      <span>{overlayText}</span>
+      {!visibleTodos && <span>You can sleep soundly</span>}
     </>
   );
 };

@@ -1,4 +1,12 @@
 .search-input {
-    flex-grow: 1;
-    margin: 0 10px;
-  }
+  margin: 0 10px;
+  flex-grow: 1;
+  border: 1px solid #000;
+  transition: 0.3s;
+  outline: none;
+}
+
+.search-input:hover,
+.search-input:focus {
+  border-color: var(--color-decorative-dark);
+}

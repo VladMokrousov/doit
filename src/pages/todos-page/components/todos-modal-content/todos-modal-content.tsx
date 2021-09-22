@@ -1,29 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Formik, Form } from 'formik';
+
 import { useAppContext, useTooltipContext } from '../../../../context';
-import { ITodoFieldsContent } from '../../../../interfaces';
-import { Id } from '../../../../types';
-import firebase from 'firebase/app';
-import { getFormattedDate } from '../../../../helpers';
-import { TooltipTypes } from '../../../../types';
+import { ITodoFieldsContent, ITodoItem, ITodosPageState } from '../../../../interfaces';
+import { Id, ToggleModalTypes } from '../../../../types';
+import { getFormattedDate, getFormattedTimeOffset } from '../../../../helpers';
+import { todoFormValidationSchema } from '../../../../validationSchemas';
+import CustomInput from '../../../../components/customInput/customInput';
+import {
+  firebaseAddTodo,
+  firebaseEditTodo,
+  firebaseGetTodoValue,
+} from '../../../../services/firebase-service';
+
 import './todos-modal-content.css';
 
-interface TodosModalProps {
-  selectedItemId: Id | false;
-  onEdited?: (fieldsContent: ITodoFieldsContent) => void;
-  onAdded: (fieldsContent: ITodoFieldsContent) => void;
-  onToggleModal: (evt: any) => void;
+interface IPartOfFormikBag {
+  setSubmitting: (isSubmitting: boolean) => void;
 }
 
-const TodosModalContent: React.FC<TodosModalProps> = ({
+interface ITodosModalProps {
+  selectedItemId: Id | null;
+  newItemId: Id;
+  onToggleModal: (type?: ToggleModalTypes) => void;
+  setState: React.Dispatch<React.SetStateAction<ITodosPageState>>;
+}
+
+const TodosModalContent: React.FC<ITodosModalProps> = ({
   selectedItemId,
-  onEdited,
-  onAdded,
+  newItemId,
   onToggleModal,
+  setState,
 }) => {
   const { currentUser } = useAppContext();
   const { showTooltip } = useTooltipContext();
 
-  const [state, setState] = useState<ITodoFieldsContent>({
+  const [initialState, setInitialState] = useState<ITodoFieldsContent>({
     description: '',
     priority: 'Low',
     status: 'New',
@@ -33,179 +45,195 @@ const TodosModalContent: React.FC<TodosModalProps> = ({
 
   useEffect(() => {
     if (selectedItemId) {
-      const todosRef = firebase.database().ref('users/' + currentUser.uid + '/todos');
-      todosRef
-        .once('value')
-        .then((snapshot) => {
-          snapshot.forEach((childSnapshot) => {
-            const childData = childSnapshot.val();
-            if (childData.id === selectedItemId) {
-              setState({
-                ...childData.fieldsContent,
-              });
-
-              return true;
-            }
-          });
-        })
-        .catch((err) => {
-          showTooltip(TooltipTypes.Error, `Couldn't take the data from DB: ${err.message}`);
-        });
+      firebaseGetTodoValue(currentUser, selectedItemId, setInitialState, showTooltip);
     }
   }, []);
 
-  const onDescriptionChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    setState((prevState) => {
-      return {
-        ...prevState,
-        description: evt.target.value,
-      };
-    });
+  const createCustomInput = (
+    label: string,
+    isRequired: boolean,
+    type: string | undefined,
+    fieldName: string,
+    placeholder: string | undefined,
+    errors: any,
+    touched: any,
+    as: any,
+    children?: React.ReactNode
+  ) => (
+    <div className="todos-form__field-wrapper">
+      <CustomInput
+        label={label}
+        labelClass="todos-form__label"
+        isRequired={isRequired}
+        fieldClass="todos-form__field"
+        type={type}
+        fieldName={fieldName}
+        placeholder={placeholder}
+        isError={fieldName in errors}
+        isTouched={fieldName in touched}
+        as={as}
+        children={children}
+      />
+    </div>
+  );
+
+  const addTodo = (fieldsContent: ITodoFieldsContent): void => {
+    const newItem: ITodoItem = {
+      fieldsContent,
+      id: newItemId,
+    };
+
+    firebaseAddTodo(currentUser, newItem, showTooltip);
   };
 
-  const onPriorityChange = (evt: React.ChangeEvent<HTMLSelectElement>): void => {
-    setState((prevState) => {
-      return {
-        ...prevState,
-        priority: evt.target.value,
-      };
-    });
+  const editTodo = (fieldsContent: ITodoFieldsContent): void => {
+    firebaseEditTodo(currentUser, selectedItemId, fieldsContent, showTooltip);
+    // @todo Сетать нужно когда взаимодействие с firebase успешно завершится
+    setState(({ selectedItemId, ...restParams }) => ({
+      selectedItemId: null,
+      ...restParams,
+    }));
   };
 
-  const onStatusChange = (evt: React.ChangeEvent<HTMLSelectElement>): void => {
-    if (evt.target.value == 'Done') {
-      setState((prevState) => {
-        return {
-          ...prevState,
-          endDateActual: new Date().toISOString(),
-        };
-      });
-    } else {
-      setState((prevState) => {
-        return {
-          ...prevState,
-          endDateActual: '-',
-        };
-      });
-    }
-    setState((prevState) => {
-      return {
-        ...prevState,
-        status: evt.target.value,
-      };
-    });
-  };
+  const handleSubmit = (
+    values: Omit<ITodoFieldsContent, 'endDateActual'>,
+    { setSubmitting }: IPartOfFormikBag
+  ) => {
+    // Пример даты, которая хранится в values.endDatePlan 2021-09-10
+    // Формат ниже нужен, чтобы задача считалась просроченной только тогда, когда у нас наступит 00:00 дня, следующего за тем, который мы обозначили в endDatePlan
+    const endDatePlan = new Date(
+      `${values.endDatePlan}T23:59:59.000${getFormattedTimeOffset()}:00`
+    ).toISOString();
 
-  const onEndDatePlanChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    if (evt.target.value.length == 10) {
-      let formattedTimeOffset = String(new Date().getTimezoneOffset() / 60);
+    const endDateActual =
+      values.status == 'Done' && initialState.endDateActual === '-'
+        ? new Date().toISOString()
+        : initialState.endDateActual;
 
-      if (formattedTimeOffset.includes('-')) {
-        formattedTimeOffset.length == 2
-          ? (formattedTimeOffset = formattedTimeOffset.replace('-', '+0'))
-          : (formattedTimeOffset = formattedTimeOffset.replace('-', '+'));
-      } else {
-        formattedTimeOffset.length == 1
-          ? (formattedTimeOffset = `-0${formattedTimeOffset}`)
-          : (formattedTimeOffset = `-${formattedTimeOffset}`);
-      }
-
-      setState((prevState) => {
-        return {
-          ...prevState,
-          endDatePlan: new Date(
-            `${evt.target.value}T23:59:59.000${formattedTimeOffset}:00`
-          ).toISOString(),
-        };
-      });
-    }
-  };
-
-  const onSubmit = (evt: React.FormEvent<HTMLFormElement>): void => {
-    evt.preventDefault();
-
+    const todo = {
+      ...values,
+      endDatePlan,
+      endDateActual,
+    };
     if (selectedItemId) {
-      onEdited!(state);
+      editTodo(todo);
     } else {
-      onAdded(state);
+      addTodo(todo);
     }
 
-    onToggleModal(evt);
-  };
+    // @todo По идее, нужно выполнять действия снизу только когда взаимодействие с firebase из addTodo и editTodo успешно завершится
+    setSubmitting(false);
 
-  const { description, priority, status, endDatePlan } = state;
+    onToggleModal();
+  };
 
   return (
-    <form className="todos-form" onSubmit={onSubmit}>
-      <div className="todos-form__field-wrapper">
-        <label className="todos-form__label" htmlFor="description">
-          Description<sup className="todos-form__label-required">*</sup>:
-        </label>
-        <input
-          maxLength={40}
-          className="todos-form__field"
-          id="description"
-          type="text"
-          name="description"
-          onChange={onDescriptionChange}
-          placeholder="What must be to do?"
-          value={description}
-          required
-        />
-      </div>
+    <Formik
+      initialValues={{
+        description: initialState.description,
+        priority: initialState.priority,
+        status: initialState.status,
+        endDatePlan: initialState.endDatePlan
+          ? getFormattedDate(new Date(initialState.endDatePlan), 'calendar')
+          : initialState.endDatePlan,
+      }}
+      enableReinitialize={true}
+      validationSchema={todoFormValidationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ isSubmitting, errors, touched }) => (
+        <Form className="todos-form">
+          {useMemo(
+            () =>
+              createCustomInput(
+                `Description`,
+                true,
+                `text`,
+                `description`,
+                `What must be to do?`,
+                errors,
+                touched,
+                undefined
+              ),
+            [errors, touched]
+          )}
+          <div className="todos-form__fields-group-wrapper">
+            {useMemo(
+              () =>
+                createCustomInput(
+                  `Priority`,
+                  true,
+                  undefined,
+                  `priority`,
+                  undefined,
+                  errors,
+                  touched,
+                  `select`,
+                  [
+                    <option key="Low" value="Low">
+                      Low
+                    </option>,
+                    <option key="Medium" value="Medium">
+                      Medium
+                    </option>,
+                    <option key="High" value="High">
+                      High
+                    </option>,
+                  ]
+                ),
+              [errors, touched]
+            )}
+            {useMemo(
+              () =>
+                createCustomInput(
+                  `Status`,
+                  true,
+                  undefined,
+                  `status`,
+                  undefined,
+                  errors,
+                  touched,
+                  `select`,
+                  [
+                    <option key="New" value="New">
+                      New
+                    </option>,
+                    <option key="In progress" value="In progress">
+                      In progress
+                    </option>,
+                    <option key="Done" value="Done">
+                      Done
+                    </option>,
+                  ]
+                ),
+              [errors, touched]
+            )}
+          </div>
 
-      <div className="todos-form__fields-group-wrapper">
-        <div className="todos-form__field-wrapper">
-          <label className="todos-form__label" htmlFor="priority">
-            Priority:
-          </label>
-          <select
-            className="todos-form__field"
-            id="priority"
-            name="priority"
-            onChange={onPriorityChange}
-            value={priority}
-          >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
-        </div>
-        <div className="todos-form__field-wrapper">
-          <label className="todos-form__label" htmlFor="status">
-            Status:
-          </label>
-          <select
-            className="todos-form__field"
-            id="status"
-            name="status"
-            onChange={onStatusChange}
-            value={status}
-          >
-            <option value="New">New</option>
-            <option value="In progress">In progress</option>
-            <option value="Done">Done</option>
-          </select>
-        </div>
-      </div>
-      <div className="todos-form__field-wrapper">
-        <label className="todos-form__label" htmlFor="calendar">
-          End Date:{' '}
-        </label>
-        <input
-          required
-          className="todos-form__field"
-          id="calendar"
-          type="date"
-          name="calendar"
-          onChange={onEndDatePlanChange}
-          value={endDatePlan ? getFormattedDate(new Date(endDatePlan), 'calendar') : endDatePlan}
+          {/* Эта проверка была раньше на календаре. Нужно перенести ее на кастомный календарь
           min={getFormattedDate(new Date(), 'calendar')}
-        />
-      </div>
+           */}
+          {useMemo(
+            () =>
+              createCustomInput(
+                `End Date`,
+                true,
+                `date`,
+                `endDatePlan`,
+                undefined,
+                errors,
+                touched,
+                undefined
+              ),
+            [errors, touched]
+          )}
 
-      <button className="todos-form__submit-btn">Save</button>
-    </form>
+          <button className="todos-form__submit-btn" type="submit" disabled={isSubmitting}>
+            Save
+          </button>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

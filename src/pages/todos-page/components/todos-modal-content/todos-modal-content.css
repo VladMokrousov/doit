@@ -3,8 +3,13 @@
 }
 .todos-form__field-wrapper {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.todos-form__field-wrapper .field-with-error-wrapper {
+  flex-grow: 1;
 }
 .todos-form__fields-group-wrapper {
   display: flex;
@@ -14,14 +19,7 @@
 .todos-form__label {
   margin-right: 10px;
 }
-.todos-form__label-required {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--color-important);
-}
-.todos-form__field {
-  flex-grow: 1;
-}
+
 .todos-form__submit-btn {
   display: block;
   margin-left: auto;
@@ -45,4 +43,9 @@
 }
 .todos-form__submit-btn:active {
   opacity: 0.4;
+}
+
+.todos-form__submit-btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
 }

@@ -5,3 +5,8 @@ export enum TooltipTypes {
   Error = 'error',
   Success = 'success',
 }
+
+export enum ToggleModalTypes {
+  Default = 'default',
+  WithSelectedItemClearing = 'withSelectedItemClearing',
+}
