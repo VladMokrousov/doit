@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import PageTitle from '../../components/page-title';
-import Portal from '../../components/portal';
-import Modal from '../../components/modal';
-import { useAppContext, useTooltipContext } from '../../context';
+import PageTitle from 'components/page-title';
+import Portal from 'components/portal';
+import Modal from 'components/modal';
+import { useAppContext, useTooltipContext } from 'context';
 import firebase from 'firebase/app';
 import ChangeEmailModalContent from './components/change-email-modal-content';
 import ChangePasswordModalContent from './components/change-password-modal-content';
 import DeleteAccountModalContent from './components/delete-account-modal-content';
 import { TooltipTypes } from '../../types';
-import './index.css';
+import ChangeIcon from '!@svgr/webpack!../../assets/img/change-icon.svg';
 import anonymousImg from '../../assets/img/anonymous.jpg';
+
+import './index.css';
 
 // @todo Рефакторинг компонента + привести к единому виду названия функций, переменных из useState
 const SettingsPage: React.FC = () => {
@@ -151,16 +153,7 @@ const SettingsPage: React.FC = () => {
                 className="settings-item__edit-btn settings-item__edit-btn--avatar"
                 onClick={onAvatarClick}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
-                  viewBox="0 0 24 24"
-                  width="24px"
-                  fill="#000000"
-                >
-                  <path d="M0 0h24v24H0z" fill="none" />
-                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                </svg>
+                <ChangeIcon width="24px" height="24px" />
               </button>
             )}
           </div>
@@ -196,16 +189,7 @@ const SettingsPage: React.FC = () => {
                   className="settings-item__edit-btn settings-item__edit-btn--name"
                   onClick={onNameClick}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="18px"
-                    viewBox="0 0 24 24"
-                    width="18px"
-                    fill="#000000"
-                  >
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                  </svg>
+                  <ChangeIcon width="18px" height="18px" />
                 </button>
               </>
             )}
@@ -222,16 +206,7 @@ const SettingsPage: React.FC = () => {
                 className="settings-item__edit-btn settings-item__edit-btn--email"
                 onClick={toggleEmailChangeModal}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="18px"
-                  viewBox="0 0 24 24"
-                  width="18px"
-                  fill="#000000"
-                >
-                  <path d="M0 0h24v24H0z" fill="none" />
-                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                </svg>
+                <ChangeIcon width="18px" height="18px" />
               </button>
             )}
           </div>

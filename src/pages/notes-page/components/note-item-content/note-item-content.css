@@ -14,10 +14,10 @@
   background-color: transparent;
 }
 
-.note__btn--del svg {
+.note__btn--del img {
   transition-duration: 0.3s;
 }
-.note__btn--del:hover svg,
-.note__btn--del:focus svg {
+.note__btn--del:hover img,
+.note__btn--del:focus img {
   opacity: 0.7;
 }

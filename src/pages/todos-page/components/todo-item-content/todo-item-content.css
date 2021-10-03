@@ -9,11 +9,11 @@
   border: 0;
   background-color: transparent;
 }
-.table__btn--del svg {
+.table__btn--del img {
   padding-top: 2px;
   transition-duration: 0.3s;
 }
-.table__btn--del:hover svg,
-.table__btn--del:focus svg {
+.table__btn--del:hover img,
+.table__btn--del:focus img {
   opacity: 0.7;
 }

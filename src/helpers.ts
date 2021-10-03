@@ -29,3 +29,9 @@ export const getFormattedTimeOffset = (): string => {
   }
   return formattedTimeOffset;
 };
+
+export const clsx = (classNames: any[]): string =>
+  classNames
+    .filter((v) => !!v)
+    .join(` `)
+    .trim();

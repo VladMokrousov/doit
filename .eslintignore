@@ -1,6 +1,7 @@
 src/*.tsx
 src/*.ts
 src/pages/todos-page/index.tsx
+src/pages/settings-page/index.tsx
 src/pages/todos-page/components/todos-modal-content/todos-modal-content.tsx
 src/pages/todos-page/components/todos-table/todos-table.tsx
 src/pages/notes-page/components/notes-modal-content/notes-modal-content.tsx
