@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 
 import TodoItemContent from '../todo-item-content';
 import tableHeadersConfig from './tableHeaderConfig';
-import { ITodoItem, ITodosPageState } from '../../../../interfaces';
-import { Id, ToggleModalTypes } from '../../../../types';
+import { ITodoItem, ITodosPageState } from 'interfaces';
+import { Id, ToggleModalTypes } from 'types';
 
 import './todos-table.css';
 

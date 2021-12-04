@@ -2,6 +2,8 @@ import React from 'react';
 import { Field, ErrorMessage } from 'formik';
 
 import { ICustomInput } from '../../interfaces';
+import { clsx } from 'helpers';
+
 import './customInput.css';
 
 const CustomInput: React.FC<ICustomInput> = ({
@@ -18,15 +20,13 @@ const CustomInput: React.FC<ICustomInput> = ({
   children,
 }) => (
   <>
-    <label className={`label ${labelClass ? labelClass : ''}`} htmlFor={fieldName}>
+    <label className={clsx([`label`, labelClass])} htmlFor={fieldName}>
       {label}
       {isRequired && <sup className="label-required">*</sup>}:
     </label>
     <div className="field-with-error-wrapper">
       <Field
-        className={`field ${fieldClass ? fieldClass : ''} ${
-          isError && isTouched ? `field--error` : ''
-        }`}
+        className={clsx([`field`, fieldClass, isError && isTouched && `field--error`])}
         id={fieldName}
         type={type}
         name={fieldName}

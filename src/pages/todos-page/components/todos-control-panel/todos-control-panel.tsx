@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ITodosList, ITodosPageState } from '../../../../interfaces';
+import { ITodosList, ITodosPageState } from 'interfaces';
 import SearchPanel from '../search-panel';
 import StatusFilter from '../status-filter';
 
@@ -18,19 +18,17 @@ const TodosControlPanel: React.FC<TodosControlPanelProps> = ({
   filter,
   onToggleModal,
   setState,
-}) => {
-  return (
-    <div className={`todos-page__control-panel ${!todosList ? 'flex-wrapper' : ``}`}>
-      <button className="todos-page__add-task-btn" onClick={onToggleModal}>
-        Add task
-      </button>
-      {todosList && (
-        <>
-          <SearchPanel setState={setState} />
-          <StatusFilter todosList={todosList} filter={filter} setState={setState} />
-        </>
-      )}
-    </div>
-  );
-};
+}) => (
+  <div className={`todos-page__control-panel ${!todosList ? 'flex-wrapper' : ``}`}>
+    <button className="todos-page__add-task-btn" onClick={onToggleModal}>
+      Add task
+    </button>
+    {todosList && (
+      <>
+        <SearchPanel setState={setState} />
+        <StatusFilter todosList={todosList} filter={filter} setState={setState} />
+      </>
+    )}
+  </div>
+);
 export default TodosControlPanel;

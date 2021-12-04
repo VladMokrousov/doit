@@ -33,3 +33,7 @@ export const todoFormValidationSchema = Yup.object({
     .required('Required'),
   endDatePlan: Yup.string().max(CORRECT_DATE_LENGTH, 'Incorrect date').required('Required'),
 });
+
+export const noteFormValidationSchema = Yup.object({
+  description: Yup.string().required('Required'),
+});

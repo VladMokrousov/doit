@@ -1,6 +1,12 @@
 import firebase from 'firebase/app';
 
-import { ITodoFieldsContent, ITodoItem, ITodosPageState } from '../interfaces';
+import {
+  INoteItem,
+  INotesPageState,
+  ITodoFieldsContent,
+  ITodoItem,
+  ITodosPageState,
+} from '../interfaces';
 import { TooltipTypes, Id } from '../types';
 
 export const firebaseCreateUser = (values: any, showTooltip: any, setSubmitting: any) =>
@@ -80,6 +86,7 @@ export const firebaseSendPasswordResetEmail = (
     })
     .finally(() => setSubmitting(false));
 
+// Todos page --------------------------------------------
 export const firebaseConnectDisconnectTodoList = (
   type: 'connect' | 'disconnect',
   currentUser: any,
@@ -87,14 +94,12 @@ export const firebaseConnectDisconnectTodoList = (
   setTodoPageState: React.Dispatch<React.SetStateAction<ITodosPageState>>
 ) => {
   const getTodos = (elem: firebase.database.DataSnapshot) => {
-    setTodoPageState(({ isDataLoaded, ...restParams }) => {
-      return {
-        isDataLoaded: true,
-        ...restParams,
-        todosList: elem.child('list').val(),
-        lastTodoId: elem.child('lastTodoId').val(),
-      };
-    });
+    setTodoPageState(({ isDataLoaded, ...restParams }) => ({
+      isDataLoaded: true,
+      ...restParams,
+      todosList: elem.child('list').val(),
+      lastTodoId: elem.child('lastTodoId').val(),
+    }));
   };
 
   const todosRef = firebase.database().ref('users/' + currentUser.uid + '/todos');
@@ -109,9 +114,6 @@ export const firebaseConnectDisconnectTodoList = (
   }
 };
 
-// id используется только один раз за исключением случая, когды мы удалили все элементы. Тогда отстчет начнется заново
-// По-хорошему нужно подлезать к предпоследнему (по id) элементу и ставить его id в lastTodoId
-// Но все это должно делаться не с фронта
 export const firebaseDeleteTodo = (id: Id, currentUser: any, showTooltip: any): void => {
   const todosRef = firebase.database().ref('users/' + currentUser.uid + '/todos/list');
   todosRef
@@ -205,5 +207,128 @@ export const firebaseGetTodoValue = (
     })
     .catch((err) => {
       showTooltip(TooltipTypes.Error, `Couldn't take the data about this todo: ${err.message}`);
+    });
+};
+
+// Notes page --------------------------------------------
+export const firebaseConnectDisconnectNoteList = (
+  type: 'connect' | 'disconnect',
+  currentUser: any,
+  showTooltip: any,
+  setNotesPageState: React.Dispatch<React.SetStateAction<INotesPageState>>
+) => {
+  const getNotes = (elem: firebase.database.DataSnapshot) => {
+    setNotesPageState(({ isDataLoaded, ...restParams }) => ({
+      isDataLoaded: true,
+      ...restParams,
+      noteList: elem.child('list').val(),
+      lastNoteId: elem.child('lastNoteId').val(),
+    }));
+  };
+
+  const notesRef = firebase.database().ref('users/' + currentUser.uid + '/notes');
+  if (type === 'connect') {
+    try {
+      notesRef.on('value', getNotes);
+    } catch (error: any) {
+      showTooltip(TooltipTypes.Error, `Couldn't fetch the note list: ${error.message}`);
+    }
+  } else {
+    notesRef.off('value', getNotes);
+  }
+};
+
+// @todo Стоит объединить с такой же функцией для удаления todo
+export const firebaseDeleteNote = (id: Id, currentUser: any, showTooltip: any): void => {
+  const notesRef = firebase.database().ref('users/' + currentUser.uid + '/notes/list');
+  notesRef
+    .once('value')
+    .then((snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const childData = childSnapshot.val();
+        if (childData.id === id) {
+          const noteRef = firebase.database().ref('users/' + currentUser.uid + `/notes`);
+
+          // Если остался последний элемент, который мы сейчас удалим
+          if (Object.keys(snapshot.val()).length - 1 === 0) {
+            noteRef.update({
+              [`/list/${childSnapshot.key}`]: null,
+              '/lastNoteId': null,
+            });
+          } else {
+            firebase
+              .database()
+              .ref('users/' + currentUser.uid + `/notes/list/${childSnapshot.key}`)
+              .remove();
+          }
+
+          return true;
+        }
+      });
+    })
+    .catch((error) => {
+      showTooltip(TooltipTypes.Error, `Removing the note failed: ${error.message}`);
+    });
+};
+
+export const firebaseGetNoteValue = (
+  currentUser: any,
+  selectedItemId: Id,
+  setInitialDescription: React.Dispatch<React.SetStateAction<string>>,
+  showTooltip: any
+) => {
+  const notesRef = firebase.database().ref('users/' + currentUser.uid + '/notes/list');
+  notesRef
+    .once('value')
+    .then((snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const childData = childSnapshot.val();
+        if (childData.id === selectedItemId) {
+          setInitialDescription(childData.description);
+
+          return true;
+        }
+      });
+    })
+    .catch((error) => {
+      showTooltip(TooltipTypes.Error, `Couldn't take the data about this note: ${error.message}`);
+    });
+};
+// @todo Стоит объединить с такой же функцией для добавления todo
+export const firebaseAddNote = (currentUser: any, newNote: INoteItem, showTooltip: any): void => {
+  const notesRef = firebase.database().ref(`users/${currentUser.uid}/notes`);
+  const newNoteKey = notesRef.child(`list`).push().key;
+
+  notesRef
+    .update({
+      [`list/${newNoteKey}`]: newNote,
+      lastNoteId: newNote.id,
+    })
+    .catch((err) => {
+      showTooltip(TooltipTypes.Error, `Note wasn't added: ${err.message}`);
+    });
+};
+
+// @todo Стоит объединить с такой же функцией для добавления todo
+export const firebaseEditNote = (
+  currentUser: any,
+  selectedItemId: Id | null,
+  description: string,
+  showTooltip: any
+) => {
+  const noteListRef = firebase.database().ref('users/' + currentUser.uid + '/notes/list');
+  noteListRef
+    .once('value')
+    .then((snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const childData = childSnapshot.val();
+        if (childData.id === selectedItemId) {
+          noteListRef.child(`${childSnapshot.key}/description`).set(description);
+          return true;
+        }
+      });
+    })
+    .catch((error) => {
+      showTooltip(TooltipTypes.Error, `Editing the note was failed: ${error.message}`);
     });
 };

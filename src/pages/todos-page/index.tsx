@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-import PageTitle from '../../components/page-title';
+import PageTitle from 'components/page-title';
 import TodosTable from './components/todos-table';
-import Portal from '../../components/portal';
+import Portal from 'components/portal';
 import TodosModalContent from './components/todos-modal-content';
 import TodosControlPanel from './components/todos-control-panel';
-import Modal from '../../components/modal';
-import { useAppContext, useTooltipContext } from '../../context';
-import { ITodosPageState } from '../../interfaces';
-import { Id, ToggleModalTypes } from '../../types';
-import { firebaseConnectDisconnectTodoList } from '../../services/firebase-service';
+import Modal from 'components/modal';
+import { useAppContext, useTooltipContext } from 'context';
+import { ITodosPageState } from 'interfaces';
+import { Id, ToggleModalTypes } from 'types';
+import { firebaseConnectDisconnectTodoList } from 'services/firebase-service';
 
 const TodosPage: React.FC = () => {
   const { currentUser } = useAppContext();
@@ -36,13 +36,11 @@ const TodosPage: React.FC = () => {
   let newItemId: Id = state.lastTodoId ? state.lastTodoId + 1 : 100;
 
   const toggleModal = (type: ToggleModalTypes = ToggleModalTypes.Default): void => {
-    setState(({ showModal, selectedItemId, ...restParams }) => {
-      return {
-        ...restParams,
-        showModal: !showModal,
-        selectedItemId: type === ToggleModalTypes.WithSelectedItemClearing ? null : selectedItemId,
-      };
-    });
+    setState(({ showModal, selectedItemId, ...restParams }) => ({
+      ...restParams,
+      showModal: !showModal,
+      selectedItemId: type === ToggleModalTypes.WithSelectedItemClearing ? null : selectedItemId,
+    }));
   };
 
   const { todosList, filter, showModal, selectedItemId } = state;

@@ -2,6 +2,10 @@
   top: 25vh;
 }
 
+.notes-form .field-with-error-wrapper {
+  margin-bottom: 20px;
+}
+
 .notes-form__label {
   display: block;
   margin-bottom: 5px;
@@ -13,11 +17,9 @@
 }
 
 .notes-form__field--description {
-  width: 100%;
   height: 300px;
-  margin-bottom: 20px;
   resize: none;
-  box-sizing: border-box;
+  border: 1px solid #000;
 }
 
 .notes-form__submit-btn {

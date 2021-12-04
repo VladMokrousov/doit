@@ -1,80 +1,106 @@
 import React, { useState, useEffect } from 'react';
-import { useAppContext, useTooltipContext } from '../../../../context';
-import { Id, TooltipTypes } from '../../../../types';
-import firebase from 'firebase/app';
+import { Form, Formik } from 'formik';
+
+import CustomInput from 'components/customInput';
+import { useAppContext, useTooltipContext } from 'context';
+import { firebaseAddNote, firebaseEditNote, firebaseGetNoteValue } from 'services/firebase-service';
+import { INoteItem, INotesPageState } from 'interfaces';
+import { Id, ToggleModalTypes } from 'types';
+import { noteFormValidationSchema } from 'validationSchemas';
+
 import './notes-modal-content.css';
 
+interface IPartOfFormikBag {
+  setSubmitting: (isSubmitting: boolean) => void;
+}
+
 interface NotesModalProps {
-  selectedItemId: Id | false;
-  onEdited?: (description: string) => void;
-  onAdded: (description: string) => void;
-  onToggleModal: (evt?: any) => void;
+  selectedItemId: Id | null;
+  newItemId: Id;
+  onToggleModal: (type?: ToggleModalTypes) => void;
+  setNotesPageState: React.Dispatch<React.SetStateAction<INotesPageState>>;
 }
 
 const NotesModalContent: React.FC<NotesModalProps> = ({
   selectedItemId,
-  onEdited,
-  onAdded,
+  newItemId,
   onToggleModal,
+  setNotesPageState,
 }) => {
   const { currentUser } = useAppContext();
   const { showTooltip } = useTooltipContext();
-  const [description, setDescription] = useState('');
+  const [initialDescription, setInitialDescription] = useState('');
 
   useEffect(() => {
     if (selectedItemId) {
-      const notesRef = firebase.database().ref('users/' + currentUser.uid + '/notes');
-      notesRef
-        .once('value')
-        .then((snapshot) => {
-          snapshot.forEach((childSnapshot) => {
-            const childData = childSnapshot.val();
-            if (childData.id === selectedItemId) {
-              setDescription(childData.description);
-
-              return true;
-            }
-          });
-        })
-        .catch((error) => {
-          showTooltip(TooltipTypes.Error, `Couldn't take the data from DB: ${error.message}`);
-        });
+      firebaseGetNoteValue(currentUser, selectedItemId, setInitialDescription, showTooltip);
     }
   }, []);
 
-  const onDescriptionChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setDescription(evt.target.value);
+  const addNote = (description: string): void => {
+    const newNote: INoteItem = {
+      description,
+      creationDate: new Date().toISOString(),
+      id: newItemId,
+    };
+
+    firebaseAddNote(currentUser, newNote, showTooltip);
   };
 
-  const onSubmit = (evt: React.FormEvent<HTMLFormElement>): void => {
-    evt.preventDefault();
+  const editNote = (description: string): void => {
+    firebaseEditNote(currentUser, selectedItemId, description, showTooltip);
+    // @todo Сетать нужно когда взаимодействие с firebase успешно завершится
+    setNotesPageState(({ selectedItemId, ...restParams }) => ({
+      selectedItemId: null,
+      ...restParams,
+    }));
+  };
 
+  const handleSubmit = (values: { description: string }, { setSubmitting }: IPartOfFormikBag) => {
     if (selectedItemId) {
-      onEdited!(description);
+      editNote(values.description);
     } else {
-      onAdded(description);
+      addNote(values.description);
     }
+
+    // @todo По идее, нужно выполнять действия снизу только когда взаимодействие с firebase из addNote и editNote успешно завершится
+    // Пока не сделаю todo выше, setSubmitting не нужен
+    // setSubmitting(false);
 
     onToggleModal();
   };
 
   return (
-    <form className="notes-form" onSubmit={onSubmit}>
-      <label className="notes-form__label" htmlFor="description">
-        Description<sup className="notes-form__label-required">*</sup>:
-      </label>
-      <textarea
-        className="notes-form__field notes-form__field--description"
-        id="description"
-        name="description"
-        onChange={onDescriptionChange}
-        placeholder="Type something:)"
-        value={description}
-        required
-      />
+    <Formik
+      initialValues={{
+        description: initialDescription,
+      }}
+      enableReinitialize={true}
+      validationSchema={noteFormValidationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ isSubmitting, errors, touched }) => (
+        <Form className="notes-form">
+          <CustomInput
+            label={'Description'}
+            labelClass="notes-form__label"
+            isRequired={true}
+            fieldClass="notes-form__field notes-form__field--description"
+            type={undefined}
+            fieldName={'description'}
+            placeholder={'Type something :)'}
+            isError={'description' in errors}
+            isTouched={'description' in touched}
+            as={'textarea'}
+            children={undefined}
+          />
 
-      <button className="notes-form__submit-btn">Save</button>
-    </form>
+          <button className="notes-form__submit-btn" type="submit" disabled={isSubmitting}>
+            Save
+          </button>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

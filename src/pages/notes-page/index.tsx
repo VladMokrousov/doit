@@ -1,180 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import firebase from 'firebase/app';
 
-import PageTitle from '../../components/page-title';
+import PageTitle from 'components/page-title';
 import NotesList from './components/notes-list';
-import Portal from '../../components/portal';
+import Portal from 'components/portal';
 import NotesModalContent from './components/notes-modal-content';
-import Modal from '../../components/modal';
-import { useAppContext, useTooltipContext } from '../../context';
-import { INoteItem } from '../../interfaces';
-import { Id, ToggleModalTypes, TooltipTypes } from '../../types';
+import Modal from 'components/modal';
+import { useAppContext, useTooltipContext } from 'context';
+import { INotesPageState } from 'interfaces';
+import { Id, ToggleModalTypes } from 'types';
+import { firebaseConnectDisconnectNoteList } from 'services/firebase-service';
 
 import './index.css';
-
-interface INotesData {
-  [key: string]: INoteItem;
-}
-
-interface INotesPageState {
-  notesData?: INotesData;
-  showModal: boolean;
-  selectedItemId: Id | false;
-  isDataLoaded: boolean;
-}
 
 const NotesPage: React.FC = () => {
   const { currentUser } = useAppContext();
   const { showTooltip } = useTooltipContext();
   const [state, setState] = useState<INotesPageState>({
     showModal: false,
-    selectedItemId: false,
+    selectedItemId: null,
     isDataLoaded: false,
+    noteList: null,
+    lastNoteId: null,
   });
 
   useEffect(() => {
-    // @todo Обернуть в try catch?
-    const getNotes = (elem: firebase.database.DataSnapshot) => {
-      setState(({ isDataLoaded, ...restParams }) => {
-        return {
-          isDataLoaded: true,
-          ...restParams,
-          notesData: elem.val(),
-        };
-      });
-    };
-    const notesRef = firebase.database().ref('users/' + currentUser.uid + '/notes');
-    notesRef.on('value', getNotes);
+    firebaseConnectDisconnectNoteList('connect', currentUser, showTooltip, setState);
 
     return () => {
-      notesRef.off('value', getNotes);
+      firebaseConnectDisconnectNoteList('disconnect', currentUser, showTooltip, setState);
     };
   }, []);
 
-  if (state.isDataLoaded) {
-    let newItemId: Id = 100;
+  // Заменить потом на uuid
+  let newItemId: Id = state.lastNoteId ? state.lastNoteId + 1 : 100;
+  const toggleModal = (type: ToggleModalTypes = ToggleModalTypes.Default): void => {
+    setState(({ showModal, selectedItemId, ...restParams }) => ({
+      ...restParams,
+      showModal: !showModal,
+      selectedItemId: type === ToggleModalTypes.WithSelectedItemClearing ? null : selectedItemId,
+    }));
+  };
 
-    const createNoteItem = (description: string): INoteItem => {
-      return {
-        description,
-        // creationDate: getCurrentFormattedDate(),
-        creationDate: new Date().toISOString(),
-        id: newItemId,
-      };
-    };
+  const { noteList, showModal, selectedItemId } = state;
 
-    const addItem = (description: string): void => {
-      const newItem: INoteItem = createNoteItem(description);
-
-      firebase
-        .database()
-        .ref('users/' + currentUser.uid + '/notes')
-        .push(newItem)
-        .catch((e) => {
-          showTooltip(TooltipTypes.Error, `Add item failed: ${e.message}`);
-        });
-    };
-
-    const toggleModal = (type: ToggleModalTypes = ToggleModalTypes.Default): void => {
-      setState(({ showModal, selectedItemId, ...restParams }) => {
-        return {
-          ...restParams,
-          showModal: !showModal,
-          selectedItemId: type === `withSelectedItemClearing` ? false : selectedItemId,
-        };
-      });
-    };
-
-    if (state.notesData) {
-      let lastItemId: Id = 100;
-
-      Object.values(state.notesData).forEach((item) => {
-        if (item.id > lastItemId) {
-          lastItemId = item.id;
-        }
-      });
-      newItemId = lastItemId + 1;
-
-      const deleteItem = (id: Id): void => {
-        const notesRef = firebase.database().ref('users/' + currentUser.uid + '/notes');
-        notesRef
-          .once('value')
-          .then((snapshot) => {
-            snapshot.forEach((childSnapshot) => {
-              const childData = childSnapshot.val();
-              if (childData.id === id) {
-                firebase
-                  .database()
-                  .ref('users/' + currentUser.uid + `/notes/${childSnapshot.key}`)
-                  .remove()
-                  .catch((error) => {
-                    showTooltip(TooltipTypes.Error, `Remove failed: ${error.message}`);
-                  });
-                return true;
-              }
-            });
-          })
-          .catch((error) => {
-            showTooltip(TooltipTypes.Error, `Couldn't take the data from DB: ${error.message}`);
-          });
-      };
-
-      const editItem = (description: string): void => {
-        const notesRef = firebase.database().ref('users/' + currentUser.uid + '/notes');
-        notesRef
-          .once('value')
-          .then((snapshot) => {
-            snapshot.forEach((childSnapshot) => {
-              const childData = childSnapshot.val();
-              if (childData.id === state.selectedItemId) {
-                firebase
-                  .database()
-                  .ref('users/' + currentUser.uid + `/notes/${childSnapshot.key}/description`)
-                  .set(description)
-                  .catch((error) => {
-                    showTooltip(TooltipTypes.Error, `Edit item failed: ${error.message}`);
-                  });
-                return true;
-              }
-            });
-          })
-          .catch((error) => {
-            showTooltip(TooltipTypes.Error, `Couldn't take the data from DB: ${error.message}`);
-          });
-
-        setState(({ selectedItemId, ...restParams }) => {
-          return {
-            selectedItemId: false,
-            ...restParams,
-          };
-        });
-      };
-
-      const selectItem = (evt: React.MouseEvent<HTMLLIElement>, id: Id): void => {
-        setState((prevState) => {
-          return {
-            ...prevState,
-            selectedItemId: id,
-          };
-        });
-
-        toggleModal();
-      };
-
-      const { notesData, showModal, selectedItemId } = state;
-
-      return (
-        <main className="notes-page">
-          <div className="container">
-            <PageTitle text="Notes" />
+  return (
+    <main className="notes-page">
+      <div className="container">
+        <PageTitle text="Notes" />
+        {state.isDataLoaded ? (
+          <>
             <button className="notes-page__add-note-btn" onClick={() => toggleModal()}>
               Add note
             </button>
-            <NotesList
-              notes={Object.values(notesData).reverse()}
-              onDeleted={deleteItem}
-              onSelected={selectItem}
-            />
+            <NotesList notes={noteList} notesPageSetState={setState} toggleModal={toggleModal} />
             {showModal && (
               <Portal>
                 <Modal
@@ -183,52 +61,18 @@ const NotesPage: React.FC = () => {
                   onCloseBtnClick={() => toggleModal(ToggleModalTypes.WithSelectedItemClearing)}
                 >
                   <NotesModalContent
-                    onAdded={addItem}
-                    onEdited={editItem}
-                    onToggleModal={() => toggleModal()}
+                    newItemId={newItemId}
+                    onToggleModal={toggleModal}
                     selectedItemId={selectedItemId}
+                    setNotesPageState={setState}
                   />
                 </Modal>
               </Portal>
             )}
-          </div>
-        </main>
-      );
-    }
-
-    return (
-      <main className="notes-page">
-        <div className="container">
-          <PageTitle text="Notes" />
-          <button className="notes-page__add-note-btn" onClick={() => toggleModal()}>
-            Add note
-          </button>
-          <NotesList overlayText="You can sleep soundly" />
-          {state.showModal && (
-            <Portal>
-              <Modal
-                classes="modal--notes"
-                title="Add note"
-                onCloseBtnClick={() => toggleModal(ToggleModalTypes.WithSelectedItemClearing)}
-              >
-                <NotesModalContent
-                  onAdded={addItem}
-                  onToggleModal={() => toggleModal()}
-                  selectedItemId={false}
-                />
-              </Modal>
-            </Portal>
-          )}
-        </div>
-      </main>
-    );
-  }
-
-  return (
-    <main className="notes-page">
-      <div className="container">
-        <PageTitle text="Notes" />
-        <span>Loading...</span>
+          </>
+        ) : (
+          <span>Loading...</span>
+        )}
       </div>
     </main>
   );

@@ -1,42 +1,53 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import NoteItemContent from '../note-item-content';
-import { INoteItem } from '../../../../interfaces';
-import { Id } from '../../../../types';
+import { INoteItem, INoteList, INotesPageState } from 'interfaces';
+import { Id, ToggleModalTypes } from 'types';
 import './notes-list.css';
 
 interface NotesListProps {
-  notes?: INoteItem[];
-  onDeleted?: (id: Id) => void;
-  onSelected?: (evt: React.MouseEvent<HTMLLIElement>, id: Id) => void;
-  overlayText?: string;
+  notes: INoteList | null;
+  notesPageSetState: React.Dispatch<React.SetStateAction<INotesPageState>>;
+  toggleModal: (type?: ToggleModalTypes) => void;
 }
 
-const NotesList: React.FC<NotesListProps> = ({ notes, onDeleted, onSelected, overlayText }) => {
-  if (notes && onDeleted && onSelected) {
-    const itemsList: JSX.Element[] = notes.map((item: INoteItem): JSX.Element => {
-      const { id, ...itemProps } = item;
+const NotesList: React.FC<NotesListProps> = ({ notes, notesPageSetState, toggleModal }) => {
+  let visibleNotes: INoteItem[] | undefined;
+  let noteList: JSX.Element[] | undefined;
+
+  if (notes) {
+    // @todo Опять не учтена работа с большим количеством элементов. Reverse - не выход
+    visibleNotes = useMemo(() => Object.values(notes).reverse().reverse(), [notes]);
+
+    const selectItem = (id: Id): void => {
+      notesPageSetState((prevState) => ({
+        ...prevState,
+        selectedItemId: id,
+      }));
+
+      toggleModal();
+    };
+
+    noteList = visibleNotes.map((item): JSX.Element => {
+      const { id } = item;
 
       return (
         <CSSTransition key={id} timeout={500} classNames="list__item">
-          <li className="list__item" onDoubleClick={(evt) => onSelected(evt, id)}>
-            <NoteItemContent {...itemProps} onDeleted={() => onDeleted(id)} />
+          <li className="list__item" onDoubleClick={() => selectItem(id)}>
+            <NoteItemContent note={item} />
           </li>
         </CSSTransition>
       );
     });
-
-    return (
-      <ul className="list list--notes">
-        <TransitionGroup component={null}>{itemsList}</TransitionGroup>
-      </ul>
-    );
   }
+
   return (
     <>
-      <ul className="list list--notes"></ul>
-      <span>{overlayText}</span>
+      <ul className="list list--notes">
+        <TransitionGroup component={null}>{noteList}</TransitionGroup>
+      </ul>
+      {!visibleNotes && <span>You can sleep soundly</span>}
     </>
   );
 };

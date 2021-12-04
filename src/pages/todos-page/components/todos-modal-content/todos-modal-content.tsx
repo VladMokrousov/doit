@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Formik, Form } from 'formik';
 
-import { useAppContext, useTooltipContext } from '../../../../context';
-import { ITodoFieldsContent, ITodoItem, ITodosPageState } from '../../../../interfaces';
-import { Id, ToggleModalTypes } from '../../../../types';
-import { getFormattedDate, getFormattedTimeOffset } from '../../../../helpers';
-import { todoFormValidationSchema } from '../../../../validationSchemas';
-import CustomInput from '../../../../components/customInput/customInput';
-import {
-  firebaseAddTodo,
-  firebaseEditTodo,
-  firebaseGetTodoValue,
-} from '../../../../services/firebase-service';
+import { useAppContext, useTooltipContext } from 'context';
+import { ITodoFieldsContent, ITodoItem, ITodosPageState } from 'interfaces';
+import { Id, ToggleModalTypes } from 'types';
+import { getFormattedDate, getFormattedTimeOffset } from 'helpers';
+import { todoFormValidationSchema } from 'validationSchemas';
+import CustomInput from 'components/customInput';
+import { firebaseAddTodo, firebaseEditTodo, firebaseGetTodoValue } from 'services/firebase-service';
 
 import './todos-modal-content.css';
 
@@ -122,7 +118,8 @@ const TodosModalContent: React.FC<ITodosModalProps> = ({
     }
 
     // @todo По идее, нужно выполнять действия снизу только когда взаимодействие с firebase из addTodo и editTodo успешно завершится
-    setSubmitting(false);
+    // Пока не сделаю todo выше, setSubmitting не нужен
+    // setSubmitting(false);
 
     onToggleModal();
   };
@@ -210,7 +207,7 @@ const TodosModalContent: React.FC<ITodosModalProps> = ({
             )}
           </div>
 
-          {/* Эта проверка была раньше на календаре. Нужно перенести ее на кастомный календарь
+          {/* @todo Эта проверка была раньше на календаре. Нужно перенести ее на кастомный календарь
           min={getFormattedDate(new Date(), 'calendar')}
            */}
           {useMemo(

@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { ITodoFieldsContent } from '../../../../interfaces';
-import { Id } from '../../../../types';
-import { getFormattedDate } from '../../../../helpers';
-import { useAppContext, useTooltipContext } from '../../../../context';
-import { firebaseDeleteTodo } from '../../../../services/firebase-service';
-import deleteIcon from '../../../../assets/img/delete-icon.svg';
+import { ITodoFieldsContent } from 'interfaces';
+import { Id } from 'types';
+import { getFormattedDate } from 'helpers';
+import { useAppContext, useTooltipContext } from 'context';
+import { firebaseDeleteTodo } from 'services/firebase-service';
+import deleteIcon from 'assets/img/delete-icon.svg';
 
 import './todo-item-content.css';
 
