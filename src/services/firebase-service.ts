@@ -332,3 +332,99 @@ export const firebaseEditNote = (
       showTooltip(TooltipTypes.Error, `Editing the note was failed: ${error.message}`);
     });
 };
+
+// Settings page --------------------------------------------
+
+export const firebaseSendEmailForResetingPassword = (
+  userEmail: string,
+  actionCodeSettings: any,
+  showTooltip: any
+) =>
+  firebase
+    .auth()
+    .sendPasswordResetEmail(userEmail, actionCodeSettings)
+    .then(() => {
+      showTooltip(TooltipTypes.Info, 'The email for reseting your password was send');
+    })
+    .catch((err) => {
+      showTooltip(
+        TooltipTypes.Error,
+        `Email for reseting your password didn't send ${err.message}`
+      );
+    });
+
+export const firebaseConfirmUserCredentials = (
+  user: any,
+  setIsFirstModal: any,
+  showTooltip: any,
+  values: any,
+  setSubmitting: any
+): void => {
+  const { email, password } = values;
+
+  const credential = firebase.auth.EmailAuthProvider.credential(email, password);
+
+  user
+    .reauthenticateWithCredential(credential)
+    .then(() => {
+      setIsFirstModal(false);
+    })
+    .catch((error: any) => {
+      showTooltip(TooltipTypes.Error, `Reauth didn't pass: ${error.message}`);
+      setSubmitting(false);
+    });
+};
+
+export const firebaseSetNewUsersEmail = (
+  user: any,
+  actionCodeSettings: any,
+  showTooltip: any,
+  onToggleModal: any,
+  values: any,
+  setSubmitting: any
+): void => {
+  user
+    .verifyBeforeUpdateEmail(values.newEmail, actionCodeSettings)
+    .then(() => {
+      showTooltip(
+        TooltipTypes.Info,
+        'Check your new email and confirm it to finish the change the email'
+      );
+      onToggleModal();
+    })
+    .catch(function (err: any) {
+      showTooltip(TooltipTypes.Error, `Your email didn't update: ${err.message}`);
+      setSubmitting(false);
+    });
+};
+
+export const firebaseSetNewUsersPassword = (
+  user: any,
+  showTooltip: any,
+  onToggleModal: any,
+  values: any,
+  setSubmitting: any
+): void => {
+  // @todo Вылазит предупреждение от гугл, что в результате утечки даннных, пароль оказался раскрыт. Скорее всего связано с отсутствием шифрования с моей стороны
+  user
+    .updatePassword(values.newPassword)
+    .then(() => {
+      showTooltip(TooltipTypes.Success, 'Your password was successfully updated!');
+      onToggleModal();
+    })
+    .catch((err: any) => {
+      showTooltip(TooltipTypes.Error, `Your password didn't be update: ${err.message}`);
+      setSubmitting(false);
+    });
+};
+
+export const firebaseDeleteUserAccount = (
+  user: any,
+  showTooltip: any,
+  setSubmitting: any
+): void => {
+  user.delete().catch((err: any) => {
+    showTooltip(TooltipTypes.Error, `Your account didn't be deleted: ${err.message}`);
+    setSubmitting(false);
+  });
+};

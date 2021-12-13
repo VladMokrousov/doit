@@ -37,3 +37,26 @@ export const todoFormValidationSchema = Yup.object({
 export const noteFormValidationSchema = Yup.object({
   description: Yup.string().required('Required'),
 });
+
+export const changeEmailFormStepOneValidationSchema = Yup.object({
+  oldEmail: Yup.string().email('Invalid email address').required('Required'),
+  password: Yup.string().min(6, 'Must be 6 characters or more').required('Required'),
+});
+
+export const changeEmailFormStepTwoValidationSchema = Yup.object({
+  newEmail: Yup.string().email('Invalid email address').required('Required'),
+});
+
+export const changePasswordFormStepOneValidationSchema = Yup.object({
+  email: Yup.string().email('Invalid email address').required('Required'),
+  oldPassword: Yup.string().min(6, 'Must be 6 characters or more').required('Required'),
+});
+
+export const changePasswordFormStepTwoValidationSchema = Yup.object({
+  newPassword: Yup.string().min(6, 'Must be 6 characters or more').required('Required'),
+});
+
+export const deleteAccountFormStepOneValidationSchema = Yup.object({
+  email: Yup.string().email('Invalid email address').required('Required'),
+  password: Yup.string().min(6, 'Must be 6 characters or more').required('Required'),
+});

@@ -2,14 +2,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.delete-account-form__field-wrapper .field-with-error-wrapper {
+  flex-grow: 1;
 }
 
 .delete-account-form__label {
   margin-right: 10px;
-}
-.delete-account-form__field {
-  flex-grow: 1;
 }
 
 .delete-account-form__btn {

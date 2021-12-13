@@ -17,7 +17,6 @@
   align-items: center;
 }
 .settings-item__avatar {
-  /* display: block; */
   border-radius: 50%;
 }
 .settings-item__text b {
@@ -52,8 +51,6 @@
   margin-bottom: 0;
 }
 .settings-item__field {
-  /* width: 200px; */
-  /* cursor: pointer; */
   box-sizing: border-box;
 }
 .settings-item__field[disabled] {

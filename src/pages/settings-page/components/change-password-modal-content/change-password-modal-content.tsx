@@ -1,18 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import firebase from 'firebase/app';
+import React, { useState } from 'react';
+import { Form, Formik } from 'formik';
 
-import { useTooltipContext } from '../../../../context';
-import RequiredMark from '../../../../components/required-mark';
-import { TooltipTypes } from '../../../../types';
+import CustomInput from 'components/customInput';
+import { useTooltipContext } from 'context';
+import {
+  firebaseConfirmUserCredentials,
+  firebaseSetNewUsersPassword,
+} from 'services/firebase-service';
+import {
+  changePasswordFormStepOneValidationSchema,
+  changePasswordFormStepTwoValidationSchema,
+} from 'validationSchemas';
+
 import './change-password-modal-content.css';
 
 interface ChangePasswordModalProps {
-  onToggleModal: (evt: any) => void;
+  onToggleModal: () => void;
   user: any;
 }
-interface IConfirmCredentials {
-  email: string;
-  oldPassword: string;
+
+export interface IPartOfFormikBag {
+  setSubmitting: (isSubmitting: boolean) => void;
 }
 
 const ChangePasswordModalContent: React.FC<ChangePasswordModalProps> = ({
@@ -21,127 +29,103 @@ const ChangePasswordModalContent: React.FC<ChangePasswordModalProps> = ({
 }) => {
   const { showTooltip } = useTooltipContext();
 
-  const [credentials, setCredentials] = useState<IConfirmCredentials>({
-    email: user.email,
-    oldPassword: '',
-  });
   const [isFirstModal, setIsFirstModal] = useState(true);
-  const [password, setPassword] = useState('');
 
-  const onCredentialsChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const id: string = evt.target.id;
-    const value: string = evt.target.value;
+  const onConfirmCredentials = (values: any, { setSubmitting }: IPartOfFormikBag): void =>
+    firebaseConfirmUserCredentials(
+      user,
+      setIsFirstModal,
+      showTooltip,
+      { email: values.email, password: values.oldPassword },
+      setSubmitting
+    );
 
-    setCredentials((prevState) => {
-      return {
-        ...prevState,
-        [id]: value,
-      };
-    });
-  };
-
-  const onPasswordChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(evt.target.value);
-  };
-
-  const onConfirmCredentials = (evt: React.FormEvent<HTMLFormElement>): void => {
-    evt.preventDefault();
-    const { email, oldPassword } = credentials;
-
-    const credential = firebase.auth.EmailAuthProvider.credential(email, oldPassword);
-
-    user
-      .reauthenticateWithCredential(credential)
-      .then(() => {
-        setIsFirstModal(false);
-      })
-      .catch((error: any) => {
-        showTooltip(TooltipTypes.Error, `Reauth didn't pass: ${error.message}`);
-      });
-  };
-
-  const onSetNewPassword = (evt: React.FormEvent<HTMLFormElement>): void => {
-    evt.preventDefault();
-    // @todo Вылозит предупреждение от гугл, что в результате утечки даннных, пароль оказался раскрыт. Скорее всего связано с отсутствием шифрования с моей стороны
-    user
-      .updatePassword(password)
-      .then(() => {
-        showTooltip(TooltipTypes.Success, 'Your password was successfully updated!');
-        onToggleModal(evt);
-      })
-      .catch((err: any) => {
-        showTooltip(TooltipTypes.Error, `Your password didn't be update: ${err.message}`);
-      });
-  };
+  const onSetNewPassword = (values: any, { setSubmitting }: IPartOfFormikBag): void =>
+    firebaseSetNewUsersPassword(user, showTooltip, onToggleModal, values, setSubmitting);
 
   return (
-    <form
-      className="change-password-form"
+    <Formik
+      initialValues={
+        isFirstModal
+          ? {
+              email: user.email,
+              oldPassword: '',
+            }
+          : {
+              newPassword: '',
+            }
+      }
+      enableReinitialize={true}
+      validationSchema={
+        isFirstModal
+          ? changePasswordFormStepOneValidationSchema
+          : changePasswordFormStepTwoValidationSchema
+      }
       onSubmit={isFirstModal ? onConfirmCredentials : onSetNewPassword}
     >
-      {isFirstModal ? (
-        <>
-          <div className="change-password-form__field-wrapper">
-            <label className="change-password-form__label" htmlFor="email">
-              Email
-              <RequiredMark />:
-            </label>
-            <input
-              className="change-password-form__field change-password-form__email-field"
-              id="email"
-              type="email"
-              placeholder="Enter you email"
-              onChange={onCredentialsChange}
-              value={credentials.email}
-              required
-            />
-          </div>
+      {({ isSubmitting, errors, touched }) => (
+        <Form className="change-password-form">
+          {isFirstModal ? (
+            <>
+              <div className="change-password-form__field-wrapper">
+                <CustomInput
+                  label={'Email'}
+                  labelClass="change-password-form__label"
+                  isRequired={true}
+                  fieldClass="change-password-form__field change-password-form__email-field"
+                  type={'email'}
+                  fieldName={'email'}
+                  placeholder={'Enter your email'}
+                  isError={'email' in errors}
+                  isTouched={'email' in touched}
+                />
+              </div>
 
-          <div className="change-password-form__field-wrapper">
-            <label className="change-password-form__label" htmlFor="oldPassword">
-              Old password
-              <RequiredMark />:
-            </label>
-            <input
-              className="change-password-form__field change-password-form__old-password-field"
-              id="oldPassword"
-              type="password"
-              placeholder="Enter you old password"
-              onChange={onCredentialsChange}
-              value={credentials.oldPassword}
-              required
-            />
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="change-password-form__field-wrapper">
-            <label className="change-password-form__label" htmlFor="newPassword">
-              New password
-              <RequiredMark />:
-            </label>
-            <input
-              className="change-password-form__field change-password-form__new-password-field"
-              id="newPassword"
-              type="password"
-              placeholder="Enter a new password"
-              onChange={onPasswordChange}
-              value={password}
-              required
-            />
-          </div>
+              <div className="change-password-form__field-wrapper">
+                <CustomInput
+                  label={'Old password'}
+                  labelClass="change-password-form__label"
+                  isRequired={true}
+                  fieldClass="change-password-form__field change-password-form__old-password-field"
+                  type={'password'}
+                  fieldName={'oldPassword'}
+                  placeholder={'Enter your old password'}
+                  isError={'oldPassword' in errors}
+                  isTouched={'oldPassword' in touched}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="change-password-form__field-wrapper">
+              <CustomInput
+                label={'New password'}
+                labelClass="change-password-form__label"
+                isRequired={true}
+                fieldClass="change-password-form__field change-password-form__new-password-field"
+                type={'password'}
+                fieldName={'newPassword'}
+                placeholder={'Enter your new password'}
+                isError={'newPassword' in errors}
+                isTouched={'newPassword' in touched}
+              />
+            </div>
 
-          {/* @todo можно реализовать генерацию рандомного пароля
+            /* @todo можно реализовать генерацию рандомного пароля
           <button className="change-password-form__generate-password" onClick={onGeneratePassword}>
             Generate password
-          </button> */}
-        </>
-      )}
+          </button> */
+          )}
 
-      <button className="change-password-form__submit-btn">
-        {isFirstModal ? 'Continue' : 'Save'}
-      </button>
-    </form>
+          <button
+            className="change-password-form__submit-btn"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isFirstModal ? 'Continue' : 'Save'}
+          </button>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

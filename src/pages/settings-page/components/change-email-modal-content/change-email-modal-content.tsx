@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
-import firebase from 'firebase/app';
+import { Form, Formik } from 'formik';
 
-import { useTooltipContext } from '../../../../context';
-import RequiredMark from '../../../../components/required-mark';
-import { TooltipTypes } from '../../../../types';
+import CustomInput from 'components/customInput';
+import { useTooltipContext } from 'context';
+import {
+  firebaseConfirmUserCredentials,
+  firebaseSetNewUsersEmail,
+} from 'services/firebase-service';
+import {
+  changeEmailFormStepOneValidationSchema,
+  changeEmailFormStepTwoValidationSchema,
+} from 'validationSchemas';
+
 import './change-email-modal-content.css';
 
 interface ChangeEmailModalProps {
-  onToggleModal: (evt: any) => void;
+  onToggleModal: () => void;
   user: any;
   actionCodeSettings: any;
 }
-interface IConfirmCredentials {
-  oldEmail: string;
-  password: string;
+
+export interface IPartOfFormikBag {
+  setSubmitting: (isSubmitting: boolean) => void;
 }
 
 const ChangeEmailModalContent: React.FC<ChangeEmailModalProps> = ({
@@ -23,121 +31,103 @@ const ChangeEmailModalContent: React.FC<ChangeEmailModalProps> = ({
 }) => {
   const { showTooltip } = useTooltipContext();
 
-  const [credentials, setCredentials] = useState<IConfirmCredentials>({
-    oldEmail: user.email,
-    password: '',
-  });
-  const [email, setEmail] = useState('');
   const [isFirstModal, setIsFirstModal] = useState(true);
 
-  const onCredentialsChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const id: string = evt.target.id;
-    const value: string = evt.target.value;
+  const onConfirmCredentials = (values: any, { setSubmitting }: IPartOfFormikBag): void =>
+    firebaseConfirmUserCredentials(
+      user,
+      setIsFirstModal,
+      showTooltip,
+      { email: values.oldEmail, password: values.password },
+      setSubmitting
+    );
 
-    setCredentials((prevState) => {
-      return {
-        ...prevState,
-        [id]: value,
-      };
-    });
-  };
+  const onSetNewEmail = (values: any, { setSubmitting }: IPartOfFormikBag): void =>
+    firebaseSetNewUsersEmail(
+      user,
+      actionCodeSettings,
+      showTooltip,
+      onToggleModal,
+      values,
+      setSubmitting
+    );
 
-  const onEmailChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(evt.target.value);
-  };
-
-  const onConfirmCredentials = (evt: React.FormEvent<HTMLFormElement>): void => {
-    evt.preventDefault();
-    const { oldEmail, password } = credentials;
-
-    const credential = firebase.auth.EmailAuthProvider.credential(oldEmail, password);
-
-    user
-      .reauthenticateWithCredential(credential)
-      .then(() => {
-        setIsFirstModal(false);
-      })
-      .catch((error: any) => {
-        showTooltip(TooltipTypes.Error, `Reauth didn't pass: ${error.message}`);
-      });
-  };
-  const onSetNewEmail = (evt: React.FormEvent<HTMLFormElement>): void => {
-    evt.preventDefault();
-
-    user
-      .verifyBeforeUpdateEmail(email, actionCodeSettings)
-      .then(() => {
-        showTooltip(
-          TooltipTypes.Info,
-          'Check your new email and confirm it to finish the change the email'
-        );
-        onToggleModal(evt);
-      })
-      .catch(function (err: any) {
-        showTooltip(TooltipTypes.Error, `Your email didn't update: ${err.message}`);
-      });
-  };
-
+  // @todo Есть некий баг, связнанный с тем, что изначально newEmail = undefined из-за этого также нельзя прописать нормальные типы в onSubmit-функциях
+  // Судя по всему, самое правильное - разделить модалки на два компонента и тут, и в change the password, и в delete the account
   return (
-    <form
-      className="change-email-form"
+    <Formik
+      initialValues={
+        isFirstModal
+          ? {
+              oldEmail: user.email,
+              password: '',
+            }
+          : {
+              newEmail: '',
+            }
+      }
+      enableReinitialize={true}
+      validationSchema={
+        isFirstModal
+          ? changeEmailFormStepOneValidationSchema
+          : changeEmailFormStepTwoValidationSchema
+      }
       onSubmit={isFirstModal ? onConfirmCredentials : onSetNewEmail}
     >
-      {isFirstModal ? (
-        <>
-          <div className="change-email-form__field-wrapper">
-            <label className="change-email-form__label" htmlFor="oldEmail">
-              Old email
-              <RequiredMark />:
-            </label>
-            <input
-              className="change-email-form__field"
-              id="oldEmail"
-              type="email"
-              placeholder="Enter you old email"
-              onChange={onCredentialsChange}
-              value={credentials.oldEmail}
-              required
-            />
-          </div>
-          <div className="change-email-form__field-wrapper">
-            <label className="change-email-form__label" htmlFor="password">
-              Password
-              <RequiredMark />:
-            </label>
-            <input
-              className="change-email-form__field"
-              id="password"
-              type="password"
-              placeholder="Enter you password"
-              onChange={onCredentialsChange}
-              value={credentials.password}
-              required
-            />
-          </div>
-        </>
-      ) : (
-        <div className="change-email-form__field-wrapper">
-          <label className="change-email-form__label" htmlFor="newEmail">
-            New email
-            <RequiredMark />:
-          </label>
-          <input
-            className="change-email-form__field"
-            id="newEmail"
-            type="email"
-            placeholder="Enter the new email"
-            onChange={onEmailChange}
-            value={email}
-            required
-          />
-        </div>
-      )}
+      {({ isSubmitting, errors, touched }) => (
+        <Form className="change-email-form">
+          {isFirstModal ? (
+            <>
+              <div className="change-email-form__field-wrapper">
+                <CustomInput
+                  label={'Old email'}
+                  labelClass="change-email-form__label"
+                  isRequired={true}
+                  fieldClass="change-email-form__field"
+                  type={'email'}
+                  fieldName={'oldEmail'}
+                  placeholder={'Enter your old email'}
+                  isError={'oldEmail' in errors}
+                  isTouched={'oldEmail' in touched}
+                />
+              </div>
 
-      <button className="change-email-form__submit-btn">
-        {isFirstModal ? 'Continue' : 'Save'}
-      </button>
-    </form>
+              <div className="change-email-form__field-wrapper">
+                <CustomInput
+                  label={'Password'}
+                  labelClass="change-email-form__label"
+                  isRequired={true}
+                  fieldClass="change-email-form__field"
+                  type={'password'}
+                  fieldName={'password'}
+                  placeholder={'Enter your password'}
+                  isError={'password' in errors}
+                  isTouched={'password' in touched}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="change-email-form__field-wrapper">
+              <CustomInput
+                label={'New email'}
+                labelClass="change-email-form__label"
+                isRequired={true}
+                fieldClass="change-email-form__field"
+                type={'email'}
+                fieldName={'newEmail'}
+                placeholder={'Enter your new email'}
+                isError={'newEmail' in errors}
+                isTouched={'newEmail' in touched}
+              />
+            </div>
+          )}
+
+          <button className="change-email-form__submit-btn" type="submit" disabled={isSubmitting}>
+            {isFirstModal ? 'Continue' : 'Save'}
+          </button>
+        </Form>
+      )}
+    </Formik>
   );
 };
 
