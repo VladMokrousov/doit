@@ -1,6 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import Modal from '../../components/modal';
+import Modal from 'components/modal';
 import ResetPasswordModalContent from './components/reset-password-modal-content';
 
 const ResetPasswordPage: React.FC = () => (

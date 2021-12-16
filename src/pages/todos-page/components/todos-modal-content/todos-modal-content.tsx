@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 
 import { useAppContext, useTooltipContext } from 'context';
@@ -102,7 +102,7 @@ const TodosModalContent: React.FC<ITodosModalProps> = ({
     ).toISOString();
 
     const endDateActual =
-      values.status == 'Done' && initialState.endDateActual === '-'
+      values.status === 'Done' && initialState.endDateActual === '-'
         ? new Date().toISOString()
         : initialState.endDateActual;
 
@@ -140,89 +140,73 @@ const TodosModalContent: React.FC<ITodosModalProps> = ({
     >
       {({ isSubmitting, errors, touched }) => (
         <Form className="todos-form">
-          {useMemo(
-            () =>
-              createCustomInput(
-                `Description`,
-                true,
-                `text`,
-                `description`,
-                `What must be to do?`,
-                errors,
-                touched,
-                undefined
-              ),
-            [errors, touched]
+          {createCustomInput(
+            `Description`,
+            true,
+            `text`,
+            `description`,
+            `What must be to do?`,
+            errors,
+            touched,
+            undefined
           )}
           <div className="todos-form__fields-group-wrapper">
-            {useMemo(
-              () =>
-                createCustomInput(
-                  `Priority`,
-                  true,
-                  undefined,
-                  `priority`,
-                  undefined,
-                  errors,
-                  touched,
-                  `select`,
-                  [
-                    <option key="Low" value="Low">
-                      Low
-                    </option>,
-                    <option key="Medium" value="Medium">
-                      Medium
-                    </option>,
-                    <option key="High" value="High">
-                      High
-                    </option>,
-                  ]
-                ),
-              [errors, touched]
+            {createCustomInput(
+              `Priority`,
+              true,
+              undefined,
+              `priority`,
+              undefined,
+              errors,
+              touched,
+              `select`,
+              [
+                <option key="Low" value="Low">
+                  Low
+                </option>,
+                <option key="Medium" value="Medium">
+                  Medium
+                </option>,
+                <option key="High" value="High">
+                  High
+                </option>,
+              ]
             )}
-            {useMemo(
-              () =>
-                createCustomInput(
-                  `Status`,
-                  true,
-                  undefined,
-                  `status`,
-                  undefined,
-                  errors,
-                  touched,
-                  `select`,
-                  [
-                    <option key="New" value="New">
-                      New
-                    </option>,
-                    <option key="In progress" value="In progress">
-                      In progress
-                    </option>,
-                    <option key="Done" value="Done">
-                      Done
-                    </option>,
-                  ]
-                ),
-              [errors, touched]
+            {createCustomInput(
+              `Status`,
+              true,
+              undefined,
+              `status`,
+              undefined,
+              errors,
+              touched,
+              `select`,
+              [
+                <option key="New" value="New">
+                  New
+                </option>,
+                <option key="In progress" value="In progress">
+                  In progress
+                </option>,
+                <option key="Done" value="Done">
+                  Done
+                </option>,
+              ]
             )}
           </div>
 
           {/* @todo Эта проверка была раньше на календаре. Нужно перенести ее на кастомный календарь
           min={getFormattedDate(new Date(), 'calendar')}
            */}
-          {useMemo(
-            () =>
-              createCustomInput(
-                `End Date`,
-                true,
-                `date`,
-                `endDatePlan`,
-                undefined,
-                errors,
-                touched,
-                undefined
-              ),
-            [errors, touched]
+          {createCustomInput(
+            `End Date`,
+            true,
+            `date`,
+            `endDatePlan`,
+            undefined,
+            errors,
+            touched,
+            undefined
           )}
 
           <button className="todos-form__submit-btn" type="submit" disabled={isSubmitting}>

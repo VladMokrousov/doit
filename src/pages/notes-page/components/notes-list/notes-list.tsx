@@ -13,13 +13,11 @@ interface NotesListProps {
 }
 
 const NotesList: React.FC<NotesListProps> = ({ notes, notesPageSetState, toggleModal }) => {
-  let visibleNotes: INoteItem[] | undefined;
+  // @todo Опять не учтена работа с большим количеством элементов. Reverse - не выход
+  let visibleNotes: INoteItem[] | undefined = useMemo(() => notes ? Object.values(notes).reverse() : undefined, [notes]);
   let noteList: JSX.Element[] | undefined;
 
-  if (notes) {
-    // @todo Опять не учтена работа с большим количеством элементов. Reverse - не выход
-    visibleNotes = useMemo(() => Object.values(notes).reverse().reverse(), [notes]);
-
+  if (visibleNotes) {
     const selectItem = (id: Id): void => {
       notesPageSetState((prevState) => ({
         ...prevState,

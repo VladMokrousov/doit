@@ -20,7 +20,7 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ todosList, filter, setState
   // @todo пагинация и большое количество items не предусмотрены
   const todos = Object.values(todosList);
   const getTodosLengthWithStatusFilter = (status: 'New' | 'In progress' | 'Done') =>
-    todos.filter((item) => item.fieldsContent.status == status).length;
+    todos.filter((item) => item.fieldsContent.status === status).length;
 
   const btnProps: IBtnProps[] = [
     {

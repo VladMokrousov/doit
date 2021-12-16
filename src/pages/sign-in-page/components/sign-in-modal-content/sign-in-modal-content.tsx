@@ -1,12 +1,13 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 
-import { useTooltipContext } from '../../../../context';
-import { signInValidationSchema } from '../../../../validationSchemas';
-import { firebaseSignIn, firebaseGoogleSignIn } from '../../../../services/firebase-service';
+import { useTooltipContext } from 'context';
+import { signInValidationSchema } from 'validationSchemas';
+import { firebaseSignIn, firebaseGoogleSignIn } from 'services/firebase-service';
 import inputsConfig from './inputs-config';
-import CustomInput from '../../../../components/customInput';
+import CustomInput from 'components/customInput';
+import { clsx } from 'helpers';
 
 import './sign-in-modal-content.css';
 
@@ -26,32 +27,30 @@ const SignInModalContent: React.FC = () => {
       >
         {({ isSubmitting, errors, touched }) => (
           <Form className="sign-in-form">
-            {useMemo(
-              () =>
-                inputsConfig.map((item) => (
-                  <div
-                    className={`sign-in-form__field-wrapper ${
-                      item.fieldName === `rememberMe` ? `sign-in-form__field-wrapper--checkbox` : ''
-                    }`}
-                    key={item.fieldName}
-                  >
-                    <CustomInput
-                      label={item.label}
-                      labelClass="sign-in-form__label"
-                      isRequired={item.isRequired}
-                      fieldClass={`sign-up-form__field ${
-                        item.fieldName === `rememberMe` ? `sign-in-form__field--checkbox` : ``
-                      }`}
-                      type={item.type}
-                      fieldName={item.fieldName}
-                      placeholder={item.placeholder}
-                      isError={item.fieldName in errors}
-                      isTouched={item.fieldName in touched}
-                    />
-                  </div>
-                )),
-              [errors, touched]
-            )}
+            {inputsConfig.map((item) => (
+              <div
+                className={clsx([
+                  `sign-in-form__field-wrapper`,
+                  item.fieldName === `rememberMe` && `sign-in-form__field-wrapper--checkbox`,
+                ])}
+                key={item.fieldName}
+              >
+                <CustomInput
+                  label={item.label}
+                  labelClass="sign-in-form__label"
+                  isRequired={item.isRequired}
+                  fieldClass={clsx([
+                    `sign-up-form__field`,
+                    item.fieldName === `rememberMe` && `sign-in-form__field--checkbox`,
+                  ])}
+                  type={item.type}
+                  fieldName={item.fieldName}
+                  placeholder={item.placeholder}
+                  isError={item.fieldName in errors}
+                  isTouched={item.fieldName in touched}
+                />
+              </div>
+            ))}
 
             <button className="sign-in-form__submit-btn" type="submit" disabled={isSubmitting}>
               Sign in

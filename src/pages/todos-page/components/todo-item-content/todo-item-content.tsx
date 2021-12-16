@@ -40,7 +40,9 @@ const TodoItemContent: React.FC<TodoItemContentProps> = ({ fieldsContent, id }) 
       </td>
       <td className={classNames}>
         <span className={`${classNames}--actualDate`}>
-          {endDateActual == '-' ? endDateActual : getFormattedDate(new Date(endDateActual), 'task')}
+          {endDateActual === '-'
+            ? endDateActual
+            : getFormattedDate(new Date(endDateActual), 'task')}
         </span>
       </td>
       <td className={classNames}>
