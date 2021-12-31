@@ -51,9 +51,9 @@ const App: React.FC = () => {
           <Route path="/sign-up" component={SignUpPage} />
           <Route path="/sign-in" component={SignInPage} />
           <Route path="/reset-password" component={ResetPasswordPage} />
+          <Redirect to="/sign-up" />
           {/* @todo Использовать switch из react-router-dom*/}
           {/* <Route path="*" render={() => <Redirect to="/sign-up" />} /> */}
-          <Redirect to="/sign-up" />
         </>
       )}
     </Router>
